@@ -12,7 +12,7 @@ export const site = {
   navigation: [
     { label: "Servicios", href: "#servicios" },
     { label: "Proceso", href: "#proceso" },
-    { label: "Plantillas", href: "#plantillas" },
+    { label: "Ruleta", href: "#ruleta" },
     { label: "FAQ", href: "#faq" },
   ],
   hero: {
@@ -51,13 +51,43 @@ export const site = {
     "Diseno responsive y desarrollo en Next.js.",
     "Revision, ajustes, GitHub y deploy en Vercel.",
   ],
-  templates: [
-    "Restaurantes y cafes",
-    "Marcas personales",
-    "Hoteles y hospedajes",
-    "Servicios profesionales",
-    "Catalogos simples",
-    "Eventos y lanzamientos",
+  landingWheel: [
+    {
+      title: "Restaurante local",
+      status: "Menu + reservas",
+      kind: "food",
+      href: "#contacto",
+    },
+    {
+      title: "Marca personal",
+      status: "Perfil + agenda",
+      kind: "profile",
+      href: "#contacto",
+    },
+    {
+      title: "Hotel boutique",
+      status: "Habitaciones + WhatsApp",
+      kind: "hotel",
+      href: "#contacto",
+    },
+    {
+      title: "Servicio profesional",
+      status: "Confianza + leads",
+      kind: "service",
+      href: "#contacto",
+    },
+    {
+      title: "Catalogo simple",
+      status: "Productos + contacto",
+      kind: "catalog",
+      href: "#contacto",
+    },
+    {
+      title: "Evento o lanzamiento",
+      status: "Fecha + registro",
+      kind: "event",
+      href: "#contacto",
+    },
   ],
   faqs: [
     {

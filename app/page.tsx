@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { HeroPreview } from "@/components/HeroPreview";
+import { LandingWheel } from "@/components/LandingWheel";
 import { Section } from "@/components/Section";
 import { site, whatsappUrl } from "@/content/site";
 
@@ -57,12 +58,11 @@ export default function HomePage() {
         </ol>
       </Section>
 
-      <Section id="plantillas" eyebrow="Plantillas" title="Tipos de proyectos que puedes ofrecer.">
-        <div className="template-list">
-          {site.templates.map((template) => (
-            <span key={template}>{template}</span>
-          ))}
-        </div>
+      <Section id="ruleta" eyebrow="Ruleta de ejemplos" title="Un inventario visual para adaptar landings por tipo de cliente.">
+        <p className="section-lead">
+          Esta estructura viene de la idea de /landings: una ruleta para mostrar posibilidades. Ahora queda limpia, editable y lista para evolucionar con casos reales.
+        </p>
+        <LandingWheel />
       </Section>
 
       <Section id="faq" eyebrow="FAQ" title="Preguntas antes de publicar." tone="white">
@@ -76,7 +76,7 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <section className="cta-section">
+      <section id="contacto" className="cta-section">
         <div className="container cta-panel">
           <div>
             <p className="eyebrow">Siguiente paso</p>
