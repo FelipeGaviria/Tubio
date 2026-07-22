@@ -13,11 +13,25 @@ const landings = [
     status: "Base editable",
   },
   {
+    label: 'Template 3',
+    title: 'Landing editorial de narrativa visual',
+    description: 'Una composición cálida para marcas con historia, producto y una experiencia memorable.',
+    href: '/template-3',
+    status: 'Nueva exploración',
+  },
+  {
     label: 'Template 2',
     title: 'Tarjeta bio editorial con contactos directos',
     description: 'Una experiencia tipo tarjeta digital inspirada en perfiles profesionales: identidad, enlaces, guardar contacto y compartir.',
     href: '/template-2',
     status: 'Nueva exploraci�n',
+  },
+  {
+    label: 'Template 3',
+    title: 'Landing editorial de narrativa visual',
+    description: 'Una composición cálida para marcas con historia, producto y una experiencia memorable.',
+    href: '/template-3',
+    status: 'Nueva exploración',
   },
 ];
 
@@ -72,6 +86,6 @@ export default function PortafolioPage() {
           </div>
           <LandingWheel />
         </div>
-      </section>    </main>
+      </section>`n    </main>
   );
 }
