@@ -16,7 +16,7 @@ const landings = [
     title: 'Tarjeta bio editorial con contactos directos',
     description: 'Una experiencia tipo tarjeta digital inspirada en perfiles profesionales: identidad, enlaces, guardar contacto y compartir.',
     href: '/template-2',
-    status: 'Nueva exploración',
+    status: 'Nueva exploraciï¿½n',
   },
 ];
 
