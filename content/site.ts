@@ -2,7 +2,7 @@ export const site = {
   name: "TuBio",
   tagline: "Landings claras para negocios que quieren vender mejor.",
   description:
-    "Creamos paginas responsive, rapidas y editables para marcas personales, servicios locales y emprendimientos que necesitan presencia profesional.",
+    "Creamos páginas responsive, rápidas y editables para marcas personales, servicios locales y emprendimientos que necesitan presencia profesional.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   contact: {
     whatsapp: "573000000000",

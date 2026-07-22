@@ -11,6 +11,13 @@ const landings = [
     href: "/template-1",
     status: "Base editable",
   },
+  {
+    label: 'Template 2',
+    title: 'Tarjeta bio editorial con contactos directos',
+    description: 'Una experiencia tipo tarjeta digital inspirada en perfiles profesionales: identidad, enlaces, guardar contacto y compartir.',
+    href: '/template-2',
+    status: 'Nueva exploración',
+  },
 ];
 
 export default function PortafolioPage() {
