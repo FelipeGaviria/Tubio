@@ -1,91 +1,9 @@
 import Link from "next/link";
 
-import { Header } from "@/components/Header";
-import { LandingWheel } from "@/components/LandingWheel";
+export const metadata = { title: "Portafolio", description: "Portafolio personal y selección de proyectos de TuBio." };
 
-const landings = [
-  {
-    label: "Template 1",
-    title: "Landing dark glass para marca tecnica",
-    description:
-      "Una primera base visual con presencia nocturna, acentos cyan y bloques listos para reemplazar por una marca real.",
-    href: "/template-1",
-    status: "Base editable",
-  },
-  {
-    label: 'Template 3',
-    title: 'Landing editorial de narrativa visual',
-    description: 'Una composición cálida para marcas con historia, producto y una experiencia memorable.',
-    href: '/template-3',
-    status: 'Nueva exploración',
-  },
-  {
-    label: 'Template 2',
-    title: 'Tarjeta bio editorial con contactos directos',
-    description: 'Una experiencia tipo tarjeta digital inspirada en perfiles profesionales: identidad, enlaces, guardar contacto y compartir.',
-    href: '/template-2',
-    status: 'Nueva exploraci�n',
-  },
-  {
-    label: 'Template 3',
-    title: 'Landing editorial de narrativa visual',
-    description: 'Una composición cálida para marcas con historia, producto y una experiencia memorable.',
-    href: '/template-3',
-    status: 'Nueva exploración',
-  },
-];
+const projects = ["Dirección creativa", "Estrategia digital", "Identidad de marca"];
 
-export default function PortafolioPage() {
-  return (
-    <main className="portfolio-page">
-      <Header />
-
-      <section className="portfolio-hero">
-        <div className="container portfolio-hero-grid">
-          <div>
-            <p className="eyebrow">Landings</p>
-            <h1>Landings separadas, cada una con su propia identidad.</h1>
-            <p className="portfolio-lead">
-              Este sera el lugar para guardar muestras, plantillas y paginas de clientes. Cada landing puede tener sus propios colores, logos, textos, componentes y direccion visual sin depender de la home de TuBio.
-            </p>
-          </div>
-          <div className="portfolio-note" aria-label="Estado del portafolio">
-            <span>01</span>
-            <strong>Primera landing lista para editar</strong>
-            <p>La estructura esta cruda a proposito: sirve como tablero inicial para crecer con marcas reales.</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="portfolio-list-section">
-        <div className="container">
-          <div className="portfolio-list-heading">
-            <p className="eyebrow">Inventario inicial</p>
-            <h2>Plantillas y landings</h2>
-          </div>
-
-          <div className="portfolio-grid">
-            {landings.map((landing) => (
-              <Link className="portfolio-card" href={landing.href} key={landing.href}>
-                <span>{landing.label}</span>
-                <h3>{landing.title}</h3>
-                <p>{landing.description}</p>
-                <strong>{landing.status}</strong>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-white">
-        <div className="container">
-          <div className="section-heading">
-            <p className="eyebrow">Ruleta de ejemplos</p>
-            <h2>Explora posibilidades para cada tipo de cliente.</h2>
-            <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en landings reales.</p>
-          </div>
-          <LandingWheel />
-        </div>
-      </section>`n    </main>
-  );
+export default function PersonalPortfolioPage() {
+  return <main className="personal-portfolio"><header><Link href="/">TB</Link><span>Portafolio / TuBio</span></header><section className="personal-portfolio-hero"><p className="eyebrow">Hola, soy Felipe</p><h1>Ideas que encuentran<br /><em>su forma.</em></h1><p>Este es mi espacio para reunir proyectos, experimentos y colaboraciones digitales.</p><a href="mailto:hola@tubio.co">Hablemos <span>→</span></a></section><section className="personal-portfolio-list"><p className="eyebrow">En lo que trabajo</p>{projects.map((project, index) => <article key={project}><span>0{index + 1}</span><h2>{project}</h2><b>+</b></article>)}</section><footer><Link href="/">Volver a TuBio</Link><span>Colombia / 2026</span></footer></main>;
 }

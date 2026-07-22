@@ -45,7 +45,7 @@ export default function TemplateTwoClient() {
       <div className="template-two-orbit template-two-orbit-one" aria-hidden="true" />
       <div className="template-two-orbit template-two-orbit-two" aria-hidden="true" />
       <section className="template-two-stage">
-        <Link className="template-two-back" href="/portafolio">Volver al portafolio</Link>
+        <Link className="template-two-back" href="/landings">Volver al portafolio</Link>
         <article className="template-two-card">
           <div className="template-two-photo" role="img" aria-label="Retrato abstracto de Sofía Andrade"><span>SA</span><i>creative direction / 2026</i></div>
           <div className="template-two-content">
@@ -57,7 +57,7 @@ export default function TemplateTwoClient() {
               {contactItems.map((item) => <a key={item.label} href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel={item.href.startsWith("http") ? "noreferrer" : undefined}><strong>{item.icon}</strong><span><small>{item.label}</small>{item.value}</span><b>→</b></a>)}
             </div>
             <div className="template-two-actions"><button type="button" onClick={handleAddContact}>＋ Guardar contacto</button><button type="button" className="template-two-share" onClick={handleShare}>Compartir ↗</button></div>
-            <footer className="template-two-footer"><span>Estudio Nómada</span><Link href="/portafolio">Hecho con TuBio</Link></footer>
+            <footer className="template-two-footer"><span>Estudio Nómada</span><Link href="/landings">Hecho con TuBio</Link></footer>
           </div>
         </article>
       </section>

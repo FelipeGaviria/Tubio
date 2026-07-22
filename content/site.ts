@@ -9,7 +9,7 @@ export const site = {
     email: "hola@tubio.co",
     city: "Colombia",
   },
-  navigation: [{ label: "Inicio", href: "/" }, { label: "Landings", href: "/portafolio" }],
+  navigation: [{ label: "Inicio", href: "/" }, { label: "Landings", href: "/landings" }],
   hero: {
     eyebrow: "Tu taller para vender paginas web",
     title: "Paginas web responsive, seguras y listas para publicar en Vercel.",
