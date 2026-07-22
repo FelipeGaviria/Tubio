@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Header } from "@/components/Header";
+import { LandingWheel } from "@/components/LandingWheel";
 
 const landings = [
   {
@@ -28,7 +29,7 @@ export default function PortafolioPage() {
       <section className="portfolio-hero">
         <div className="container portfolio-hero-grid">
           <div>
-            <p className="eyebrow">Portafolio</p>
+            <p className="eyebrow">Landings</p>
             <h1>Landings separadas, cada una con su propia identidad.</h1>
             <p className="portfolio-lead">
               Este sera el lugar para guardar muestras, plantillas y paginas de clientes. Cada landing puede tener sus propios colores, logos, textos, componentes y direccion visual sin depender de la home de TuBio.
@@ -61,6 +62,16 @@ export default function PortafolioPage() {
           </div>
         </div>
       </section>
-    </main>
+
+      <section className="section section-white">
+        <div className="container">
+          <div className="section-heading">
+            <p className="eyebrow">Ruleta de ejemplos</p>
+            <h2>Explora posibilidades para cada tipo de cliente.</h2>
+            <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en landings reales.</p>
+          </div>
+          <LandingWheel />
+        </div>
+      </section>    </main>
   );
 }
