@@ -78,7 +78,7 @@ a {
   height: 38px;
   place-items: center;
   border-radius: 12px;
-  background: var(--brand);
+  background: #808080;
   color: white;
   font-family: var(--font-display), var(--font-inter), system-ui, sans-serif;
   font-size: 1.1rem;
