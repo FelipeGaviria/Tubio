@@ -25,6 +25,13 @@ const landings = [
     href: "/template-3",
     status: "Nueva exploracion",
   },
+  {
+    label: 'Template 4',
+    title: 'Biolink con parallax suave y datos personales',
+    description: 'Una tarjeta de perfil pensada para reunir enlaces, trabajo y personalidad en una experiencia con movimiento.',
+    href: '/template-4',
+    status: 'Experimento visual',
+  },
 ];
 
 export default function PortafolioPage() {
