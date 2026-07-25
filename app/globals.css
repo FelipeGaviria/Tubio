@@ -1310,3 +1310,25 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-illustration-modal { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; border: 0; background: rgba(8,10,13,.94); padding: clamp(20px, 5vw, 70px); cursor: zoom-out; }
 .raw-illustration-modal img { position: relative !important; width: auto !important; height: auto !important; max-width: 100%; max-height: 100%; object-fit: contain !important; }
 @media (max-width: 800px) { .raw-illustration-pair { grid-template-columns: 1fr; width: 100%; }.raw-illustration-pair-grid { grid-column: 1; grid-template-columns: 1fr; gap: 18px; }.raw-illustration-project-grid .raw-illustration-trigger { aspect-ratio: 16 / 9; }.raw-illustrations-more { margin-top: 58px; } }
+/* Casos de manuales e identidades de marca. */
+.raw-manuals { padding: 120px clamp(20px, 9vw, 150px); overflow: hidden; background: #11151b; color: #f4f4f0; }
+.raw-manuals .raw-label { color: #73a9ff; }
+.raw-manuals-heading { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); gap: 42px; align-items: end; }
+.raw-manuals h2 { margin-top: 22px; font-size: clamp(4rem, 8vw, 8rem); font-weight: 400; letter-spacing: .035em; line-height: .84; }
+.raw-manuals h2 em { color: #73a9ff; font-style: normal; }
+.raw-manuals-heading > p { max-width: 360px; margin: 0 0 8px; color: #b8c0c9; line-height: 1.65; }
+.raw-manual-cases { margin-top: 110px; }
+.raw-manual-case { display: grid; grid-template-columns: minmax(230px, .56fr) minmax(0, 1.44fr); column-gap: clamp(40px, 7vw, 105px); align-items: end; padding: 74px 0; border-top: 1px solid rgba(244,244,240,.2); }
+.raw-manual-case:last-child { border-bottom: 1px solid rgba(244,244,240,.2); }
+.raw-manual-case-intro { padding-bottom: 4px; }
+.raw-manual-case-intro h3 { margin-top: 16px; font-size: clamp(3rem, 5vw, 5.5rem); font-weight: 400; letter-spacing: .035em; line-height: .84; }
+.raw-manual-case-intro > p:not(.raw-label) { margin-top: 26px; color: #b8c0c9; font-size: .91rem; line-height: 1.65; }
+.raw-manual-case-intro ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; margin: 30px 0 0; padding: 0; list-style: none; color: #f4f4f0; font-size: .66rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.raw-manual-case-intro li::before { color: #73a9ff; content: "• "; }
+.raw-manual-slide { position: relative; display: block; width: 100%; overflow: hidden; border: 0; border-radius: 8px; padding: 0; background: #242b33; cursor: zoom-in; }
+.raw-manual-slide img { object-fit: cover; transition: transform 450ms ease; }
+.raw-manual-slide:hover img { transform: scale(1.025); }
+.raw-manual-cover { grid-column: 2; aspect-ratio: 16 / 9; }
+.raw-manual-thumbnails { grid-column: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.raw-manual-thumbnails .raw-manual-slide { aspect-ratio: 16 / 9; }
+@media (max-width: 800px) { .raw-manuals { padding-block: 82px; }.raw-manuals-heading, .raw-manual-case { grid-template-columns: 1fr; gap: 30px; }.raw-manual-cases { margin-top: 72px; }.raw-manual-case { padding: 54px 0; }.raw-manual-cover, .raw-manual-thumbnails { grid-column: 1; }.raw-manual-thumbnails { grid-template-columns: repeat(2, minmax(0, 1fr)); }.raw-manual-case-intro ol { max-width: 300px; } }

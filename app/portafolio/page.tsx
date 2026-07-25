@@ -1,6 +1,7 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
 import IllustrationGallery from "@/components/IllustrationGallery";
+import ManualCases from "@/components/ManualCases";
 
 export const metadata = {
   title: "Portafolio | Felipe Ramírez",
@@ -22,7 +23,8 @@ export default function PortfolioPage() {
       <section className="raw-tools"><p className="raw-label">03 / Herramientas</p><h2>¿Qué herramientas<br /><em>me acompañan?</em></h2><div className="raw-tool-list">{tools.map((tool) => <span key={tool}>{tool}</span>)}</div></section>
       {projects.map((project, index) => <section id={`proyecto-${index + 1}`} className={`raw-project-section raw-project-section-${index + 1}`} key={project}><p className="raw-label">0{index + 4} / Proyecto</p><h2>{project}</h2><p>Esta sección queda preparada para desarrollar el proyecto, sus imágenes, proceso, resultados y detalles.</p><a href="#inicio">Volver arriba <span>↗</span></a></section>)}
       <IllustrationGallery />
-      <section id="contacto" className="raw-contact"><p className="raw-label">08 / Siguiente proyecto</p><h2>Creemos<br /><em>algo que valga.</em></h2><div className="raw-contact-actions"><a className="raw-whatsapp-link" href="https://wa.me/573004318932" target="_blank" rel="noreferrer"><span>Escríbeme</span><Image className="raw-whatsapp-icon" src="/images/portfolio/whatsapp.webp" alt="" width={28} height={28} /></a><a className="raw-email-link" href="mailto:felipegaviria17@hotmail.com" aria-label="Escribir a Felipe por correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1" /><path d="m4 7 8 6 8-6" /></svg></a></div></section>
+      <ManualCases />
+      <section id="contacto" className="raw-contact"><p className="raw-label">09 / Siguiente proyecto</p><h2>Creemos<br /><em>algo que valga.</em></h2><div className="raw-contact-actions"><a className="raw-whatsapp-link" href="https://wa.me/573004318932" target="_blank" rel="noreferrer"><span>Escríbeme</span><Image className="raw-whatsapp-icon" src="/images/portfolio/whatsapp.webp" alt="" width={28} height={28} /></a><a className="raw-email-link" href="mailto:felipegaviria17@hotmail.com" aria-label="Escribir a Felipe por correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1" /><path d="m4 7 8 6 8-6" /></svg></a></div></section>
       <footer className="raw-portfolio-footer"><span>Felipe Gaviria Vásquez</span><a href="#inicio">Volver arriba</a><span>Colombia / 2026</span></footer>
     </main>
   );
