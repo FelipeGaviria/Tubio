@@ -1228,3 +1228,18 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-experience { grid-template-columns: minmax(300px, .9fr) minmax(0, 1.1fr); column-gap: clamp(56px, 9vw, 140px); }
 .raw-experience-list { max-width: 580px; }
 @media (max-width: 1000px) and (min-width: 801px) { .raw-experience { grid-template-columns: minmax(235px, .78fr) minmax(0, 1.22fr); column-gap: 48px; }.raw-experience-list { max-width: 100%; } }
+/* Ajustes finales de navegación, trayectoria y contacto. */
+.raw-portfolio-header { display: none; }
+.raw-portfolio-hero { padding-top: 64px; }
+.raw-experience > h2 { align-self: start; margin-top: 22px; text-align: left; }
+.raw-experience-list article { padding: 13px 0; }
+.raw-experience-list h3 { font-size: clamp(1.15rem, 2vw, 1.8rem); line-height: .95; }
+.raw-experience-role { font-size: .72rem; }
+.raw-experience-list article p:not(.raw-experience-role) { margin-top: 8px; font-size: .76rem; line-height: 1.35; }
+.raw-experience-list strong { margin-top: 10px; font-size: .65rem; }
+.raw-contact-actions { display: flex; align-items: center; gap: 12px; margin-top: 64px; }
+.raw-contact .raw-whatsapp-link { margin-top: 0; border-radius: 999px; color: #11151b; font-family: var(--font-display), var(--font-inter), sans-serif; font-size: 1.15rem; font-weight: 400; letter-spacing: .06em; }
+.raw-email-link { display: grid; width: 54px; height: 54px; place-items: center; border: 1px solid rgba(17,21,27,.2); border-radius: 50%; background: #fff; color: #11151b; transition: transform 180ms ease, box-shadow 180ms ease; }
+.raw-email-link:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,.18); }
+.raw-email-link svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+@media (max-width: 800px) { .raw-contact-actions { margin-top: 48px; }.raw-experience-list article { padding: 14px 0; } }
