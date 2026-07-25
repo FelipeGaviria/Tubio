@@ -1332,3 +1332,25 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-manual-thumbnails { grid-column: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
 .raw-manual-thumbnails .raw-manual-slide { aspect-ratio: 16 / 9; }
 @media (max-width: 800px) { .raw-manuals { padding-block: 82px; }.raw-manuals-heading, .raw-manual-case { grid-template-columns: 1fr; gap: 30px; }.raw-manual-cases { margin-top: 72px; }.raw-manual-case { padding: 54px 0; }.raw-manual-cover, .raw-manual-thumbnails { grid-column: 1; }.raw-manual-thumbnails { grid-template-columns: repeat(2, minmax(0, 1fr)); }.raw-manual-case-intro ol { max-width: 300px; } }
+/* Carrusel de estrategia de marca y nueva composición Shift. */
+.raw-project-section-2 { padding-bottom: 90px; }
+.raw-brand-carousel { margin-top: 62px; }
+.raw-brand-carousel-top { display: flex; justify-content: space-between; gap: 28px; align-items: end; margin-bottom: 18px; }
+.raw-brand-carousel-top > p { max-width: 370px; margin: 0; color: var(--raw-muted); font-size: .82rem; line-height: 1.55; }
+.raw-brand-carousel-top > div { display: flex; gap: 8px; }
+.raw-brand-carousel-top button { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid rgba(17,21,27,.22); border-radius: 50%; background: transparent; color: #11151b; cursor: pointer; font-size: 1.1rem; }
+.raw-brand-carousel-top button:hover { background: #11151b; color: #fff; }
+.raw-brand-track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; scrollbar-width: thin; }
+.raw-brand-piece { position: relative; flex: 0 0 clamp(210px, 24vw, 310px); aspect-ratio: 4 / 5; overflow: hidden; scroll-snap-align: start; border: 0; border-radius: 8px; padding: 0; background: #d9d9d5; cursor: zoom-in; }
+.raw-brand-piece-wide { flex-basis: clamp(300px, 35vw, 460px); aspect-ratio: 16 / 9; align-self: center; }
+.raw-brand-piece img { object-fit: cover; transition: transform 400ms ease; }
+.raw-brand-piece:hover img { transform: scale(1.025); }
+.raw-brand-piece span { position: absolute; right: 10px; bottom: 10px; padding: 6px 8px; background: rgba(17,21,27,.82); color: #fff; font-size: .62rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.raw-illustration-series-shift { display: block; margin-top: 92px; }
+.raw-illustration-series-shift .raw-series-copy { display: flex; align-items: baseline; gap: 22px; padding-bottom: 18px; }
+.raw-illustration-series-shift .raw-series-copy h3 { margin-top: 0; }
+.raw-illustration-series-shift .raw-illustration-feature { width: 100%; aspect-ratio: 16 / 8.2; }
+.raw-illustration-pair { display: block; width: 100%; margin-top: 18px; }
+.raw-illustration-pair-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.raw-illustration-pair-grid .raw-illustration-trigger { aspect-ratio: 16 / 9; }
+@media (max-width: 800px) { .raw-brand-carousel-top { align-items: start; }.raw-brand-carousel-top > p { max-width: 250px; }.raw-brand-piece { flex-basis: 70vw; }.raw-brand-piece-wide { flex-basis: 80vw; }.raw-illustration-series-shift .raw-series-copy { display: block; }.raw-illustration-series-shift .raw-series-copy h3 { margin-top: 12px; }.raw-illustration-pair-grid { grid-template-columns: 1fr; gap: 14px; } }
