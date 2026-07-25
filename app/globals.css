@@ -1262,3 +1262,34 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-experience > h2 { grid-row: 1; margin-top: 0; }
 .raw-experience > .raw-label { position: absolute; top: 88px; left: clamp(20px, 9vw, 150px); margin: 0; }
 @media (max-width: 800px) { .raw-experience > .raw-label { position: static; margin: 0 0 18px; }.raw-experience > h2 { margin-top: 0; } }
+/* Encabezado de experiencia: rótulo encima del título, como las demás secciones. */
+.raw-experience > .raw-experience-heading { grid-column: 1; grid-row: 1; align-self: start; }
+.raw-experience-heading .raw-label { position: static; margin: 0; }
+.raw-experience-heading h2 { margin-top: 22px; text-align: left; }
+@media (max-width: 800px) { .raw-experience > .raw-experience-heading { display: block; }.raw-experience-heading h2 { margin-top: 18px; } }
+/* Galería editorial de ilustraciones. */
+.raw-illustrations { overflow: hidden; padding: 120px clamp(20px, 9vw, 150px); background: #ecebe5; color: #11151b; }
+.raw-illustrations-heading { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(220px, .7fr); gap: 42px; align-items: end; }
+.raw-illustrations h2 { margin-top: 22px; font-size: clamp(4rem, 9vw, 9rem); font-weight: 400; letter-spacing: .035em; line-height: .84; }
+.raw-illustrations h2 em, .raw-project-illustrations em { color: var(--raw-blue); font-style: normal; }
+.raw-illustrations-heading > p:last-child { max-width: 350px; margin: 0 0 8px; color: var(--raw-muted); line-height: 1.6; }
+.raw-illustration-series { display: grid; grid-template-columns: minmax(220px, .62fr) minmax(0, 1.38fr); gap: clamp(38px, 7vw, 110px); align-items: end; margin-top: 105px; }
+.raw-series-copy { padding-bottom: 6px; }
+.raw-series-copy h3, .raw-project-illustrations h3 { margin-top: 16px; font-size: clamp(3.4rem, 6vw, 6.6rem); font-weight: 400; letter-spacing: .035em; line-height: .82; }
+.raw-series-copy > p:not(.raw-label) { margin-top: 28px; color: var(--raw-muted); font-size: .92rem; line-height: 1.65; }
+.raw-series-copy span { display: block; margin-top: 28px; color: var(--raw-blue); font-size: .68rem; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+.raw-illustration-feature, .raw-illustration-pair figure, .raw-illustration-project-grid figure { position: relative; margin: 0; overflow: hidden; border-radius: 8px; background: #d7d9d4; }
+.raw-illustration-feature { aspect-ratio: 16 / 9; }
+.raw-illustration-feature img, .raw-illustration-pair img, .raw-illustration-project-grid img { object-fit: cover; transition: transform 500ms ease; }
+.raw-illustration-feature:hover img, .raw-illustration-pair figure:hover img, .raw-illustration-project-grid figure:hover img { transform: scale(1.025); }
+.raw-illustration-feature figcaption, .raw-illustration-pair figcaption { position: absolute; right: 14px; bottom: 13px; padding: 7px 9px; background: rgba(17,21,27,.8); color: #fff; font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.raw-illustration-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; width: min(100%, 840px); margin: 24px 0 0 auto; }
+.raw-illustration-pair figure { aspect-ratio: 16 / 9; }
+.raw-project-illustrations { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .7fr); gap: 42px; align-items: end; margin-top: 145px; }
+.raw-project-illustrations > p { max-width: 360px; margin: 0 0 8px; color: var(--raw-muted); font-size: .92rem; line-height: 1.65; }
+.raw-illustration-project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 56px; }
+.raw-illustration-project-grid figure { aspect-ratio: 16 / 10; }
+.raw-illustration-project-grid figcaption { display: grid; gap: 4px; padding: 14px 2px 0; color: #11151b; }
+.raw-illustration-project-grid figcaption span { color: var(--raw-blue); font-size: .65rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.raw-illustration-project-grid figcaption strong { font-family: var(--font-display), var(--font-inter), sans-serif; font-size: 1.1rem; font-weight: 400; letter-spacing: .03em; }
+@media (max-width: 800px) { .raw-illustrations { padding-block: 82px; }.raw-illustrations-heading, .raw-illustration-series, .raw-project-illustrations { grid-template-columns: 1fr; gap: 30px; }.raw-illustration-series { margin-top: 70px; }.raw-illustration-pair, .raw-illustration-project-grid { grid-template-columns: 1fr; width: 100%; gap: 18px; }.raw-project-illustrations { margin-top: 88px; }.raw-illustration-project-grid { margin-top: 38px; }.raw-illustration-project-grid figure { aspect-ratio: 16 / 9; } }
