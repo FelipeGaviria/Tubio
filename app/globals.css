@@ -1354,3 +1354,18 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-illustration-pair-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .raw-illustration-pair-grid .raw-illustration-trigger { aspect-ratio: 16 / 9; }
 @media (max-width: 800px) { .raw-brand-carousel-top { align-items: start; }.raw-brand-carousel-top > p { max-width: 250px; }.raw-brand-piece { flex-basis: 70vw; }.raw-brand-piece-wide { flex-basis: 80vw; }.raw-illustration-series-shift .raw-series-copy { display: block; }.raw-illustration-series-shift .raw-series-copy h3 { margin-top: 12px; }.raw-illustration-pair-grid { grid-template-columns: 1fr; gap: 14px; } }
+/* Collage de Ilustración, proyectos de marca y tipografía unificada. */
+.raw-intro h2 em, .raw-contact h2 em { font-family: var(--font-display), var(--font-inter), sans-serif; font-style: normal; }
+.raw-manual-cases { margin-top: 64px; }
+.raw-illustration-collage { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; align-items: center; margin-top: 80px; }
+.raw-collage-center { position: relative; z-index: 1; grid-column: 3 / span 8; grid-row: 2 / span 2; }
+.raw-collage-center .raw-label { margin-bottom: 10px; }
+.raw-collage-center h3 { margin: 0 0 20px; font-size: clamp(3.5rem, 7vw, 7.5rem); font-weight: 400; letter-spacing: .035em; line-height: .8; }
+.raw-collage-center .raw-illustration-feature { aspect-ratio: 16 / 9; box-shadow: 0 25px 60px rgba(17,21,27,.16); }
+.raw-collage-orbit { display: contents; }
+.raw-collage-item { aspect-ratio: 16 / 10; box-shadow: 0 15px 30px rgba(17,21,27,.12); }
+.raw-collage-item::after { content: "+"; position: absolute; right: 10px; bottom: 10px; display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #f4f4f0; color: #11151b; font-size: 1.3rem; line-height: 1; opacity: .95; }
+.raw-collage-item-1 { grid-column: 1 / span 3; grid-row: 1; transform: translateY(24px); }.raw-collage-item-2 { grid-column: 10 / span 3; grid-row: 1; transform: translateY(-6px); }.raw-collage-item-3 { grid-column: 1 / span 3; grid-row: 3; transform: translateY(50px); }.raw-collage-item-4 { grid-column: 10 / span 3; grid-row: 3; transform: translateY(34px); }.raw-collage-item-5 { grid-column: 2 / span 3; grid-row: 4; transform: translateY(8px); }.raw-collage-item-6 { grid-column: 9 / span 3; grid-row: 4; transform: translateY(16px); }
+.raw-brand-carousel-top { align-items: start; }.raw-brand-carousel-top > div:first-child { max-width: 430px; }.raw-brand-carousel-top > div:first-child > p:last-child { margin: 10px 0 0; color: var(--raw-muted); font-size: .82rem; line-height: 1.55; }.raw-brand-carousel-top > p { display: none; }
+.raw-brand-wide { margin-top: 42px; }.raw-brand-wide > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }.raw-brand-wide .raw-brand-piece { width: 100%; max-width: none; }.raw-brand-wide .raw-brand-piece-wide { aspect-ratio: 16 / 9; }
+@media (max-width: 800px) { .raw-illustration-collage { display: block; margin-top: 58px; }.raw-collage-center { display: block; }.raw-collage-orbit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }.raw-collage-item { transform: none !important; }.raw-collage-item-1 { grid-column: auto; }.raw-brand-wide > div { grid-template-columns: 1fr; }.raw-manual-cases { margin-top: 48px; } }
