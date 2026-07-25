@@ -1243,3 +1243,14 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-email-link:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,.18); }
 .raw-email-link svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 @media (max-width: 800px) { .raw-contact-actions { margin-top: 48px; }.raw-experience-list article { padding: 14px 0; } }
+/* Experiencia compacta y herramientas en cuadrícula. */
+.raw-experience > h2 { grid-row: 1; margin-top: 0; }
+.raw-experience > .raw-label { grid-row: 2; align-self: start; margin-top: 20px; }
+.raw-experience-list article { display: block; border-top: 0; padding: 8px 0; }
+.raw-experience-list h3 { margin-top: 5px; }
+.raw-experience-list article p:not(.raw-experience-role) { margin-top: 5px; }
+.raw-experience-list strong { margin-top: 7px; }
+.raw-tools h2 { line-height: .95; }
+.raw-tools .raw-tool-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 42px; row-gap: 18px; margin-top: 55px; color: #11151b; font-family: var(--font-inter), sans-serif; font-size: .86rem; font-weight: 800; text-align: center; }
+.raw-tools .raw-tool-list span { padding: 10px 6px; }
+@media (max-width: 800px) { .raw-experience > h2, .raw-experience > .raw-label { grid-row: auto; }.raw-experience-list article { padding: 10px 0; }.raw-tools .raw-tool-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10px; row-gap: 14px; margin-top: 40px; font-size: .76rem; } }
