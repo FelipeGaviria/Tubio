@@ -1254,3 +1254,6 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-tools .raw-tool-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 42px; row-gap: 18px; margin-top: 55px; color: #11151b; font-family: var(--font-inter), sans-serif; font-size: .86rem; font-weight: 800; text-align: center; }
 .raw-tools .raw-tool-list span { padding: 10px 6px; }
 @media (max-width: 800px) { .raw-experience > h2, .raw-experience > .raw-label { grid-row: auto; }.raw-experience-list article { padding: 10px 0; }.raw-tools .raw-tool-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10px; row-gap: 14px; margin-top: 40px; font-size: .76rem; } }
+/* Orden del rótulo de experiencia. */
+.raw-experience > .raw-label { grid-row: 1; margin-top: 0; }
+.raw-experience > h2 { grid-row: 2; margin-top: 14px; }
