@@ -1257,3 +1257,8 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 /* Orden del rótulo de experiencia. */
 .raw-experience > .raw-label { grid-row: 1; margin-top: 0; }
 .raw-experience > h2 { grid-row: 2; margin-top: 14px; }
+/* El rótulo queda sobre el título sin desplazar Experiencia. */
+.raw-experience { position: relative; }
+.raw-experience > h2 { grid-row: 1; margin-top: 0; }
+.raw-experience > .raw-label { position: absolute; top: 88px; left: clamp(20px, 9vw, 150px); margin: 0; }
+@media (max-width: 800px) { .raw-experience > .raw-label { position: static; margin: 0 0 18px; }.raw-experience > h2 { margin-top: 0; } }
