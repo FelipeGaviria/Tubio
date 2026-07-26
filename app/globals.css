@@ -1591,3 +1591,7 @@ html[data-portfolio-theme="night"] .raw-experience-more { color: #11151b; }
 /* Solo el switch se desplaza; la ubicación permanece fija. */
 .raw-hero-actions { right: -54px; }.raw-theme-toggle { transform: translateX(132px); }
 @media (max-width: 800px) { .raw-hero-actions { right: -10px; }.raw-theme-toggle { transform: translateX(52px); } }
+
+/* Cierre adicional para servicios de landing. */
+.raw-landing-cta { padding: 92px clamp(20px, 9vw, 150px) 132px; background: radial-gradient(circle at 70% 20%, rgba(96,78,153,.42), transparent 38%), #101018; color: #f4f4f0; text-align: center; }.raw-landing-cta .raw-label { color: #b7abff; }.raw-landing-cta h2 { margin-top: 18px; font-family: var(--font-display), var(--font-inter), sans-serif; font-size: clamp(2.7rem, 6vw, 6.2rem); font-weight: 400; letter-spacing: .035em; line-height: .88; }.raw-landing-cta > p:not(.raw-label) { max-width: 430px; margin: 24px auto 0; color: #c1c0cf; line-height: 1.6; }.raw-landing-cta a { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; border-radius: 999px; background: #fff; padding: 11px 20px; color: #11151b; font-family: var(--font-display), var(--font-inter), sans-serif; letter-spacing: .06em; text-decoration: none; box-shadow: 0 12px 30px rgba(0,0,0,.24); }.raw-landing-cta a span { color: var(--raw-blue); }
+@media (max-width: 800px) { .raw-landing-cta { padding-block: 74px 110px; } }
