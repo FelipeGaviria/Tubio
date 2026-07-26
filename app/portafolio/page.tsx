@@ -4,7 +4,6 @@ import IllustrationGallery from "@/components/IllustrationGallery";
 import ManualCases from "@/components/ManualCases";
 import BrandCarousel from "@/components/BrandCarousel";
 import PortfolioThemeToggle from "@/components/PortfolioThemeToggle";
-import PortfolioScrollIndicator from "@/components/PortfolioScrollIndicator";
 import PortfolioShareButton from "@/components/PortfolioShareButton";
 import ExperienceCarousel from "@/components/ExperienceCarousel";
 
@@ -18,6 +17,7 @@ const projects = ["Contenido para marcas"];
 export default function PortfolioPage() {
   return (
     <main id="inicio" className="raw-portfolio">
+      <PortfolioShareButton />
       <a className="raw-whatsapp-float" href="https://wa.me/573004318932" target="_blank" rel="noreferrer" aria-label="Escribir a Felipe por WhatsApp">
         <Image src="/images/portfolio/whatsapp.webp" alt="" width={56} height={56} />
       </a>
@@ -29,8 +29,7 @@ export default function PortfolioPage() {
       <ManualCases />
       <IllustrationGallery />
       <section id="produccion-audiovisual" className="raw-project-section raw-project-section-1"><p className="raw-label">08 / Producción audiovisual</p><h2>Producción audiovisual</h2><p>Esta sección queda preparada para desarrollar proyectos audiovisuales, proceso, resultados y detalles.</p><a href="#inicio">Volver arriba <span>?</span></a></section>
-      <section id="contacto" className="raw-contact"><p className="raw-label">09 / Siguiente proyecto</p><h2>Creemos<br /><em>algo que valga.</em></h2><div className="raw-contact-actions"><a className="raw-whatsapp-link" href="https://wa.me/573004318932" target="_blank" rel="noreferrer"><span>Escríbeme</span><Image className="raw-whatsapp-icon" src="/images/portfolio/whatsapp.webp" alt="" width={28} height={28} /></a><a className="raw-email-link" href="mailto:felipegaviria17@hotmail.com" aria-label="Escribir a Felipe por correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1" /><path d="m4 7 8 6 8-6" /></svg></a></div></section>
-      <section className="raw-landing-cta"><p className="raw-label">Extra</p><h2>¿Te gustó esta landing?</h2><p>También podemos hablar de crear una para tu marca.</p><a href="https://wa.me/573004318932" target="_blank" rel="noreferrer">Hablemos <span>↗</span></a></section>
+      <section id="contacto" className="raw-contact"><p className="raw-label">09 / Siguiente proyecto</p><h2>Creemos<br /><em>algo que valga.</em></h2><div className="raw-contact-actions"><a className="raw-whatsapp-link" href="https://wa.me/573004318932" target="_blank" rel="noreferrer"><span>Escríbeme</span><Image className="raw-whatsapp-icon" src="/images/portfolio/whatsapp.webp" alt="" width={28} height={28} /></a><a className="raw-email-link" href="mailto:felipegaviria17@hotmail.com" aria-label="Escribir a Felipe por correo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1" /><path d="m4 7 8 6 8-6" /></svg></a></div><p className="raw-landing-inline">¿Te gustó esta landing? También podemos hablar de crear una para tu marca.</p></section>
       <footer className="raw-portfolio-footer"><span>Felipe Gaviria Vásquez</span><a href="#inicio">Volver arriba</a><span>Colombia / 2026</span></footer>
     </main>
   );
