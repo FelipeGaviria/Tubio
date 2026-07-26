@@ -1587,3 +1587,7 @@ html[data-portfolio-theme="night"] .raw-experience-more { color: #11151b; }
 /* Aire adicional en el tragaperras y desplazamiento final del switch. */
 .raw-experience-ghost-before { top: -104px; }.raw-hero-actions { right: -188px; }
 @media (max-width: 800px) { .raw-experience-ghost-before { top: -74px; }.raw-hero-actions { right: -62px; } }
+
+/* Solo el switch se desplaza; la ubicación permanece fija. */
+.raw-hero-actions { right: -54px; }.raw-theme-toggle { transform: translateX(132px); }
+@media (max-width: 800px) { .raw-hero-actions { right: -10px; }.raw-theme-toggle { transform: translateX(52px); } }
