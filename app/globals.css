@@ -1381,3 +1381,29 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-shift-expansions .raw-illustration-trigger { aspect-ratio: 16 / 9; }
 .raw-illustration-project-grid { margin-top: 70px; }
 @media (max-width: 800px) { .raw-shift-group { margin-top: 58px; }.raw-shift-group-heading { display: block; }.raw-shift-group-heading h3 { margin-top: 12px; }.raw-shift-expansions { grid-template-columns: 1fr; gap: 14px; }.raw-brand-piece { flex-basis: 70vw; } }
+/* Bandas de color y contraste para la narrativa del portafolio. */
+.raw-intro { padding: 0; background: #11151b; }
+.raw-intro-identity, .raw-intro-creative { padding: 105px clamp(20px, 9vw, 150px); }
+.raw-intro-identity { background: linear-gradient(135deg, #25244d, #273d72 58%, #202034); color: #f4f4f0; }
+.raw-intro-identity .raw-about-role { color: rgba(244,244,240,.76); }
+.raw-intro-identity .raw-label { color: #a9c9ff; }
+.raw-intro-creative { background: #11151b; color: #f4f4f0; }
+.raw-intro-creative .raw-intro-subtitle { margin-top: 0; }
+.raw-tools { padding-bottom: 68px; }
+.raw-tools .raw-tools-list { max-width: 840px; margin-top: 38px; color: #11151b; font-size: 1rem; font-weight: 750; letter-spacing: .04em; line-height: 1.8; }
+.raw-project-section-2 { overflow: visible; padding-bottom: 0; background: #11151b; color: #f4f4f0; }
+.raw-project-section-2 > .raw-label { color: #73a9ff; }
+.raw-project-section-2 > p:not(.raw-label) { color: #c7ced8; }
+.raw-project-section-2 .raw-brand-carousel { margin: 72px clamp(-150px, -9vw, -20px) 0; padding: 72px clamp(20px, 9vw, 150px) 90px; background: #dedbf4; color: #11151b; }
+.raw-project-section-2 .raw-brand-carousel .raw-label { color: var(--raw-blue); }
+.raw-manuals-heading { display: block; text-align: center; }
+.raw-manuals-heading > div { max-width: 950px; margin: 0 auto; }
+.raw-manuals h2, .raw-manuals h2 em { font-family: var(--font-display), var(--font-inter), sans-serif; font-style: normal; }
+.raw-manuals-heading h2 { margin-top: 18px; }
+.raw-manuals-heading p:not(.raw-label) { max-width: 610px; margin: 28px auto 0; color: #b8c0c9; line-height: 1.65; }
+.raw-manual-case { margin-top: 24px; border: 0; padding: 64px clamp(20px, 5vw, 74px); }
+.raw-manual-case:first-child { margin-top: 0; background: #152c50; }.raw-manual-case:nth-child(2) { background: #5b2e1e; }.raw-manual-case:nth-child(3) { background: #35204d; }.raw-manual-case:last-child { border: 0; }
+.raw-illustrations { padding-top: 120px; }
+.raw-illustrations-intro { margin: -120px clamp(-150px, -9vw, -20px) 0; padding: 120px clamp(20px, 9vw, 150px) 86px; background: #11151b; color: #f4f4f0; }
+.raw-illustrations-intro .raw-label { color: #73a9ff; }.raw-illustrations-intro h2 { color: #f4f4f0; }.raw-illustrations-intro h2 em { color: #73a9ff; }.raw-illustrations-intro .raw-illustrations-heading > p:last-child { color: #b8c0c9; }
+@media (max-width: 800px) { .raw-intro-identity, .raw-intro-creative { padding-block: 78px; }.raw-tools { padding-bottom: 52px; }.raw-project-section-2 .raw-brand-carousel { margin-top: 54px; padding-block: 54px 68px; }.raw-manual-case { padding: 48px 20px; }.raw-illustrations-intro { margin-top: -82px; padding-top: 82px; padding-bottom: 60px; } }
