@@ -5,6 +5,7 @@ import ManualCases from "@/components/ManualCases";
 import BrandCarousel from "@/components/BrandCarousel";
 import PortfolioThemeToggle from "@/components/PortfolioThemeToggle";
 import PortfolioScrollIndicator from "@/components/PortfolioScrollIndicator";
+import PortfolioShareButton from "@/components/PortfolioShareButton";
 import ExperienceCarousel from "@/components/ExperienceCarousel";
 
 export const metadata = {
