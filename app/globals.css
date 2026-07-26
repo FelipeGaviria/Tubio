@@ -1453,3 +1453,14 @@ html[data-portfolio-theme="night"] .raw-illustrations { background: #151a23; col
 .raw-theme-toggle { position: static; gap: 0; border: 0; background: transparent; padding: 0; box-shadow: none; backdrop-filter: none; }.raw-theme-toggle-icon { display: none; }.raw-theme-toggle-track { width: 30px; height: 17px; padding: 2px; background: #c6ccd3; }.raw-theme-toggle-track span { width: 13px; height: 13px; box-shadow: 0 1px 3px rgba(0,0,0,.22); }html[data-portfolio-theme="night"] .raw-theme-toggle { background: transparent; }html[data-portfolio-theme="night"] .raw-theme-toggle-track span { transform: translateX(13px); }
 @media (max-width: 700px) { .raw-hero-actions { gap: 7px; }.raw-hero-actions .raw-contact-data { text-align: right; } }
 .raw-intro-identity .raw-about-heading > div:first-child { text-align: center; }
+/* Alineación final de bloques y lectura vertical. */
+.raw-intro-identity .raw-about-heading { grid-template-columns: 220px auto; justify-content: center; gap: 30px; }
+.raw-intro-identity .raw-about-heading > div:first-child { align-self: center; }
+.raw-hero-actions { grid-column: 2; grid-row: 1; align-self: start; margin-left: auto; }
+.raw-theme-toggle { border: 1px solid #11151b; border-radius: 999px; padding: 2px; }
+.raw-intro-creative .raw-intro-grid { grid-template-columns: 1fr; max-width: 650px; gap: 20px; }.raw-intro-creative .raw-intro-grid p { text-align: center; }
+.raw-tools { text-align: center; }.raw-tools .raw-label, .raw-tools .raw-tools-list { margin-inline: auto; }.raw-tools .raw-tools-list { max-width: 900px; }
+.raw-project-section-2 { display: block; text-align: center; }.raw-project-section-2 > .raw-label, .raw-project-section-2 > h2, .raw-project-section-2 > p:not(.raw-label) { text-align: center; }.raw-project-section-2 > p:not(.raw-label) { max-width: 600px; margin: 28px auto 0; }.raw-project-section-2 > a { display: none; }
+.raw-illustrations-intro .raw-illustrations-heading > p:last-child { max-width: 720px; }
+.raw-contact { text-align: center; }.raw-contact .raw-label { text-align: center; }.raw-contact-actions { justify-content: center; }
+@media (max-width: 800px) { .raw-intro-identity .raw-about-heading { grid-template-columns: 125px minmax(0, 1fr); justify-content: initial; gap: 22px; }.raw-intro-creative .raw-intro-grid { gap: 16px; }.raw-illustrations-intro .raw-illustrations-heading > p:last-child { max-width: 100%; } }
