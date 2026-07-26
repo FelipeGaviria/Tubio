@@ -1560,3 +1560,15 @@ html[data-portfolio-theme="night"] .raw-experience-more { color: #11151b; }
 .raw-hero-actions { right: -92px; }
 .raw-illustrations-intro { padding-top: 88px; padding-bottom: 62px; }.raw-shift-group { margin-top: 58px; }.raw-shift-hero { aspect-ratio: 16 / 10.5; }.raw-shift-expansions { margin-top: 14px; }.raw-shift-expansions .raw-illustration-trigger { aspect-ratio: 16 / 10.5; }.raw-shift-hero img, .raw-shift-expansions .raw-illustration-trigger img { object-fit: contain; background: #151515; }
 @media (max-width: 800px) { .raw-experience { display: block; }.raw-experience > .raw-experience-heading { display: block; }.raw-experience-carousel { margin-top: 36px; }.raw-experience-heading h2, .raw-experience-heading .raw-label { text-align: left; }.raw-hero-actions { right: -24px; }.raw-illustrations-intro { padding-top: 68px; padding-bottom: 48px; }.raw-shift-group { margin-top: 42px; }.raw-shift-hero, .raw-shift-expansions .raw-illustration-trigger { aspect-ratio: 16 / 11; } }
+
+/* Compactación del módulo de experiencia frente a la ficha activa. */
+.raw-experience > .raw-experience-heading { transform: translateY(-68px); }
+.raw-experience-rotor { height: 294px; padding-block: 56px; }.raw-experience-ghost-before { top: -32px; }.raw-experience-ghost-after { bottom: 42px; }.raw-experience-more { margin-top: 8px; }
+.raw-experience { padding-top: 86px; padding-bottom: 58px; }
+@media (max-width: 800px) { .raw-experience > .raw-experience-heading { transform: none; }.raw-experience-rotor { height: 305px; padding-block: 62px; }.raw-experience-ghost-before { top: -28px; }.raw-experience-ghost-after { bottom: 24px; }.raw-experience { padding-top: 72px; padding-bottom: 48px; } }
+
+/* Encuadre y color de Ilustración; controles de carrusel. */
+.raw-brand-carousel-motion .raw-brand-carousel-top button:first-child { left: -16px; }.raw-brand-carousel-motion .raw-brand-carousel-top button:last-child { right: -16px; }
+.raw-nfc-heading { display: grid; width: 100%; margin: 0 auto 24px; justify-items: center; text-align: center; }.raw-nfc-heading .raw-label, .raw-nfc-heading > p:last-child { width: 100%; text-align: center; }
+.raw-illustrations { background: radial-gradient(circle at 16% 24%, rgba(130,89,220,.42), transparent 32%), radial-gradient(circle at 84% 68%, rgba(35,132,211,.35), transparent 36%), linear-gradient(145deg, #171039 0%, #24134d 48%, #0d1739 100%); color: #f5f2ff; }.raw-illustrations .raw-illustration-project-grid { position: relative; }.raw-illustrations .raw-illustration-trigger { box-shadow: 0 18px 45px rgba(5,2,20,.42); }.raw-illustrations-more a { background: #fff; color: #171039; }.raw-shift-hero { aspect-ratio: 16 / 9; }.raw-shift-expansions .raw-illustration-trigger { aspect-ratio: 16 / 9; }.raw-shift-hero img, .raw-shift-expansions .raw-illustration-trigger img { object-fit: cover; background: transparent; }
+@media (max-width: 800px) { .raw-brand-carousel-motion .raw-brand-carousel-top button:first-child { left: -8px; }.raw-brand-carousel-motion .raw-brand-carousel-top button:last-child { right: -8px; }.raw-shift-hero, .raw-shift-expansions .raw-illustration-trigger { aspect-ratio: 16 / 9; } }
