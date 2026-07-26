@@ -3,6 +3,7 @@ import Link from "next/link";
 import IllustrationGallery from "@/components/IllustrationGallery";
 import ManualCases from "@/components/ManualCases";
 import BrandCarousel from "@/components/BrandCarousel";
+import PortfolioThemeToggle from "@/components/PortfolioThemeToggle";
 
 export const metadata = {
   title: "Portafolio | Felipe Ramírez",
@@ -14,6 +15,7 @@ const projects = ["Contenido para marcas"];
 export default function PortfolioPage() {
   return (
     <main id="inicio" className="raw-portfolio">
+      <PortfolioThemeToggle />
       <a className="raw-whatsapp-float" href="https://wa.me/573004318932" target="_blank" rel="noreferrer" aria-label="Escribir a Felipe por WhatsApp">
         <Image src="/images/portfolio/whatsapp.webp" alt="" width={56} height={56} />
       </a>
