@@ -1603,3 +1603,8 @@ html[data-portfolio-theme="night"] .raw-experience-more { color: #11151b; }
 /* Ajuste de ubicación y CTA integrado al cierre. */
 .raw-hero-actions { right: -34px; }.raw-theme-toggle { transform: translateX(104px); }.raw-landing-inline { max-width: 430px; margin: 34px auto 0; color: rgba(255,255,255,.72); font-size: .92rem; line-height: 1.6; }
 @media (max-width: 800px) { .raw-hero-actions { right: -4px; }.raw-theme-toggle { transform: translateX(38px); }.raw-landing-inline { margin-top: 28px; } }
+
+/* Estado temporal y acciones superiores compactas. */
+#produccion-audiovisual { display: none; }
+.raw-hero-actions .raw-profile-share { position: static; width: 34px; height: 34px; justify-content: center; padding: 0; transform: translateX(104px); border-width: 1.5px; border-radius: 50%; }.raw-hero-actions .raw-profile-share span { display: none; }.raw-hero-actions .raw-profile-share:hover { transform: translateX(104px) translateY(-2px); }.raw-experience-more, .raw-illustrations-more a { color: #11151b !important; }
+@media (max-width: 800px) { .raw-hero-actions .raw-profile-share { transform: translateX(38px); }.raw-hero-actions .raw-profile-share:hover { transform: translateX(38px) translateY(-2px); } }
