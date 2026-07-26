@@ -1526,3 +1526,11 @@ html { scrollbar-width: none; } body::-webkit-scrollbar { width: 0; height: 0; }
 .raw-scroll-indicator span.is-active { width: 11px; background: #11151b; transform: translateX(-1px); }
 html[data-portfolio-theme="night"] .raw-scroll-indicator span { background: rgba(244,244,240,.3); }html[data-portfolio-theme="night"] .raw-scroll-indicator span.is-active { background: #f4f4f0; }
 @media (max-width: 800px) { .raw-scroll-indicator { left: 7px; gap: 6px; }.raw-scroll-indicator span { width: 4px; }.raw-scroll-indicator span.is-active { width: 8px; } }
+
+/* Ajustes de interacción y composición de los carruseles. */
+.raw-hero-actions { justify-self: end; justify-items: end; margin-left: auto; margin-right: -22px; }
+.raw-experience-rotor { height: 438px; padding-block: 128px; mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.92) 18%, #000 34%, #000 66%, rgba(0,0,0,.92) 82%, transparent 100%); }
+.raw-experience-ghost { opacity: .38 !important; filter: blur(3.5px) saturate(.7); }.raw-experience-ghost-before { top: -62px; }.raw-experience-ghost-after { bottom: -62px; }
+.raw-brand-carousel-motion { position: relative; }.raw-brand-carousel-motion .raw-brand-carousel-top button { top: 50%; transform: translateY(-50%); }.raw-brand-carousel-motion .raw-brand-carousel-top button:hover { transform: translateY(-50%) scale(1.06); }.raw-brand-carousel-motion .raw-brand-carousel-top button:first-child { left: 2px; }.raw-brand-carousel-motion .raw-brand-carousel-top button:last-child { right: 2px; }
+.raw-reels h3 { letter-spacing: .11em; }.raw-reels-heading { margin-bottom: 34px; }
+@media (max-width: 800px) { .raw-hero-actions { margin-right: -10px; }.raw-experience-rotor { height: 395px; padding-block: 112px; }.raw-experience-ghost-before { top: -82px; }.raw-experience-ghost-after { bottom: -82px; }.raw-brand-carousel-motion .raw-brand-carousel-top button { top: 50%; }.raw-brand-carousel-motion .raw-brand-carousel-top button:first-child { left: 0; }.raw-brand-carousel-motion .raw-brand-carousel-top button:last-child { right: 0; } }
