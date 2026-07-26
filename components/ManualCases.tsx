@@ -9,7 +9,7 @@ type BrandCase = { name: string; intro: string; slides: Slide[] };
 const cases: BrandCase[] = [
   { name: "Distrito 42-71", intro: "Una identidad trabajada como sistema. Requirió investigación, identificación de problemáticas, análisis psicológico de las pretensiones de esta ONG, criterio visual y reglas claras para que cada aplicación mantenga la misma voz.", slides: [1, 2, 3, 4, 5, 6, 7].map((number) => ({ src: `/images/portfolio/manuales/identidad-4271-manual${number}.png`, alt: `Manual de Identidad 4271, lámina ${number}` })) },
   { name: "Conferencia Distrital Barranquilla", intro: "Una micromarca que dirigió todos los visuales y elementos de una conferencia efectuada en junio de 2026.", slides: [1, 2, 3, 4].map((number) => ({ src: `/images/portfolio/manuales/quilla${number}.png`, alt: `Manual Quilla, lámina ${number}` })) },
-  { name: "Reboost", intro: "Escalamiento de una marca sin identidad hasta un manual completamente utilizable, escalable y dedicado a la venta.", slides: ["", "2", "3", "4", "5"].map((suffix, index) => ({ src: `/images/portfolio/manuales/ribuzz${suffix}.png`, alt: `Manual RiBuzz, lámina ${index + 1}` })) },
+  { name: "Reboost", intro: "Escalamiento de una marca sin identidad hasta un manual completamente utilizable, escalable y dedicado a la venta.", slides: ["", "2", "3", "4", "5", "6", "7"].map((suffix, index) => ({ src: `/images/portfolio/manuales/ribuzz${suffix}.png`, alt: `Manual RiBuzz, lámina ${index + 1}` })) },
 ];
 
 function ManualSlide({ slide, className, sizes, priority = false }: { slide: Slide; className?: string; sizes: string; priority?: boolean }) {

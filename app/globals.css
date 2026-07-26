@@ -1369,3 +1369,15 @@ html { scrollbar-color: #11151b transparent; } body::-webkit-scrollbar-track { b
 .raw-brand-carousel-top { align-items: start; }.raw-brand-carousel-top > div:first-child { max-width: 430px; }.raw-brand-carousel-top > div:first-child > p:last-child { margin: 10px 0 0; color: var(--raw-muted); font-size: .82rem; line-height: 1.55; }.raw-brand-carousel-top > p { display: none; }
 .raw-brand-wide { margin-top: 42px; }.raw-brand-wide > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }.raw-brand-wide .raw-brand-piece { width: 100%; max-width: none; }.raw-brand-wide .raw-brand-piece-wide { aspect-ratio: 16 / 9; }
 @media (max-width: 800px) { .raw-illustration-collage { display: block; margin-top: 58px; }.raw-collage-center { display: block; }.raw-collage-orbit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }.raw-collage-item { transform: none !important; }.raw-collage-item-1 { grid-column: auto; }.raw-brand-wide > div { grid-template-columns: 1fr; }.raw-manual-cases { margin-top: 48px; } }
+/* Refinamiento de Marcas y nueva agrupación limpia de Shift. */
+.raw-brand-carousel-top > div:first-child > p:last-child { display: none; }
+.raw-brand-piece { flex-basis: clamp(205px, 21vw, 285px); aspect-ratio: 3 / 4; }
+.raw-brand-piece img { object-position: center; }
+.raw-shift-group { margin-top: 86px; }
+.raw-shift-group-heading { display: flex; align-items: baseline; gap: 22px; margin-bottom: 18px; }
+.raw-shift-group-heading h3 { margin: 0; font-size: clamp(3.6rem, 7vw, 7.5rem); font-weight: 400; letter-spacing: .035em; line-height: .82; }
+.raw-shift-hero { width: 100%; aspect-ratio: 16 / 8.4; box-shadow: 0 22px 55px rgba(17,21,27,.15); }
+.raw-shift-expansions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+.raw-shift-expansions .raw-illustration-trigger { aspect-ratio: 16 / 9; }
+.raw-illustration-project-grid { margin-top: 70px; }
+@media (max-width: 800px) { .raw-shift-group { margin-top: 58px; }.raw-shift-group-heading { display: block; }.raw-shift-group-heading h3 { margin-top: 12px; }.raw-shift-expansions { grid-template-columns: 1fr; gap: 14px; }.raw-brand-piece { flex-basis: 70vw; } }
