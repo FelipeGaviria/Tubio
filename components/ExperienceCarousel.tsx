@@ -1,0 +1,16 @@
+﻿"use client";
+
+import { useEffect, useState } from "react";
+
+type Experience = { role: string; company: string; period?: string; description: string; clients?: string };
+const experiences: Experience[] = [
+  { role: "Producción audiovisual", company: "MERO STUDIO SAS", period: "2023 — 2026", description: "Ilustración de escenarios y personajes 2D, edición de videos, storytelling y dirección de arte.", clients: "Chef Burger · Pentatonic · Frank Sinatra (representación), etc." },
+  { role: "Independiente", company: "@FEGAV_ART", period: "2020 — 2024", description: "Ilustración de fanart, concept art para empresas, videojuegos, diseño e ilustración de personajes para cómics y público interesado." },
+  { role: "Diseño gráfico", company: "ROTARY INTERNATIONAL", period: "2018 — 2026", description: "Ilustración de logotipos y banners en planeación de eventos de alta participación social. Manejo de redes sociales y branding." },
+  { role: "Diseño gráfico", company: "+MELO AGENCY", period: "2024", description: "Ilustración y edición de piezas estáticas y algunos reels. Acompañamiento de métricas de marca y carruseles. Manejo de redes sociales y branding." },
+  { role: "Ilustrador", company: "GLOBAL GAME JAM PJ.", period: "2023, 2025", description: "Diseño de UX y UI. Ilustración de fondos y diseño óptimo para animación." },
+  { role: "Ilustrador", company: "FORJA STUDIOS", description: "Ilustración de fondos y diseño óptimo para animación. Composición de ambientes y teoría de espacios y colores." },
+  { role: "Emprendedor + dirección creativa", company: "RIBUZZ", period: "2025 — 2026", description: "Edición consistente de carruseles y piezas para redes. Estrategia de empresas, branding y business model canvas." },
+];
+function ExperienceCard({ experience }: { experience: Experience }) { return <article><div><p className="raw-experience-role">{experience.role}</p><h3>{experience.company} {experience.period && <small>({experience.period})</small>}</h3><p>{experience.description}</p>{experience.clients && <><strong>Clientes atendidos por mí</strong><p>{experience.clients}</p></>}</div></article>; }
+export default function ExperienceCarousel() { const [active, setActive] = useState(0); const [expanded, setExpanded] = useState(false); useEffect(() => { if (expanded) return; const timer = window.setInterval(() => setActive((current) => (current + 1) % experiences.length), 5200); return () => window.clearInterval(timer); }, [expanded]); return <div className={`raw-experience-list raw-experience-carousel ${expanded ? "is-expanded" : ""}`}>{expanded ? <div className="raw-experience-all">{experiences.map((experience) => <ExperienceCard key={experience.company} experience={experience} />)}</div> : <div className="raw-experience-rotor" key={experiences[active].company}><ExperienceCard experience={experiences[active]} /></div>}<button type="button" className="raw-experience-more" onClick={() => setExpanded((current) => !current)}>{expanded ? "Ver menos" : "Ver más"}<span>{expanded ? "↑" : "↓"}</span></button></div>; }

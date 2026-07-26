@@ -1469,3 +1469,21 @@ html[data-portfolio-theme="night"] .raw-illustrations { background: #151a23; col
 html[data-portfolio-theme="night"] .raw-nfc-cards { border-color: rgba(255,255,255,.16); }.raw-project-section-2 .raw-nfc-heading .raw-label { color: var(--raw-blue); }html[data-portfolio-theme="night"] .raw-nfc-heading > p:last-child { color: #b9c5d3; }.raw-project-section-2 .raw-nfc-card-face { border-color: rgba(17,21,27,.28); }
 @media (max-width: 800px) { .raw-nfc-cards { margin-top: 54px; padding-top: 32px; }.raw-nfc-heading { display: grid; gap: 8px; margin-bottom: 18px; }.raw-nfc-viewport { margin-right: -20px; }.raw-nfc-set { gap: 12px; padding-right: 12px; }.raw-nfc-card { width: 72vw; }.raw-nfc-track { animation-duration: 52s; } }
 @media (prefers-reduced-motion: reduce) { .raw-nfc-track { animation: none; } }
+/* Ritmo pausado para tarjetas, carruseles y experiencia. */
+.raw-nfc-heading { display: grid; justify-items: center; text-align: center; }.raw-nfc-track { animation: none; scroll-behavior: smooth; }.raw-nfc-card-face { border: 0; box-shadow: 0 16px 28px rgba(17,21,27,.14); }
+.raw-brand-carousel { position: relative; }.raw-brand-carousel-top > div:last-child { display: contents; }.raw-brand-carousel-top button { position: absolute; z-index: 2; top: 165px; display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid rgba(17,21,27,.22); border-radius: 50%; background: rgba(244,244,240,.92); box-shadow: 0 8px 18px rgba(17,21,27,.13); font-size: 1.25rem; }.raw-brand-carousel-top button:first-child { left: -22px; }.raw-brand-carousel-top button:last-child { right: -22px; }.raw-brand-carousel-top button:hover { transform: scale(1.06); }
+.raw-illustrations-more { margin-top: 36px; }.raw-experience-carousel { overflow: hidden; }.raw-experience-rotor { animation: rawExperienceRoll 520ms cubic-bezier(.2,.75,.2,1); }.raw-experience-rotor article { min-height: 170px; }.raw-experience-more { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; border: 0; border-bottom: 1px solid currentColor; background: transparent; padding: 8px 0; color: #11151b; cursor: pointer; font-family: var(--font-display), var(--font-inter), sans-serif; font-size: 1.05rem; letter-spacing: .06em; }.raw-experience-more span { color: var(--raw-blue); font-size: 1.2rem; }.raw-experience-all { display: grid; gap: 6px; }@keyframes rawExperienceRoll { from { opacity: 0; transform: translateY(32px) rotateX(-12deg); } to { opacity: 1; transform: translateY(0) rotateX(0); } }html[data-portfolio-theme="night"] .raw-experience-more { color: #f4f4f0; }
+@media (max-width: 800px) { .raw-brand-carousel-top button { top: 128px; width: 38px; height: 38px; }.raw-brand-carousel-top button:first-child { left: -10px; }.raw-brand-carousel-top button:last-child { right: -10px; }.raw-illustrations-more { margin-top: 28px; }.raw-experience-rotor article { min-height: 0; } }
+/* Alineación del rol en la presentación. */
+.raw-intro-identity .raw-about-role { text-align: center; }
+
+/* Separación del selector de tema bajo la ubicación. */
+.raw-hero-actions { gap: 20px; }
+@media (max-width: 700px) { .raw-hero-actions { gap: 16px; } }
+
+/* Bloque unificado de presentación. */
+.raw-intro-identity .raw-about-heading { grid-template-columns: 220px minmax(260px, 360px); justify-content: center; gap: 0; }
+.raw-intro-identity .raw-about-heading > div:first-child { align-self: stretch; display: grid; align-content: center; padding-left: 30px; text-align: left; }
+.raw-intro-identity .raw-about-heading .raw-label { margin: 0; }
+.raw-intro-identity .raw-about-role { max-width: 610px; margin-inline: auto; }
+@media (max-width: 800px) { .raw-intro-identity .raw-about-heading { grid-template-columns: 125px minmax(0, 1fr); gap: 0; } .raw-intro-identity .raw-about-heading > div:first-child { padding-left: 18px; } }
