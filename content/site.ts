@@ -1,15 +1,19 @@
-export const site = {
+﻿export const site = {
   name: "TuBio",
   tagline: "Landings claras para negocios que quieren vender mejor.",
   description:
-    "Creamos p�ginas responsive, r�pidas y editables para marcas personales, servicios locales y emprendimientos que necesitan presencia profesional.",
+    "Creamos pï¿½ginas responsive, rï¿½pidas y editables para marcas personales, servicios locales y emprendimientos que necesitan presencia profesional.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   contact: {
     whatsapp: "573000000000",
     email: "hola@tubio.co",
     city: "Colombia",
   },
-  navigation: [{ label: "Inicio", href: "/" }, { label: "Landings", href: "/landings" }],
+  navigation: [
+    { label: "Inicio", href: "/" },
+    { label: "Landings", href: "/landings" },
+    { label: "Social Calendars", href: "/social-calendars" },
+  ],
   hero: {
     eyebrow: "Tu taller para vender paginas web",
     title: "Paginas web responsive, seguras y listas para publicar en Vercel.",
