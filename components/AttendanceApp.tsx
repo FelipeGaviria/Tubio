@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
 type Mark = "present" | "virtual" | "absent" | "excused";
@@ -9,6 +9,9 @@ type Member = { id: string; name: string; joined: string; retired?: string };
 type Session = { date: string; kind: Kind; marks: Record<string, Mark> };
 type Data = { members: Member[]; sessions: Session[] };
 const KEY = "tubio-toastmasters-attendance-v2";
+const ACCESS_KEY = "tubio-attendance-access-until";
+const ACCESS_DURATION = 2 * 60 * 60 * 1000;
+const SYNC_URL = "https://qdxapfnjizissxgkhpxi.supabase.co/functions/v1/attendance-sync";
 const choices: { value: Mark; label: string; short: string }[] = [
   { value: "present", label: "Vino presencial", short: "Presencial" },
   { value: "virtual", label: "Vino virtual", short: "Virtual" },
@@ -35,10 +38,65 @@ export function AttendanceApp() {
   const [profileId, setProfileId] = useState<string | null>(null);
   const [allDates, setAllDates] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
+  const [accessReady, setAccessReady] = useState(false);
   const [password, setPassword] = useState("");
   const [accessError, setAccessError] = useState(false);
+  const [cloudReady, setCloudReady] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<"connecting" | "saving" | "saved" | "error">("connecting");
+  const remoteStamp = useRef("");
+  const applyingRemote = useRef(false);
+  const dataRef = useRef<Data | null>(null);
+  const dataLoaded = data !== null;
+  useEffect(() => { dataRef.current = data; }, [data]);
   useEffect(() => { const timer = window.setTimeout(() => { try { const saved = localStorage.getItem(KEY); setData(saved ? JSON.parse(saved) : starter()); } catch { setData(starter()); } }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(KEY, JSON.stringify(data)); }, [data]);
+  useEffect(() => { const timer = window.setTimeout(() => { const until = Number(localStorage.getItem(ACCESS_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
+  function grantAccess() { localStorage.setItem(ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setUnlocked(true); setAccessError(false); }
+  useEffect(() => {
+    if (!unlocked || !dataLoaded) return;
+    let active = true;
+    async function readCloud(initial = false) {
+      try {
+        const response = await fetch(SYNC_URL, { headers: { "x-attendance-pin": "1234" }, cache: "no-store" });
+        if (!response.ok) throw new Error("No fue posible sincronizar");
+        const remote = await response.json() as { data: Data; updated_at: string } | null;
+        if (!active || !remote) return;
+        const localData = dataRef.current;
+        if (initial && remote.data.members.length === 0 && localData && localData.members.length > 0) {
+          setCloudReady(true);
+          setSyncStatus("saving");
+          return;
+        }
+        if (remote.updated_at !== remoteStamp.current) {
+          remoteStamp.current = remote.updated_at;
+          applyingRemote.current = true;
+          setData(remote.data);
+        }
+        setCloudReady(true);
+        setSyncStatus("saved");
+      } catch {
+        if (active) setSyncStatus("error");
+      }
+    }
+    void readCloud(true);
+    const interval = window.setInterval(() => void readCloud(), 4000);
+    return () => { active = false; window.clearInterval(interval); };
+  }, [unlocked, dataLoaded]);
+  useEffect(() => {
+    if (!cloudReady || !data) return;
+    if (applyingRemote.current) { applyingRemote.current = false; return; }
+    setSyncStatus("saving");
+    const timer = window.setTimeout(async () => {
+      try {
+        const response = await fetch(SYNC_URL, { method: "POST", headers: { "Content-Type": "application/json", "x-attendance-pin": "1234" }, body: JSON.stringify({ data }) });
+        if (!response.ok) throw new Error("No fue posible guardar");
+        const saved = await response.json() as { updated_at?: string } | null;
+        if (saved?.updated_at) remoteStamp.current = saved.updated_at;
+        setSyncStatus("saved");
+      } catch { setSyncStatus("error"); }
+    }, 550);
+    return () => window.clearTimeout(timer);
+  }, [data, cloudReady]);
   const ordered = useMemo(() => [...(data?.sessions ?? [])].sort((a, b) => a.date.localeCompare(b.date)), [data]);
   const session = data?.sessions.find((s) => s.date === date);
   const members = data?.members.filter((m) => m.joined <= date && (!m.retired || m.retired > date)) ?? [];
@@ -52,19 +110,20 @@ export function AttendanceApp() {
   const level = (id: string) => streak(id) >= 3 ? "danger" : streak(id) >= 2 ? "warning" : "active";
   function rename(id: string, nextName: string) { setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, name: nextName } : m) })); }
   function retire(id: string) { if (future) return; setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, retired: date } : m) })); setProfileId(null); }
-  if (!unlocked) return <main className="attendance-lock"><form onSubmit={(e) => { e.preventDefault(); if (password === "1234") { setUnlocked(true); setAccessError(false); } else { setAccessError(true); setPassword(""); } }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Acompañamiento de asistencias</h1><span>Ingresa la contraseña para consultar o editar las sesiones.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" value={password} onChange={(e) => { setPassword(e.target.value); setAccessError(false); }} placeholder="••••" aria-invalid={accessError} /></label>{accessError && <small>La contraseña no es correcta.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
+  if (!accessReady) return <main className="attendance-lock"><div className="lock-loading">Verificando acceso…</div></main>;
+  if (!unlocked) return <main className="attendance-lock"><form onSubmit={(e) => { e.preventDefault(); if (password === "1234") grantAccess(); else { setAccessError(true); setPassword(""); } }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Acompañamiento de asistencias</h1><span>Ingresa la contraseña para consultar o editar las sesiones. El acceso se recordará durante 2 horas.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" maxLength={4} value={password} onChange={(e) => { const next = e.target.value; setPassword(next); setAccessError(false); if (next === "1234") grantAccess(); else if (next.length === 4) setAccessError(true); }} placeholder="••••" aria-invalid={accessError} /></label>{accessError && <small>La contraseña no es correcta.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
   if (!data || !session) return <main className="attendance-page"><div className="attendance-loading">Preparando tus sesiones…</div></main>;
   const profile = data.members.find((m) => m.id === profileId);
   const count = (mark: Mark) => members.filter((m) => (session.marks[m.id] ?? "excused") === mark).length;
   return <main className="attendance-page">
-    <header className="attendance-topbar"><Link href="/" className="attendance-logo"><span>TM</span><div><strong>Toastmasters</strong><small>Club de oratoria</small></div></Link><div className="autosave"><span /> Guardado automático</div></header>
+    <header className="attendance-topbar"><Link href="/" className="attendance-logo"><span>TM</span><div><strong>Toastmasters</strong><small>Club de oratoria</small></div></Link><div className={`autosave ${syncStatus}`}><span /> {syncStatus === "connecting" ? "Conectando…" : syncStatus === "saving" ? "Guardando…" : syncStatus === "error" ? "Sin conexión" : "Sincronizado"}</div></header>
     <div className="attendance-layout">
       <aside className="attendance-sidebar">
         <div className="sidebar-app-title"><span><Icon name="people" /></span><div><strong>Acompañamiento</strong><small>de asistencias</small></div></div>
         <p className="sidebar-caption">Sesiones recientes</p>
         <div className="session-list">{(allDates ? [...ordered].reverse() : [...ordered].reverse().slice(0, 6)).map((s) => <button className={s.date === date ? "active" : ""} key={s.date} onClick={() => go(s.date)}><span><Icon name="calendar" /></span><div><strong>{pretty(s.date, true)}</strong><small>{s.kind === "normal" ? "Sesión normal" : s.kind === "cancelled" ? "No hubo sesión" : "No aplica"}</small></div></button>)}</div>
         {ordered.length > 6 && <button className="show-sessions" onClick={() => setAllDates(!allDates)}>{allDates ? "Ver menos" : "Ver todas las sesiones"}</button>}
-        <div className="sidebar-note"><span>✓</span><strong>Todo queda guardado</strong><p>Los cambios se conservan automáticamente en este dispositivo.</p></div>
+        <div className="sidebar-note"><span>✓</span><strong>Todo queda guardado</strong><p>Los cambios se sincronizan automáticamente entre tus dispositivos.</p></div>
       </aside>
       <section className="attendance-workspace">
         <div className="attendance-heading"><div><p>Control semanal</p><h1>Acompañamiento de asistencias</h1><span>Registra quién vino y detecta a tiempo a quien necesita acompañamiento.</span></div><form className="add-person" onSubmit={add}><input disabled={future} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre del asistente" aria-label="Nombre del nuevo asistente" /><button disabled={future}><Icon name="plus" /> Agregar persona</button></form></div>
