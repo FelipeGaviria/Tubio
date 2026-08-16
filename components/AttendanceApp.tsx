@@ -43,6 +43,7 @@ export function AttendanceApp() {
   const [accessError, setAccessError] = useState(false);
   const [cloudReady, setCloudReady] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"connecting" | "saving" | "saved" | "error">("connecting");
+  const [shared, setShared] = useState(false);
   const remoteStamp = useRef("");
   const applyingRemote = useRef(false);
   const dataRef = useRef<Data | null>(null);
@@ -111,22 +112,31 @@ export function AttendanceApp() {
   function rename(id: string, nextName: string) { setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, name: nextName } : m) })); }
   function retire(id: string) { if (future) return; setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, retired: date } : m) })); setProfileId(null); }
   if (!accessReady) return <main className="attendance-lock"><div className="lock-loading">Verificando acceso…</div></main>;
-  if (!unlocked) return <main className="attendance-lock"><form onSubmit={(e) => { e.preventDefault(); if (password === "1234") grantAccess(); else { setAccessError(true); setPassword(""); } }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Acompañamiento de asistencias</h1><span>Ingresa la contraseña para consultar o editar las sesiones. El acceso se recordará durante 2 horas.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" maxLength={4} value={password} onChange={(e) => { const next = e.target.value; setPassword(next); setAccessError(false); if (next === "1234") grantAccess(); else if (next.length === 4) setAccessError(true); }} placeholder="••••" aria-invalid={accessError} /></label>{accessError && <small>La contraseña no es correcta.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
+  if (!unlocked) return <main className="attendance-lock"><form onSubmit={(e) => { e.preventDefault(); if (password === "1234") grantAccess(); else { setAccessError(true); setPassword(""); } }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Asistencia a Sesiones</h1><span>Ingresa la contraseña para consultar o editar las sesiones. El acceso se recordará durante 2 horas.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" maxLength={4} value={password} onChange={(e) => { const next = e.target.value; setPassword(next); setAccessError(false); if (next === "1234") grantAccess(); else if (next.length === 4) setAccessError(true); }} placeholder="••••" aria-invalid={accessError} /></label>{accessError && <small>La contraseña no es correcta.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
   if (!data || !session) return <main className="attendance-page"><div className="attendance-loading">Preparando tus sesiones…</div></main>;
+  async function shareApp() {
+    const shareData = { title: "Asistencia a Sesiones", text: "Registro de asistencia de las sesiones de Toastmasters", url: window.location.href };
+    try {
+      if (navigator.share) await navigator.share(shareData);
+      else await navigator.clipboard.writeText(window.location.href);
+      setShared(true);
+      window.setTimeout(() => setShared(false), 1800);
+    } catch { /* El usuario puede cerrar el menú de compartir. */ }
+  }
   const profile = data.members.find((m) => m.id === profileId);
   const count = (mark: Mark) => members.filter((m) => (session.marks[m.id] ?? "excused") === mark).length;
   return <main className="attendance-page">
-    <header className="attendance-topbar"><Link href="/" className="attendance-logo"><span>TM</span><div><strong>Toastmasters</strong><small>Club de oratoria</small></div></Link><div className={`autosave ${syncStatus}`}><span /> {syncStatus === "connecting" ? "Conectando…" : syncStatus === "saving" ? "Guardando…" : syncStatus === "error" ? "Sin conexión" : "Sincronizado"}</div></header>
+    <header className="attendance-topbar"><div className="attendance-logo" aria-label="Toastmasters"><span>TM</span><div><strong>Toastmasters</strong><small>Club de oratoria</small></div></div><div className="attendance-top-actions"><button className="share-attendance" type="button" onClick={shareApp} aria-label="Compartir enlace"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg><span>{shared ? "¡Copiado!" : "Compartir"}</span></button><div className={`autosave ${syncStatus}`}><span /> {syncStatus === "connecting" ? "Conectando…" : syncStatus === "saving" ? "Guardando…" : syncStatus === "error" ? "Sin conexión" : "Sincronizado"}</div></div></header>
     <div className="attendance-layout">
       <aside className="attendance-sidebar">
-        <div className="sidebar-app-title"><span><Icon name="people" /></span><div><strong>Acompañamiento</strong><small>de asistencias</small></div></div>
+        <div className="sidebar-app-title"><span><Icon name="people" /></span><div><strong>Asistencia</strong><small>a sesiones</small></div></div>
         <p className="sidebar-caption">Sesiones recientes</p>
         <div className="session-list">{(allDates ? [...ordered].reverse() : [...ordered].reverse().slice(0, 6)).map((s) => <button className={s.date === date ? "active" : ""} key={s.date} onClick={() => go(s.date)}><span><Icon name="calendar" /></span><div><strong>{pretty(s.date, true)}</strong><small>{s.kind === "normal" ? "Sesión normal" : s.kind === "cancelled" ? "No hubo sesión" : "No aplica"}</small></div></button>)}</div>
         {ordered.length > 6 && <button className="show-sessions" onClick={() => setAllDates(!allDates)}>{allDates ? "Ver menos" : "Ver todas las sesiones"}</button>}
         <div className="sidebar-note"><span>✓</span><strong>Todo queda guardado</strong><p>Los cambios se sincronizan automáticamente entre tus dispositivos.</p></div>
       </aside>
       <section className="attendance-workspace">
-        <div className="attendance-heading"><div><p>Control semanal</p><h1>Acompañamiento de asistencias</h1><span>Registra quién vino y detecta a tiempo a quien necesita acompañamiento.</span></div><form className="add-person" onSubmit={add}><input disabled={future} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre del asistente" aria-label="Nombre del nuevo asistente" /><button disabled={future}><Icon name="plus" /> Agregar persona</button></form></div>
+        <div className="attendance-heading"><div><p>Control semanal</p><h1>Asistencia a Sesiones</h1><span>Registra quién vino y detecta a tiempo a quien necesita acompañamiento.</span></div><form className="add-person" onSubmit={add}><input disabled={future} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre del asistente" aria-label="Nombre del nuevo asistente" /><button disabled={future}><Icon name="plus" /> Agregar persona</button></form></div>
         <div className="session-card"><div className="session-date-control"><button onClick={() => go(shift(date, -1))} aria-label="Sesión anterior"><Icon name="left" /></button><div><span>Sesión del lunes</span><strong>{pretty(date)}</strong></div><button onClick={() => go(shift(date, 1))} aria-label="Sesión siguiente"><Icon name="right" /></button></div><div className="session-kind">{([['normal','Sesión normal'],['cancelled','No hubo sesión'],['na','No aplica']] as [Kind,string][]).map(([value,label]) => <button disabled={future} key={value} className={session.kind === value ? "active" : ""} onClick={() => editSession({ kind: value })}>{label}</button>)}</div></div>
         {future && <div className="future-lock"><span>🔒</span><div><strong>Esta sesión todavía está bloqueada</strong><p>Se habilitará automáticamente el lunes {pretty(date)}.</p></div></div>}
         {session.kind !== "normal" ? <div className="no-session"><span>—</span><h2>{session.kind === "cancelled" ? "Esta semana no hubo sesión" : "Esta fecha no aplica"}</h2><p>No se sumarán asistencias ni ausencias al historial.</p></div> : <>

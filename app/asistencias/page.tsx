@@ -2,7 +2,7 @@
 import { AttendanceApp } from "@/components/AttendanceApp";
 
 export const metadata: Metadata = {
-  title: "Acompañamiento de asistencias",
+  title: "Asistencia a Sesiones",
   description: "Registro sencillo de asistencia para las sesiones de Toastmasters.",
 };
 

@@ -19,7 +19,7 @@
     eyebrow: "Tu taller para vender paginas web",
     title: "Paginas web responsive, seguras y listas para publicar en Vercel.",
     body:
-      "TuBio es una base independiente para crear landings de clientes, iterarlas con criterio y convertirlas en proyectos reales sin mezclar nada con RiBuzz.",
+      "Transformamos buenas ideas en experiencias digitales claras, bonitas y listas para conectar con quienes importan.",
     primaryAction: "Quiero mi landing",
     secondaryAction: "Ver estructura",
   },
