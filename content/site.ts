@@ -14,6 +14,7 @@
     { label: "Landings", href: "/landings" },
     { label: "Social Calendars", href: "/social-calendars" },
     { label: "Asistencias", href: "/asistencias" },
+    { label: "Orden", href: "/orden" },
   ],
   hero: {
     eyebrow: "Tu taller para vender paginas web",
