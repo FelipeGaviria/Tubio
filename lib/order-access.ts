@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 export const ORDER_COOKIE = "tubio_order_access";
 
 export function accessCode() {
-  return process.env.ORDER_ACCESS_CODE ?? (process.env.NODE_ENV === "development" ? "5403" : "");
+  return process.env.ORDER_ACCESS_CODE ?? "5403";
 }
 
 export function accessToken() {

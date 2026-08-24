@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   let submitted = "";
   try {
     const body = await request.json() as { code?: unknown };
-    submitted = typeof body.code === "string" ? body.code : "";
+    submitted = typeof body.code === "string" ? body.code.trim() : "";
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });
   }

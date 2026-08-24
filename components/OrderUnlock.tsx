@@ -1,10 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export function OrderUnlock() {
-  const router = useRouter();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,13 +15,13 @@ export function OrderUnlock() {
       const response = await fetch("/orden/desbloquear", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code: code.trim() }),
       });
       if (!response.ok) {
         setError("Código incorrecto.");
         return;
       }
-      router.refresh();
+      window.location.assign("/orden");
     } catch {
       setError("No fue posible validar el código. Intenta de nuevo.");
     } finally {
