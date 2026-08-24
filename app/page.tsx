@@ -5,7 +5,7 @@ import { site, whatsappUrl } from "@/content/site";
 
 export default function HomePage() {
   return (
-    <main id="inicio">
+    <main id="inicio" className="home-art">
       <Header />
 
       <section className="hero-section">

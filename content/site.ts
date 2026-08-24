@@ -5,7 +5,7 @@
     "Creamos pï¿½ginas responsive, rï¿½pidas y editables para marcas personales, servicios locales y emprendimientos que necesitan presencia profesional.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   contact: {
-    whatsapp: "573000000000",
+    whatsapp: "573004318932",
     email: "hola@tubio.co",
     city: "Colombia",
   },
@@ -109,7 +109,7 @@
   ],
 };
 
-export function whatsappUrl(message = "Hola, quiero una landing web") {
+export function whatsappUrl(message = "¡Hola! ¿Cómo estás? Vi tu página y me gustaría hablar contigo sobre una idea que tengo 😊") {
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${site.contact.whatsapp}?text=${encoded}`;
 }
