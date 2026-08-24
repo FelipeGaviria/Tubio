@@ -4,7 +4,7 @@ import { DragEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type Lesson = { id: string; title: string };
 type CourseModule = { id: string; title: string; lessons: Lesson[] };
-type SavedState = { modules: CourseModule[]; completed: string[] };
+type SavedState = { modules: CourseModule[]; completed: string[]; removed?: string[] };
 
 const STORAGE_KEY = "tubio-course-order-v1";
 
@@ -18,7 +18,7 @@ function isCourseData(value: unknown): value is CourseModule[] {
   });
 }
 
-function mergeCourseData(savedModules: CourseModule[], initialModules: CourseModule[]) {
+function mergeCourseData(savedModules: CourseModule[], initialModules: CourseModule[], removed: Set<string>) {
   const initialById = new Map(initialModules.map((module) => [module.id, module]));
   const merged = savedModules
     .filter((module) => initialById.has(module.id))
@@ -27,17 +27,25 @@ function mergeCourseData(savedModules: CourseModule[], initialModules: CourseMod
       const savedLessonIds = new Set(module.lessons.map((lesson) => lesson.id));
       return {
         ...current,
-        lessons: [...module.lessons, ...current.lessons.filter((lesson) => !savedLessonIds.has(lesson.id))],
+        lessons: [...module.lessons, ...current.lessons.filter((lesson) => !savedLessonIds.has(lesson.id))]
+          .filter((lesson) => !removed.has(lesson.id)),
       };
     });
   const savedModuleIds = new Set(savedModules.map((module) => module.id));
-  return [...merged, ...initialModules.filter((module) => !savedModuleIds.has(module.id))];
+  return [
+    ...merged,
+    ...initialModules
+      .filter((module) => !savedModuleIds.has(module.id))
+      .map((module) => ({ ...module, lessons: module.lessons.filter((lesson) => !removed.has(lesson.id)) })),
+  ];
 }
 
 export function CourseOrderTracker({ initialModules }: { initialModules: CourseModule[] }) {
   const [modules, setModules] = useState<CourseModule[]>(initialModules);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
+  const [removed, setRemoved] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const draggedLesson = useRef<{ moduleId: string; lessonIndex: number } | null>(null);
@@ -51,8 +59,10 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
         if (isCourseData(saved.modules) && Array.isArray(saved.completed)) {
           queueMicrotask(() => {
             if (cancelled) return;
-            setModules(mergeCourseData(saved.modules, initialModules));
+            const removedLessons = new Set(Array.isArray(saved.removed) ? saved.removed : []);
+            setModules(mergeCourseData(saved.modules, initialModules, removedLessons));
             setCompleted(new Set(saved.completed));
+            setRemoved(removedLessons);
             setReady(true);
           });
           return () => { cancelled = true; };
@@ -67,9 +77,9 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
 
   useEffect(() => {
     if (!ready) return;
-    const state: SavedState = { modules, completed: [...completed] };
+    const state: SavedState = { modules, completed: [...completed], removed: [...removed] };
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [completed, modules, ready]);
+  }, [completed, modules, ready, removed]);
 
   const totals = useMemo(() => {
     const lessons = modules.reduce((sum, module) => sum + module.lessons.length, 0);
@@ -109,10 +119,41 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
     }));
   }
 
+  function removeLesson(moduleId: string, lesson: Lesson) {
+    if (!window.confirm(`¿Quitar “${lesson.title}” de tu checklist?`)) return;
+    setModules((current) => current.map((module) => module.id === moduleId
+      ? { ...module, lessons: module.lessons.filter((item) => item.id !== lesson.id) }
+      : module));
+    setCompleted((current) => {
+      const next = new Set(current);
+      next.delete(lesson.id);
+      return next;
+    });
+    setRemoved((current) => new Set(current).add(lesson.id));
+  }
+
+  function autoScrollWhileDragging(event: DragEvent<HTMLElement>) {
+    const edge = 110;
+    const maxSpeed = 18;
+    if (event.clientY < edge) {
+      window.scrollBy(0, -Math.ceil(maxSpeed * (1 - event.clientY / edge)));
+    } else if (event.clientY > window.innerHeight - edge) {
+      const distance = window.innerHeight - event.clientY;
+      window.scrollBy(0, Math.ceil(maxSpeed * (1 - distance / edge)));
+    }
+  }
+
   if (!ready) return <div className="order-empty">Cargando tu espacio local…</div>;
 
   return (
-    <div className="order-tracker">
+    <div
+      className="order-tracker"
+      onDragOver={(event) => {
+        if (!draggedLesson.current) return;
+        event.preventDefault();
+        autoScrollWhileDragging(event);
+      }}
+    >
       <section className="order-overview" aria-label="Progreso general">
         <div>
           <span className="order-kicker">Progreso general</span>
@@ -122,6 +163,15 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
         <div className="order-progress" aria-label={`${totals.percent}% completado`}>
           <span style={{ width: `${totals.percent}%` }} />
         </div>
+        <button
+          className={`order-edit-toggle${editMode ? " is-active" : ""}`}
+          type="button"
+          aria-pressed={editMode}
+          onClick={() => setEditMode((current) => !current)}
+        >
+          <span aria-hidden="true">{editMode ? "✓" : "↕"}</span>
+          {editMode ? "Ocultar edición" : "Editar orden"}
+        </button>
       </section>
 
       <div className="order-modules">
@@ -135,7 +185,7 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
                   <strong>{module.title.replace(/^\d+\s*-\s*/, "")}</strong>
                   <small>{done}/{module.lessons.length} completadas</small>
                 </span>
-                <span className="order-module-percent">{Math.round((done / module.lessons.length) * 100)}%</span>
+                <span className="order-module-percent">{module.lessons.length ? Math.round((done / module.lessons.length) * 100) : 0}%</span>
               </summary>
 
               <ol className="order-lessons">
@@ -168,19 +218,30 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
                         <span className="order-lesson-number">{String(lessonIndex + 1).padStart(3, "0")}</span>
                         <span className="order-lesson-title">{lesson.title}</span>
                       </label>
-                      <button
-                        className="order-drag-handle"
-                        type="button"
-                        draggable
-                        onDragStart={(event) => startDragging(event, module.id, lessonIndex, lesson.id)}
-                        onDragEnd={() => {
-                          draggedLesson.current = null;
-                          setDraggingId(null);
-                          setDropTargetId(null);
-                        }}
-                        aria-label={`Arrastrar ${lesson.title}`}
-                        title="Arrastra para cambiar de posición"
-                      >⠿</button>
+                      {editMode && (
+                        <span className="order-edit-actions">
+                          <button
+                            className="order-drag-handle"
+                            type="button"
+                            draggable
+                            onDragStart={(event) => startDragging(event, module.id, lessonIndex, lesson.id)}
+                            onDragEnd={() => {
+                              draggedLesson.current = null;
+                              setDraggingId(null);
+                              setDropTargetId(null);
+                            }}
+                            aria-label={`Arrastrar ${lesson.title}`}
+                            title="Arrastra para cambiar de posición"
+                          >⠿</button>
+                          <button
+                            className="order-delete-lesson"
+                            type="button"
+                            onClick={() => removeLesson(module.id, lesson)}
+                            aria-label={`Quitar ${lesson.title}`}
+                            title="Quitar de la checklist"
+                          >×</button>
+                        </span>
+                      )}
                     </li>
                   );
                 })}
