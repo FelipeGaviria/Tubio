@@ -38,6 +38,8 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
   const [modules, setModules] = useState<CourseModule[]>(initialModules);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const draggedLesson = useRef<{ moduleId: string; lessonIndex: number } | null>(null);
 
   useEffect(() => {
@@ -83,15 +85,20 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
     });
   }
 
-  function startDragging(event: DragEvent<HTMLButtonElement>, moduleId: string, lessonIndex: number) {
+  function startDragging(event: DragEvent<HTMLButtonElement>, moduleId: string, lessonIndex: number, lessonId: string) {
     draggedLesson.current = { moduleId, lessonIndex };
+    setDraggingId(lessonId);
     event.dataTransfer.effectAllowed = "move";
     event.dataTransfer.setData("text/plain", `${moduleId}:${lessonIndex}`);
+    const lessonRow = event.currentTarget.closest("li");
+    if (lessonRow) event.dataTransfer.setDragImage(lessonRow, lessonRow.clientWidth - 24, 24);
   }
 
   function dropLesson(moduleId: string, targetIndex: number) {
     const source = draggedLesson.current;
     draggedLesson.current = null;
+    setDraggingId(null);
+    setDropTargetId(null);
     if (!source || source.moduleId !== moduleId || source.lessonIndex === targetIndex) return;
     setModules((current) => current.map((module) => {
       if (module.id !== moduleId) return module;
@@ -136,8 +143,15 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
                   const isDone = completed.has(lesson.id);
                   return (
                     <li
-                      className={isDone ? "is-complete" : ""}
+                      className={[
+                        isDone ? "is-complete" : "",
+                        draggingId === lesson.id ? "is-dragging" : "",
+                        dropTargetId === lesson.id && draggingId !== lesson.id ? "is-drop-target" : "",
+                      ].filter(Boolean).join(" ")}
                       key={lesson.id}
+                      onDragEnter={() => {
+                        if (draggedLesson.current?.moduleId === module.id) setDropTargetId(lesson.id);
+                      }}
                       onDragOver={(event) => {
                         if (draggedLesson.current?.moduleId !== module.id) return;
                         event.preventDefault();
@@ -158,8 +172,12 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
                         className="order-drag-handle"
                         type="button"
                         draggable
-                        onDragStart={(event) => startDragging(event, module.id, lessonIndex)}
-                        onDragEnd={() => { draggedLesson.current = null; }}
+                        onDragStart={(event) => startDragging(event, module.id, lessonIndex, lesson.id)}
+                        onDragEnd={() => {
+                          draggedLesson.current = null;
+                          setDraggingId(null);
+                          setDropTargetId(null);
+                        }}
                         aria-label={`Arrastrar ${lesson.title}`}
                         title="Arrastra para cambiar de posición"
                       >⠿</button>

@@ -708,8 +708,10 @@ h1 {
 .order-module-copy small { margin-top: 5px; color: var(--muted); font-weight: 750; }
 .order-module-percent { color: var(--accent-warm); font-weight: 900; }
 .order-lessons { margin: 0; padding: 8px 14px 14px; list-style: none; }
-.order-lessons li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; min-height: 54px; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+.order-lessons li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; min-height: 54px; padding: 7px 8px; border-bottom: 1px solid var(--line); border-radius: 10px; transition: transform .18s ease, opacity .18s ease, background-color .18s ease, box-shadow .18s ease; }
 .order-lessons li:last-child { border-bottom: 0; }
+.order-lessons li.is-dragging { opacity: .38; transform: scale(.985); background: #f7f2ea; }
+.order-lessons li.is-drop-target { transform: translateY(4px) scale(1.008); background: #fff8ec; box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 38%, transparent), 0 8px 22px rgba(45, 35, 22, .09); }
 .order-lessons label { display: grid; grid-template-columns: 24px 42px 1fr; align-items: center; gap: 10px; cursor: pointer; }
 .order-lessons input { position: absolute; opacity: 0; pointer-events: none; }
 .order-check { display: grid; width: 22px; height: 22px; place-items: center; border: 2px solid #b7afa3; border-radius: 7px; background: white; }
@@ -719,7 +721,7 @@ h1 {
 .order-lesson-title { font-size: .91rem; font-weight: 720; line-height: 1.4; }
 .is-complete .order-lesson-title { color: #8b8379; text-decoration: line-through; }
 .order-drag-handle { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 9px; background: white; color: #8b8379; cursor: grab; font-size: 1.2rem; font-weight: 900; touch-action: none; }
-.order-drag-handle:active { cursor: grabbing; color: var(--brand); }
+.order-drag-handle:active { cursor: grabbing; color: var(--brand); transform: scale(.94); }
 
 @media (max-width: 860px) {
   .order-overview { grid-template-columns: 1fr auto; }
