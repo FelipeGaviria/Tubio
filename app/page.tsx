@@ -10,8 +10,13 @@ export default function HomePage() {
 
       <section className="hero-section">
         <div className="container hero-grid">
-          <div className="hero-copy">
+          <div className="hero-meta">
             <p className="eyebrow">{site.hero.eyebrow}</p>
+            <span>Estudio digital independiente</span>
+            <small>Colombia · Disponible globalmente</small>
+          </div>
+          <HeroPreview />
+          <div className="hero-copy">
             <h1>{site.hero.title}</h1>
             <p className="hero-body">{site.hero.body}</p>
             <div className="hero-actions">
@@ -22,16 +27,15 @@ export default function HomePage() {
                 {site.hero.secondaryAction}
               </a>
             </div>
-            <div className="metrics" aria-label="Ventajas principales">
-              {site.metrics.map((metric) => (
-                <div key={metric.label}>
-                  <strong>{metric.value}</strong>
-                  <span>{metric.label}</span>
-                </div>
-              ))}
-            </div>
           </div>
-          <HeroPreview />
+          <div className="metrics" aria-label="Ventajas principales">
+            {site.metrics.map((metric) => (
+              <div key={metric.label}>
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

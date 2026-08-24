@@ -17,17 +17,17 @@
     { label: "Orden", href: "/orden" },
   ],
   hero: {
-    eyebrow: "Tu taller para vender paginas web",
-    title: "Paginas web responsive, seguras y listas para publicar en Vercel.",
+    eyebrow: "Colección digital / 01",
+    title: "Tu idea. En cualquier lugar.",
     body:
-      "Transformamos buenas ideas en experiencias digitales claras, bonitas y listas para conectar con quienes importan.",
-    primaryAction: "Quiero mi landing",
-    secondaryAction: "Ver estructura",
+      "Diseñamos experiencias digitales precisas, memorables y listas para conectar tu trabajo con las personas correctas.",
+    primaryAction: "Hablemos",
+    secondaryAction: "Explorar",
   },
   metrics: [
-    { value: "1", label: "archivo para editar contenido" },
-    { value: "0", label: "dependencias innecesarias" },
-    { value: "100%", label: "responsive desde el inicio" },
+    { value: "01", label: "Diseño creado a tu medida" },
+    { value: "24/7", label: "Tu marca siempre disponible" },
+    { value: "100%", label: "Responsive desde el inicio" },
   ],
   services: [
     {
