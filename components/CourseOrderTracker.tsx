@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { DragEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type Lesson = { id: string; title: string };
 type CourseModule = { id: string; title: string; lessons: Lesson[] };
@@ -38,6 +38,7 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
   const [modules, setModules] = useState<CourseModule[]>(initialModules);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
+  const draggedLesson = useRef<{ moduleId: string; lessonIndex: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,13 +83,21 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
     });
   }
 
-  function moveLesson(moduleId: string, lessonIndex: number, direction: -1 | 1) {
+  function startDragging(event: DragEvent<HTMLButtonElement>, moduleId: string, lessonIndex: number) {
+    draggedLesson.current = { moduleId, lessonIndex };
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", `${moduleId}:${lessonIndex}`);
+  }
+
+  function dropLesson(moduleId: string, targetIndex: number) {
+    const source = draggedLesson.current;
+    draggedLesson.current = null;
+    if (!source || source.moduleId !== moduleId || source.lessonIndex === targetIndex) return;
     setModules((current) => current.map((module) => {
       if (module.id !== moduleId) return module;
-      const target = lessonIndex + direction;
-      if (target < 0 || target >= module.lessons.length) return module;
       const lessons = [...module.lessons];
-      [lessons[lessonIndex], lessons[target]] = [lessons[target], lessons[lessonIndex]];
+      const [lesson] = lessons.splice(source.lessonIndex, 1);
+      lessons.splice(targetIndex, 0, lesson);
       return { ...module, lessons };
     }));
   }
@@ -126,17 +135,34 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
                 {module.lessons.map((lesson, lessonIndex) => {
                   const isDone = completed.has(lesson.id);
                   return (
-                    <li className={isDone ? "is-complete" : ""} key={lesson.id}>
+                    <li
+                      className={isDone ? "is-complete" : ""}
+                      key={lesson.id}
+                      onDragOver={(event) => {
+                        if (draggedLesson.current?.moduleId !== module.id) return;
+                        event.preventDefault();
+                        event.dataTransfer.dropEffect = "move";
+                      }}
+                      onDrop={(event) => {
+                        event.preventDefault();
+                        dropLesson(module.id, lessonIndex);
+                      }}
+                    >
                       <label>
                         <input type="checkbox" checked={isDone} onChange={() => toggleLesson(lesson.id)} />
                         <span className="order-check" aria-hidden="true" />
                         <span className="order-lesson-number">{String(lessonIndex + 1).padStart(3, "0")}</span>
                         <span className="order-lesson-title">{lesson.title}</span>
                       </label>
-                      <span className="order-move-actions">
-                        <button type="button" disabled={lessonIndex === 0} onClick={() => moveLesson(module.id, lessonIndex, -1)} aria-label={`Subir ${lesson.title}`}>↑</button>
-                        <button type="button" disabled={lessonIndex === module.lessons.length - 1} onClick={() => moveLesson(module.id, lessonIndex, 1)} aria-label={`Bajar ${lesson.title}`}>↓</button>
-                      </span>
+                      <button
+                        className="order-drag-handle"
+                        type="button"
+                        draggable
+                        onDragStart={(event) => startDragging(event, module.id, lessonIndex)}
+                        onDragEnd={() => { draggedLesson.current = null; }}
+                        aria-label={`Arrastrar ${lesson.title}`}
+                        title="Arrastra para cambiar de posición"
+                      >⠿</button>
                     </li>
                   );
                 })}
