@@ -18,6 +18,22 @@ function isCourseData(value: unknown): value is CourseModule[] {
   });
 }
 
+function mergeCourseData(savedModules: CourseModule[], initialModules: CourseModule[]) {
+  const initialById = new Map(initialModules.map((module) => [module.id, module]));
+  const merged = savedModules
+    .filter((module) => initialById.has(module.id))
+    .map((module) => {
+      const current = initialById.get(module.id)!;
+      const savedLessonIds = new Set(module.lessons.map((lesson) => lesson.id));
+      return {
+        ...current,
+        lessons: [...module.lessons, ...current.lessons.filter((lesson) => !savedLessonIds.has(lesson.id))],
+      };
+    });
+  const savedModuleIds = new Set(savedModules.map((module) => module.id));
+  return [...merged, ...initialModules.filter((module) => !savedModuleIds.has(module.id))];
+}
+
 export function CourseOrderTracker({ initialModules }: { initialModules: CourseModule[] }) {
   const [modules, setModules] = useState<CourseModule[]>(initialModules);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
@@ -32,7 +48,7 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
         if (isCourseData(saved.modules) && Array.isArray(saved.completed)) {
           queueMicrotask(() => {
             if (cancelled) return;
-            setModules(saved.modules);
+            setModules(mergeCourseData(saved.modules, initialModules));
             setCompleted(new Set(saved.completed));
             setReady(true);
           });
@@ -44,7 +60,7 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
     }
     queueMicrotask(() => { if (!cancelled) setReady(true); });
     return () => { cancelled = true; };
-  }, []);
+  }, [initialModules]);
 
   useEffect(() => {
     if (!ready) return;
@@ -77,12 +93,6 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
     }));
   }
 
-  function resetTracker() {
-    if (!window.confirm("¿Restablecer el orden original y borrar todo el progreso guardado en este navegador?")) return;
-    setModules(initialModules);
-    setCompleted(new Set());
-  }
-
   if (!ready) return <div className="order-empty">Cargando tu espacio local…</div>;
 
   return (
@@ -96,7 +106,6 @@ export function CourseOrderTracker({ initialModules }: { initialModules: CourseM
         <div className="order-progress" aria-label={`${totals.percent}% completado`}>
           <span style={{ width: `${totals.percent}%` }} />
         </div>
-        <button className="order-reset" type="button" onClick={resetTracker}>Restablecer</button>
       </section>
 
       <div className="order-modules">

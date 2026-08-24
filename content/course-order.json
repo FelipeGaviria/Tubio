@@ -1274,5 +1274,36 @@
         "title": "Despedida y regalo"
       }
     ]
+  },
+  {
+    "id": "agentes-con-ia",
+    "title": "Agentes con IA",
+    "lessons": [
+      { "id": "agentes-ia-001", "title": "Introducción" },
+      { "id": "agentes-ia-002", "title": "Instalación de las Skills" },
+      { "id": "agentes-ia-003", "title": "Actualización de las Skills" },
+      { "id": "agentes-ia-004", "title": "Opción 2- Codex de ChatGPT" },
+      { "id": "agentes-ia-005", "title": "7 Maletas" },
+      { "id": "agentes-ia-006", "title": "Calculadora de Presupuestos" },
+      { "id": "agentes-ia-007", "title": "Excel de Estrategia" },
+      { "id": "agentes-ia-008", "title": "Niveles de Conciencia" },
+      { "id": "agentes-ia-009", "title": "Diversificación Creativa" },
+      { "id": "agentes-ia-010", "title": "Escanear Marca" },
+      { "id": "agentes-ia-011", "title": "Producción de anuncios" },
+      { "id": "agentes-ia-012", "title": "Espiar Competidores" },
+      { "id": "agentes-ia-013", "title": "Analizar anuncios de imagen" },
+      { "id": "agentes-ia-014", "title": "Analizar anuncios de video" },
+      { "id": "agentes-ia-015", "title": "Generador de Nombres" },
+      { "id": "agentes-ia-016", "title": "Columnas Administrador de Anuncios" },
+      { "id": "agentes-ia-017", "title": "Metodología 3QS" },
+      { "id": "agentes-ia-018", "title": "Simulador de Resultados" },
+      { "id": "agentes-ia-019", "title": "Optimización de destino" },
+      { "id": "agentes-ia-020", "title": "Escalar Vertical y Horizontal" },
+      { "id": "agentes-ia-021", "title": "Crear Campaña" },
+      { "id": "agentes-ia-022", "title": "🎁 Masterclass - Cómo aprovechar al máximo Claude" },
+      { "id": "agentes-ia-023", "title": "Cómo conectar Claude con el MCP de Meta" },
+      { "id": "agentes-ia-024", "title": "Analizando tus campañas con las 3Qs" },
+      { "id": "agentes-ia-025", "title": "Análisis de Creativos (Video e imágenes)" }
+    ]
   }
 ]
