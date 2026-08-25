@@ -1,6 +1,7 @@
 export function HeroPreview() {
   return (
     <div className="hero-preview" aria-label="Vista previa de landing responsive">
+      <div className="hero-orbit" aria-hidden="true" />
       <div className="preview-window">
         <div className="preview-bar">
           <span />
@@ -21,6 +22,7 @@ export function HeroPreview() {
           <div />
         </div>
       </div>
+      <div className="hero-artifact" aria-hidden="true" />
     </div>
   );
 }
