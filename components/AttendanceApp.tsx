@@ -51,6 +51,27 @@ export function AttendanceApp() {
   const applyingRemote = useRef(false);
   const dataRef = useRef<Data | null>(null);
   const dataLoaded = data !== null;
+  useEffect(() => {
+    const preventGestureZoom = (event: Event) => event.preventDefault();
+    const preventMultiTouchZoom = (event: TouchEvent) => {
+      if (event.touches.length > 1) event.preventDefault();
+    };
+    const preventWheelZoom = (event: WheelEvent) => {
+      if (event.ctrlKey) event.preventDefault();
+    };
+
+    document.addEventListener("gesturestart", preventGestureZoom, { passive: false });
+    document.addEventListener("gesturechange", preventGestureZoom, { passive: false });
+    document.addEventListener("touchmove", preventMultiTouchZoom, { passive: false });
+    document.addEventListener("wheel", preventWheelZoom, { passive: false });
+
+    return () => {
+      document.removeEventListener("gesturestart", preventGestureZoom);
+      document.removeEventListener("gesturechange", preventGestureZoom);
+      document.removeEventListener("touchmove", preventMultiTouchZoom);
+      document.removeEventListener("wheel", preventWheelZoom);
+    };
+  }, []);
   useEffect(() => { dataRef.current = data; }, [data]);
   useEffect(() => { const timer = window.setTimeout(() => { try { const saved = localStorage.getItem(KEY); setData(saved ? JSON.parse(saved) : starter()); } catch { setData(starter()); } }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(KEY, JSON.stringify(data)); }, [data]);
