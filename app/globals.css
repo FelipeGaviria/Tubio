@@ -2065,7 +2065,8 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 .home-art #contacto .landing-wheel-card{border:0}
 .mero-bubbles{inset:-14% -16% -8%}
 @media(max-width:700px){
-  .home-art .home-theme-toggle{z-index:200;right:16px;bottom:18px;left:auto;pointer-events:auto;touch-action:manipulation}
+  .home-art .home-theme-toggle{z-index:200;top:50%;right:0;bottom:auto;left:auto;width:40px;height:52px;border-right:0;border-radius:16px 0 0 16px;background:rgba(31,38,36,.92);box-shadow:-7px 8px 24px rgba(0,0,0,.2);pointer-events:auto;touch-action:manipulation;transform:translateY(-50%);backdrop-filter:blur(14px)}
+  .home-art .home-theme-toggle:hover{transform:translateY(-50%)}
   .footer-grid{grid-template-columns:84px auto 84px;width:min(300px,100%);gap:16px}
   .mero-bubbles{inset:-19% -22% -10%}
   .mero-currency-panel{margin-inline:auto;text-align:center}
