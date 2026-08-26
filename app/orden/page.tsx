@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 import { CourseOrderTracker } from "@/components/CourseOrderTracker";
 import { Header } from "@/components/Header";
-import { OrderUnlock } from "@/components/OrderUnlock";
+import { PrivateUnlock } from "@/components/PrivateUnlock";
 import courseModules from "@/content/course-order.json";
 import { accessToken, ORDER_COOKIE } from "@/lib/order-access";
 
@@ -15,8 +15,9 @@ export const metadata: Metadata = {
 
 export default async function OrderPage() {
   const unlocked = (await cookies()).get(ORDER_COOKIE)?.value === accessToken();
+  if (!unlocked) return <PrivateUnlock title="Orden del curso" description="Tu ruta de aprendizaje y progreso son privados. Ingresa el código para abrir este espacio." endpoint="/orden/desbloquear" destination="/orden" />;
   return (
-    <main className="order-page">
+    <main className="order-page tubio-private-page">
       <Header />
       <section className="order-hero">
         <div className="container">
@@ -29,7 +30,7 @@ export default async function OrderPage() {
         </div>
       </section>
       <section className="container order-content">
-        {unlocked ? <CourseOrderTracker initialModules={courseModules} /> : <OrderUnlock />}
+        <CourseOrderTracker initialModules={courseModules} />
       </section>
     </main>
   );

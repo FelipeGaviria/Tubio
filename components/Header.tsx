@@ -8,11 +8,11 @@ import { site, whatsappUrl } from "@/content/site";
 function PersonIcon() { return <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2" /><path d="M5 20c.7-3.7 3-5.5 7-5.5s6.3 1.8 7 5.5" /></svg>; }
 
 const workspaceLinks = [
-  { label: "Social Calendars", href: "/social-calendars", note: "Planeación de contenidos" },
-  { label: "Asistencias", href: "/asistencias", note: "Registro del equipo" },
-  { label: "Orden", href: "/orden", note: "Ruta de aprendizaje" },
-  { label: "Portafolio", href: "/portafolio", note: "Trabajo seleccionado" },
-  { label: "Tarifario MERO", href: "/tarifario", note: "Tarifas para proveedores" },
+  { label: "Portafolio", href: "/portafolio", note: "Trabajo seleccionado", locked: false },
+  { label: "Tarifario MERO", href: "/tarifario", note: "Tarifas para proveedores", locked: false },
+  { label: "Toastmasters Asistencias", href: "/asistencias", note: "Registro de sesiones", locked: true },
+  { label: "Social Calendars", href: "/social-calendars", note: "Planeación de contenidos", locked: true },
+  { label: "Orden curso", href: "/orden", note: "Ruta de aprendizaje", locked: true },
 ];
 
 export function Header() {
@@ -43,7 +43,7 @@ export function Header() {
         <button className="header-profile-link" type="button" aria-label="Abrir accesos" aria-expanded={workspaceOpen} onClick={() => setWorkspaceOpen(!workspaceOpen)}><PersonIcon /></button>
         <div className="workspace-popover" aria-label="Accesos rápidos">
           <p>Tu espacio</p>
-          {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}</span><small>{item.note}</small></Link>)}
+          {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}{item.locked && <i className="workspace-lock" aria-label="Acceso con clave">🔒</i>}</span><small>{item.note}</small></Link>)}
         </div>
       </div>
     </div>
