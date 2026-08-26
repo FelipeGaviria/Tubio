@@ -24,7 +24,7 @@ export const site = {
   ],
   hero: {
     eyebrow: "Colección digital / 01",
-    title: "Tu idea. En cualquier lugar.",
+    title: "Tu idea. Tu estilo. Tu bio.",
     body:
       "Diseñamos experiencias digitales precisas, memorables y listas para conectar tu trabajo con las personas correctas.",
     primaryAction: "Hablemos",

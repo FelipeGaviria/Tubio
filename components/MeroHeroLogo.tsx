@@ -10,7 +10,7 @@ const bubbleY = [42, 48, 45, 38, 52, 55, 34, 47, 41, 58, 31, 50, 44, 37, 54, 28,
 const bubbleStyle = (index: number) => ({
   "--bubble-x": `${bubbleX[index]}%`,
   "--bubble-y": `${bubbleY[index]}%`,
-  "--bubble-size": `${7 + ((index * 7) % 19)}px`,
+  "--bubble-size": `${11 + ((index * 7) % 26)}px`,
   "--bubble-delay": `${(index % 8) * 55}ms`,
   "--bubble-drift": `${-18 + ((index * 13) % 37)}px`,
   "--bubble-rise": `${-(100 + ((index * 23) % 100))}px`,

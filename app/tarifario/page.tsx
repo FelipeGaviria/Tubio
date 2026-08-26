@@ -12,7 +12,7 @@ const paymentGuide = "https://docs.google.com/presentation/d/1zjSUb2coF0Ou2zFqgX
 const paymentTemplate = "https://docs.google.com/document/d/1EfvSR32QKMCfJ3W6CA7GDRM8Pinrov8-UsKTjTwjlRA/edit?usp=sharing";
 
 export default function TarifarioPage() {
-  return <main className="mero-page">
+  return <main className="mero-page" id="inicio">
     <Header />
     <section className="mero-hero">
       <div className="mero-hero-grid">
