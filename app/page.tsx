@@ -13,6 +13,7 @@ export default function HomePage() {
   return (
     <main id="inicio" className="home-art">
       <Header />
+      <ThemeToggle />
 
       <section className="hero-section">
         <div className="container hero-grid">
@@ -32,7 +33,6 @@ export default function HomePage() {
               <a className="button button-secondary" href="#servicios">
                 {site.hero.secondaryAction}
               </a>
-              <ThemeToggle />
             </div>
           </div>
           <div className="metrics" aria-label="Ventajas principales">

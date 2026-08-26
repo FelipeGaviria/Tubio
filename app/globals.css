@@ -2058,6 +2058,11 @@ html[data-portfolio-theme="night"] .raw-night-button{border-color:rgba(255,255,2
   .mero-guide-question{text-align:center}
 }
 
+/* Control de tema global, independiente del layout del hero */
+.home-art>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:20px;bottom:20px;left:auto;width:44px;height:44px;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:rgba(31,38,36,.9);color:#f5f7f5;box-shadow:0 10px 30px rgba(0,0,0,.24);backdrop-filter:blur(14px);transform:none;pointer-events:auto;touch-action:manipulation}
+.home-art>.home-theme-toggle:hover{transform:translateY(-2px)}
+@media(max-width:700px){.home-art>.home-theme-toggle{top:auto;right:14px;bottom:14px;left:auto;width:42px;height:42px;border-right:1px solid rgba(255,255,255,.3);border-radius:50%;transform:none}.home-art>.home-theme-toggle:hover{transform:none}}
+
 /* Glass header y ajustes de lectura finales */
 .home-art .site-header,.home-art .site-header.header-scrolled{border-bottom:1px solid rgba(255,255,255,.22);background:rgba(214,222,216,.52);box-shadow:0 10px 32px rgba(18,27,23,.08);backdrop-filter:blur(22px) saturate(155%);-webkit-backdrop-filter:blur(22px) saturate(155%)}
 html[data-tubio-theme="night"] .home-art .site-header,html[data-tubio-theme="night"] .home-art .site-header.header-scrolled{border-bottom-color:rgba(255,255,255,.1);background:rgba(12,17,15,.58)}
