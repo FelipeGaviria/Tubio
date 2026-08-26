@@ -4,14 +4,17 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useState } from "react";
 
+const bubbleX = [50, 47, 53, 44, 56, 49, 51, 41, 59, 46, 54, 38, 62, 48, 52, 43, 57, 35, 65, 45, 55, 40, 60, 50, 47, 53, 32, 68];
+const bubbleY = [42, 48, 45, 38, 52, 55, 34, 47, 41, 58, 31, 50, 44, 37, 54, 28, 61, 46, 35, 56, 40, 24, 64, 49, 33, 59, 43, 52];
+
 const bubbleStyle = (index: number) => ({
-  "--bubble-x": `${5 + ((index * 23) % 91)}%`,
-  "--bubble-y": `${7 + ((index * 31) % 70)}%`,
-  "--bubble-size": `${6 + ((index * 7) % 25)}px`,
-  "--bubble-delay": `${(index % 9) * 48}ms`,
-  "--bubble-drift": `${-44 + ((index * 29) % 89)}px`,
-  "--bubble-rise": `${-(65 + ((index * 31) % 105))}px`,
-  "--bubble-duration": `${900 + ((index * 47) % 520)}ms`,
+  "--bubble-x": `${bubbleX[index]}%`,
+  "--bubble-y": `${bubbleY[index]}%`,
+  "--bubble-size": `${7 + ((index * 7) % 19)}px`,
+  "--bubble-delay": `${(index % 8) * 55}ms`,
+  "--bubble-drift": `${-18 + ((index * 13) % 37)}px`,
+  "--bubble-rise": `${-(100 + ((index * 23) % 100))}px`,
+  "--bubble-duration": `${1250 + ((index * 47) % 450)}ms`,
 } as CSSProperties);
 
 export function MeroHeroLogo() {
@@ -21,7 +24,7 @@ export function MeroHeroLogo() {
     setBubbling(false);
     window.requestAnimationFrame(() => {
       setBubbling(true);
-      window.setTimeout(() => setBubbling(false), 2000);
+      window.setTimeout(() => setBubbling(false), 2200);
     });
   };
 
