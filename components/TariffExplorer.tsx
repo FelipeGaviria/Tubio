@@ -56,6 +56,7 @@ export function TariffExplorer() {
   const [serviceId, setServiceId] = useState("clean");
   const [levelIndex, setLevelIndex] = useState(1);
   const [quantity, setQuantity] = useState(1);
+  const [cadences, setCadences] = useState<Record<string, 8 | 12 | 24>>({ rough: 24, clean: 24, color: 24 });
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editorCode, setEditorCode] = useState("");
@@ -102,6 +103,7 @@ export function TariffExplorer() {
   const unitPrice = level.perFrame ?? level.value ?? level.perSecond ?? 0;
   const estimate = unitPrice * Math.max(0, quantity || 0);
   const visible = filter === "Todas" ? services : services.filter((service) => service.category === filter);
+  const ratePerSecond = (service: Service, item: Level) => service.fps === "24 FPS de referencia" && item.perFrame !== undefined ? item.perFrame * (cadences[service.id] ?? 24) : item.perSecond;
 
   return <>
     <section className="mero-explorer" id="tarifas">
@@ -116,10 +118,10 @@ export function TariffExplorer() {
         {visible.map((service, index) => <details key={service.id} open={index === 0}>
           <summary><span className="mero-service-number">{String(services.indexOf(service) + 1).padStart(2, "0")}</span><span><b>{service.category}</b><strong>{service.title}</strong></span><em>{service.unit}</em><i aria-hidden="true">+</i></summary>
           <div className="mero-detail-body">
-            <div className="mero-detail-intro"><p>{service.intro}</p>{service.fps && <span>{service.fps}</span>}</div>
+            <div className="mero-detail-intro"><p>{service.intro}</p>{service.fps === "24 FPS de referencia" ? <div className="mero-cadence" aria-label={`Cadencia de ${service.title}`}>{([{ label: "Animación a 1s", fps: 24 }, { label: "2s", fps: 12 }, { label: "3s", fps: 8 }] as const).map((option) => <button type="button" className={(cadences[service.id] ?? 24) === option.fps ? "active" : ""} key={option.fps} onClick={() => setCadences((current) => ({ ...current, [service.id]: option.fps }))}><b>{option.label}</b><small>{option.fps} FPS</small></button>)}</div> : service.fps && <span>{service.fps}</span>}</div>
             <div className="mero-rate-list">
               {service.levels.map((item, itemIndex) => <article key={item.name} data-level={item.name.toLowerCase()}><div><small>Complejidad</small><h3>{item.name}</h3><p>{item.description}</p></div><dl>
-                {item.perSecond !== undefined && <div><dt>Por segundo · COP</dt><dd>{editing ? <input aria-label={`${service.title} ${item.name} por segundo`} type="number" min="0" value={item.perSecond} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "perSecond", Number(event.target.value))} /> : cop.format(item.perSecond)}</dd></div>}
+                {ratePerSecond(service, item) !== undefined && <div><dt>Por segundo · COP</dt><dd>{editing && service.fps !== "24 FPS de referencia" ? <input aria-label={`${service.title} ${item.name} por segundo`} type="number" min="0" value={item.perSecond} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "perSecond", Number(event.target.value))} /> : cop.format(ratePerSecond(service, item)!)}</dd></div>}
                 {item.perFrame !== undefined && <div><dt>Por frame · COP</dt><dd>{editing ? <input aria-label={`${service.title} ${item.name} por frame`} type="number" min="0" value={item.perFrame} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "perFrame", Number(event.target.value))} /> : cop.format(item.perFrame)}</dd></div>}
                 {item.value !== undefined && <div><dt>Valor · COP</dt><dd>{editing ? <input aria-label={`${service.title} ${item.name} valor`} type="number" min="0" value={item.value} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "value", Number(event.target.value))} /> : cop.format(item.value)}</dd></div>}
               </dl></article>)}
