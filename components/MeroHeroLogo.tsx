@@ -4,13 +4,13 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useState } from "react";
 
-const bubbleX = [50, 42, 59, 31, 69, 47, 54, 22, 78, 38, 64, 15, 86, 45, 57, 27, 73, 8, 92, 35, 67, 19, 82, 51, 40, 61, 12, 89];
-const bubbleY = [42, 55, 48, 35, 62, 70, 27, 52, 39, 76, 20, 65, 50, 31, 72, 18, 81, 43, 29, 67, 45, 12, 59, 84, 24, 64, 75, 16];
+const bubbleX = [50, 43, 57, 35, 65, 47, 53, 27, 73, 39, 61, 23, 77, 45, 55, 31, 69, 20, 80, 37, 63, 29, 71, 51, 41, 59, 25, 75];
+const bubbleY = [43, 56, 48, 36, 61, 69, 29, 52, 40, 74, 23, 64, 50, 32, 71, 20, 78, 44, 30, 66, 46, 15, 58, 81, 26, 63, 73, 18];
 
 const bubbleStyle = (index: number) => ({
   "--bubble-x": `${bubbleX[index]}%`,
   "--bubble-y": `${bubbleY[index]}%`,
-  "--bubble-size": `${16 + ((index * 9) % 32)}px`,
+  "--bubble-size": `${10 + ((index * 11) % 19)}px`,
   "--bubble-delay": `${(index % 8) * 55}ms`,
   "--bubble-drift": `${-18 + ((index * 13) % 37)}px`,
   "--bubble-rise": `${-(100 + ((index * 23) % 100))}px`,

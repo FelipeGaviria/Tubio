@@ -2057,3 +2057,25 @@ html[data-portfolio-theme="night"] .raw-night-button{border-color:rgba(255,255,2
   .mero-calculator-copy{text-align:center}
   .mero-guide-question{text-align:center}
 }
+
+/* Glass header y ajustes de lectura finales */
+.home-art .site-header,.home-art .site-header.header-scrolled{border-bottom:1px solid rgba(255,255,255,.22);background:rgba(214,222,216,.52);box-shadow:0 10px 32px rgba(18,27,23,.08);backdrop-filter:blur(22px) saturate(155%);-webkit-backdrop-filter:blur(22px) saturate(155%)}
+html[data-tubio-theme="night"] .home-art .site-header,html[data-tubio-theme="night"] .home-art .site-header.header-scrolled{border-bottom-color:rgba(255,255,255,.1);background:rgba(12,17,15,.58)}
+html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,243,240,.48)}
+.home-art #contacto .landing-wheel-card{border:0}
+.mero-bubbles{inset:-14% -16% -8%}
+@media(max-width:700px){
+  .home-art .home-theme-toggle{z-index:200;right:16px;bottom:18px;left:auto;pointer-events:auto;touch-action:manipulation}
+  .footer-grid{grid-template-columns:84px auto 84px;width:min(300px,100%);gap:16px}
+  .mero-bubbles{inset:-19% -22% -10%}
+  .mero-currency-panel{margin-inline:auto;text-align:center}
+  .mero-currency-panel>p{justify-content:center;text-align:left}
+  .mero-filters{justify-content:center}
+  .mero-rule-grid article{text-align:center}
+  .mero-rule-grid article p{margin-right:auto;margin-left:auto}
+  .mero-rule-feature>span{margin-inline:auto}
+  .mero-process li{text-align:center}
+  .mero-template-cta,.mero-guide-link{text-align:center}
+  .mero-template-cta{align-items:center}
+  .mero-guide-link{align-items:center}
+}
