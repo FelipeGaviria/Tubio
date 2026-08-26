@@ -1,7 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { useState } from "react";
+
+const bubbleStyle = (index: number) => ({
+  "--bubble-x": `${18 + ((index * 17) % 65)}%`,
+  "--bubble-size": `${7 + ((index * 7) % 23)}px`,
+  "--bubble-delay": `${(index % 6) * 55}ms`,
+  "--bubble-drift": `${-38 + ((index * 29) % 77)}px`,
+  "--bubble-rise": `${-(125 + ((index * 31) % 115))}px`,
+  "--bubble-duration": `${850 + ((index * 47) % 370)}ms`,
+} as CSSProperties);
 
 export function MeroHeroLogo() {
   const [bubbling, setBubbling] = useState(false);
@@ -10,13 +20,13 @@ export function MeroHeroLogo() {
     setBubbling(false);
     window.requestAnimationFrame(() => {
       setBubbling(true);
-      window.setTimeout(() => setBubbling(false), 850);
+      window.setTimeout(() => setBubbling(false), 1500);
     });
   };
 
   return <button className={`mero-hero-art ${bubbling ? "is-bubbling" : ""}`} type="button" onClick={makeBubbles} aria-label="Hacer burbujas con el logo de MERO">
     <Image src="/images/mero/logo-mero.png" alt="MERO Estudio" fill priority sizes="(max-width: 760px) 44vw, 42vw" />
-    <span className="mero-bubbles" aria-hidden="true">{Array.from({ length: 9 }, (_, index) => <i key={index} />)}</span>
+    <span className="mero-bubbles" aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <i key={index} style={bubbleStyle(index)} />)}</span>
   </button>;
 }
 
