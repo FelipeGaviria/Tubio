@@ -2018,7 +2018,7 @@ html[data-portfolio-theme="night"] .raw-experience-more { color: #11151b; }
 @media(max-width:600px){.mero-template-cta{align-items:flex-start;flex-direction:column;gap:3px}.mero-process li{min-height:125px}}
 
 /* Hero central y control de iluminación */
-@media(min-width:701px){.home-art .hero-preview{left:50%;width:62%;top:-96px;bottom:-40px;transform:translate(-50%,-24px)}.home-art .hero-artifact{inset:-7% -17% -7%}.home-art .hero-artifact.is-guyanverse{background-size:138% auto}.home-art .hero-orbit{top:24%;left:50%;width:112%}}
+@media(min-width:701px){.home-art .hero-preview{left:50%;width:62%;top:-96px;bottom:-40px;transform:translate(-34%,-24px)}.home-art .hero-artifact{inset:-7% -17% -7%}.home-art .hero-artifact.is-guyanverse{background-size:138% auto}.home-art .hero-orbit{top:20%;left:50%;width:132%}}
 .home-art .hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px}.home-theme-toggle{display:grid;width:42px;height:42px;padding:0;place-items:center;border:1px solid rgba(245,247,245,.3);border-radius:50%;background:rgba(245,247,245,.07);color:var(--archive-paper);cursor:pointer;transition:background .25s ease,color .25s ease,transform .25s ease}.home-theme-toggle:hover{background:var(--archive-paper);color:var(--archive-ink);transform:translateY(-2px)}.home-theme-toggle svg{width:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .footer-share{border-color:transparent}.footer-share:hover{border-color:transparent}
 .home-art .home-theme-toggle{position:absolute;z-index:20;right:24px;bottom:22px}
