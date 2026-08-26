@@ -12,7 +12,8 @@ export function PrivateUnlock({ title, description, endpoint, destination }: { t
     setLoading(true); setError("");
     try {
       const response = await fetch(endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code: nextCode }) });
-      if (!response.ok) { setError("Código incorrecto."); setCode(""); return; }
+      const result = await response.json() as { locked?: boolean; attemptsRemaining?: number };
+      if (!response.ok) { setError(result.locked ? "Demasiados intentos. Acceso bloqueado durante 2 horas." : `Código incorrecto. ${result.attemptsRemaining ?? 0} intentos disponibles.`); setCode(""); return; }
       window.location.assign(destination);
     } catch { setError("No fue posible validar el acceso."); }
     finally { setLoading(false); }

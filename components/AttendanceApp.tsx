@@ -77,6 +77,13 @@ export function AttendanceApp() {
   useEffect(() => { if (data) localStorage.setItem(KEY, JSON.stringify(data)); }, [data]);
   useEffect(() => { const timer = window.setTimeout(() => { const until = Number(localStorage.getItem(ACCESS_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
   function grantAccess() { localStorage.setItem(ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setUnlocked(true); setAccessError(false); }
+  async function tryAccess(next: string) {
+    if (next.length !== 4) return;
+    try {
+      const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "attendance", code: next }) });
+      if (response.ok) grantAccess(); else { setAccessError(true); setPassword(""); }
+    } catch { setAccessError(true); }
+  }
   useEffect(() => {
     if (!unlocked || !dataLoaded) return;
     let active = true;
@@ -160,7 +167,7 @@ export function AttendanceApp() {
   function setMemberSpecialGuest(id: string, checked: boolean) { setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, specialGuest: checked } : m) })); }
   function retire(id: string) { if (future) return; setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, retired: date } : m) })); setProfileId(null); }
   if (!accessReady) return <main className="attendance-lock"><div className="lock-loading">Verificando acceso…</div></main>;
-  if (!unlocked) return <main className="attendance-lock"><form onSubmit={(e) => { e.preventDefault(); if (password === "1234") grantAccess(); else { setAccessError(true); setPassword(""); } }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Asistencia a Sesiones</h1><span>Ingresa la contraseña para consultar o editar las sesiones. El acceso se recordará durante 2 horas.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" maxLength={4} value={password} onChange={(e) => { const next = e.target.value; setPassword(next); setAccessError(false); if (next === "1234") grantAccess(); else if (next.length === 4) setAccessError(true); }} placeholder="••••" aria-invalid={accessError} /></label>{accessError && <small>La contraseña no es correcta.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
+  if (!unlocked) return <main className="attendance-lock"><form onSubmit={(e) => { e.preventDefault(); void tryAccess(password); }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Asistencia a Sesiones</h1><span>Ingresa la contraseña para consultar o editar las sesiones. El acceso se recordará durante 2 horas.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" maxLength={4} value={password} onChange={(e) => { const next = e.target.value.replace(/\D/g, ""); setPassword(next); setAccessError(false); if (next.length === 4) void tryAccess(next); }} placeholder="••••" aria-invalid={accessError} /></label>{accessError && <small>La contraseña no es correcta o el acceso está temporalmente bloqueado.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
   if (!data || !session) return <main className="attendance-page"><div className="attendance-loading">Preparando tus sesiones…</div></main>;
   const currentSession = session;
   async function shareApp() {

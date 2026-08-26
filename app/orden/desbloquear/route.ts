@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { accessCode, accessToken, ORDER_COOKIE } from "@/lib/order-access";
+import { checkPrivateAccess } from "@/lib/check-private-access";
 
 export async function POST(request: Request) {
   let submitted = "";
@@ -11,7 +12,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  if (submitted !== accessCode()) return NextResponse.json({ ok: false }, { status: 401 });
+  const access = await checkPrivateAccess(request, "order", submitted);
+  if (!access.response.ok || submitted !== accessCode()) return NextResponse.json(access.result, { status: access.response.status });
 
   const response = NextResponse.json({ ok: true });
   response.cookies.set(ORDER_COOKIE, accessToken(), {

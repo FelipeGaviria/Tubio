@@ -110,8 +110,10 @@ export function TariffExplorer() {
     return () => controller.abort();
   }, []);
 
-  const unlockEditor = () => {
-    if (editorCode !== "696969") { setEditorStatus("Código incorrecto."); return; }
+  const unlockEditor = async (code = editorCode) => {
+    const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "tariff", code }) });
+    const result = await response.json() as { locked?: boolean; attemptsRemaining?: number };
+    if (!response.ok) { setEditorStatus(result.locked ? "Acceso bloqueado durante 2 horas." : `Código incorrecto. ${result.attemptsRemaining ?? 0} intentos disponibles.`); return; }
     beforeEdit.current = structuredClone(services);
     setEditing(true); setEditorOpen(false); setEditorStatus("");
   };
@@ -186,7 +188,7 @@ export function TariffExplorer() {
       </div>
     </section>
 
-    {editorOpen && <div className="mero-editor-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditorOpen(false); }}><div className="mero-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="editor-title"><button className="mero-editor-close" type="button" onClick={() => setEditorOpen(false)} aria-label="Cerrar">×</button><small>Acceso restringido</small><h2 id="editor-title">Editar tarifas</h2><p>Ingresa el código de seis dígitos para habilitar los campos.</p><label>Código<input type="password" inputMode="numeric" maxLength={6} value={editorCode} onChange={(event) => setEditorCode(event.target.value.replace(/\D/g, ""))} onKeyDown={(event) => { if (event.key === "Enter") unlockEditor(); }} autoFocus /></label>{editorStatus && <span className="mero-editor-error">{editorStatus}</span>}<button type="button" onClick={unlockEditor}>Desbloquear</button></div></div>}
+    {editorOpen && <div className="mero-editor-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditorOpen(false); }}><div className="mero-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="editor-title"><button className="mero-editor-close" type="button" onClick={() => setEditorOpen(false)} aria-label="Cerrar">×</button><small>Acceso restringido</small><h2 id="editor-title">Editar tarifas</h2><p>Ingresa el código de seis dígitos para habilitar los campos.</p><label>Código<input type="password" inputMode="numeric" maxLength={6} value={editorCode} onChange={(event) => { const next = event.target.value.replace(/\D/g, ""); setEditorCode(next); if (next.length === 6) void unlockEditor(next); }} onKeyDown={(event) => { if (event.key === "Enter") void unlockEditor(); }} autoFocus /></label>{editorStatus && <span className="mero-editor-error">{editorStatus}</span>}<button type="button" onClick={() => void unlockEditor()}>Desbloquear</button></div></div>}
     <footer className="mero-footer"><div className="mero-footer-center"><Image src="/images/mero/logo-mero.png" alt="MERO Estudio" width={132} height={132} /><div className={`mero-editor-dock ${editing ? "is-editing" : ""}`}>{editorStatus && <span role="status">{editorStatus}</span>}{editing ? <><button type="button" onClick={() => { setEditing(false); setServices(beforeEdit.current); setEditorCode(""); }}>Cancelar</button><button type="button" onClick={saveRates} disabled={saving}>{saving ? "Guardando…" : "Guardar para todos"}</button></> : <button type="button" onClick={() => setEditorOpen(true)}>Editar valores</button>}</div></div></footer>
   </>;
 }
