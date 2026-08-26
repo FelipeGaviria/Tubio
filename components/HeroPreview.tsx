@@ -16,7 +16,6 @@ export function HeroPreview() {
     <div className="hero-preview" aria-label="Vista previa de landing responsive">
       <div className="hero-orbit" aria-hidden="true" />
       <button className={`hero-artifact ${alternate ? "is-guyanverse" : ""} ${popping ? "is-popping" : ""}`} type="button" onClick={swapGuy} aria-label={alternate ? "Cambiar a Guy Pro Max" : "Cambiar a Guyanverse"}>
-        <span className="hero-artifact-spark" aria-hidden="true" />
       </button>
     </div>
   );

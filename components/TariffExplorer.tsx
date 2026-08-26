@@ -115,7 +115,7 @@ export function TariffExplorer() {
         {(["Todas", "Animación", "Arte"] as const).map((item) => <button className={filter === item ? "active" : ""} key={item} onClick={() => setFilter(item)}>{item}</button>)}
       </div>
       <div className="mero-accordion">
-        {visible.map((service, index) => <details key={service.id} open={index === 0}>
+        {visible.map((service) => <details key={service.id}>
           <summary><span className="mero-service-number">{String(services.indexOf(service) + 1).padStart(2, "0")}</span><span><b>{service.category}</b><strong>{service.title}</strong></span><em>{service.unit}</em><i aria-hidden="true">+</i></summary>
           <div className="mero-detail-body">
             <div className="mero-detail-intro"><p>{service.intro}</p>{service.fps === "24 FPS de referencia" ? <div className="mero-cadence" aria-label={`Cadencia de ${service.title}`}>{([{ label: "Animación a 1s", fps: 24 }, { label: "2s", fps: 12 }, { label: "3s", fps: 8 }] as const).map((option) => <button type="button" className={(cadences[service.id] ?? 24) === option.fps ? "active" : ""} key={option.fps} onClick={() => setCadences((current) => ({ ...current, [service.id]: option.fps }))}><b>{option.label}</b><small>{option.fps} FPS</small></button>)}</div> : service.fps && <span>{service.fps}</span>}</div>

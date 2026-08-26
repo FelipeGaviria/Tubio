@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { Header } from "@/components/Header";
+import { MeroHeroLogo } from "@/components/MeroHeroLogo";
 import { TariffExplorer } from "@/components/TariffExplorer";
 
 export const metadata: Metadata = {
@@ -16,8 +17,8 @@ export default function TarifarioPage() {
     <Header />
     <section className="mero-hero">
       <div className="mero-hero-grid">
-        <div className="mero-hero-copy"><span className="mero-kicker">MERO ESTUDIO / PROVEEDORES</span><h1>Tarifario<br /><em>2026</em></h1></div>
-        <div className="mero-hero-art" aria-hidden="true"><Image src="/images/mero/logo-mero.png" alt="" fill priority sizes="(max-width: 760px) 90vw, 48vw" /></div>
+        <div className="mero-hero-copy"><span className="mero-kicker">MERO ESTUDIO / PROVEEDORES</span><h1>Tarifario<br /><em>2026</em></h1><p className="mero-hero-note">Antes de trabajar juntos, dale una lectura atenta. Aquí cuidamos tu trabajo y el proyecto.</p></div>
+        <MeroHeroLogo />
       </div>
     </section>
 
