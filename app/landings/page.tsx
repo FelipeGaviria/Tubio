@@ -81,7 +81,7 @@ export default function PortafolioPage() {
           <div className="section-heading">
             <p className="eyebrow">Ruleta de ejemplos</p>
             <h2>Explora posibilidades para cada tipo de cliente.</h2>
-            <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en landings reales.</p>
+            <p className="section-lead">Una selección de estructuras que podemos adaptar y convertir en landings reales.</p>
           </div>
           <LandingWheel />
         </div>

@@ -2038,3 +2038,22 @@ html[data-tubio-theme="night"] .home-art .hero-copy h1,html[data-tubio-theme="ni
 @keyframes mero-zen-bubble{0%{opacity:0;transform:translate3d(-50%,8px,0) scale(.45)}14%{opacity:.82}100%{opacity:0;transform:translate3d(calc(-50% + var(--bubble-drift)),var(--bubble-rise),0) scale(1.08)}}
 @media(max-width:700px){.home-art .hero-meta{text-align:left}.home-art .hero-meta::before{margin-left:0;margin-right:0}.home-art .hero-preview{height:410px;margin:0 auto -8px}.home-art .hero-copy{text-align:center}.home-art .hero-copy h1,.home-art .hero-body{margin-inline:auto}.home-art .hero-actions{justify-content:center}.home-art .home-theme-toggle{top:62px;right:14px;bottom:auto;width:38px;height:38px}.home-art .section-heading,.home-art .portfolio-list-heading{text-align:center}.home-art .section-lead{margin-inline:auto;text-align:center}.footer-grid{display:grid;grid-template-columns:72px auto 72px;width:min(260px,100%);margin-inline:auto;align-items:center;gap:12px}.footer-grid>p{justify-self:end}.footer-grid>.footer-logo-link{justify-self:center}.footer-grid>.footer-share{justify-self:start}.landing-wheel-card-center{width:min(286px,70vw)}.landing-wheel-card-left,.landing-wheel-card-right{z-index:3;opacity:.48;filter:saturate(.65);pointer-events:none}.landing-wheel-card-left{transform:translateX(-91%) translateZ(-100px) rotateY(15deg) scale(.76)}.landing-wheel-card-right{transform:translateX(-9%) translateZ(-100px) rotateY(-15deg) scale(.76)}.landing-wheel-card-back,.landing-wheel-card-back-left{opacity:0}.landing-wheel{min-height:455px}}
 .tubio-private-lock form>img{margin-right:auto;margin-left:auto}.tubio-private-lock form>p,.tubio-private-lock h1,.tubio-private-lock form>span{text-align:center}
+
+/* Último pulido de interacción, temas y composición */
+@media(min-width:701px){.home-art .hero-copy h1>span{display:block}}
+html[data-tubio-theme="night"] .home-art .header-cta{border-color:#f5f7f5;background:#f5f7f5;color:#151b19}
+.mero-hero-note span{display:block;margin-top:7px}
+.mero-bubbles{inset:-24% -28% -12%}
+.mero-footer .mero-footer-logo{padding:0;border:0;border-radius:0;background:transparent}
+.raw-night-button,.raw-hero-actions .raw-night-button{display:grid;width:42px;height:42px;padding:0;place-items:center;border:1px solid rgba(17,21,27,.32);border-radius:50%;background:rgba(244,244,240,.78);color:#11151b;box-shadow:0 8px 22px rgba(17,21,27,.1);backdrop-filter:blur(10px)}
+.raw-night-button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+html[data-portfolio-theme="night"] .raw-night-button{border-color:rgba(255,255,255,.3);background:rgba(244,244,240,.1);color:#f4f4f0}
+@media(max-width:700px){
+  .home-art .home-theme-toggle{position:fixed;top:auto;right:auto;bottom:16px;left:16px;width:42px;height:42px;background:rgba(31,38,36,.9);box-shadow:0 8px 28px rgba(0,0,0,.24);backdrop-filter:blur(12px)}
+  .footer-grid{grid-template-columns:78px auto 78px;width:min(280px,100%);gap:14px}
+  .mero-bubbles{inset:-32% -38% -18%}
+  .mero-section-heading{text-align:center}
+  .mero-section-heading>p,.mero-calculator-copy>p{margin-inline:auto}
+  .mero-calculator-copy{text-align:center}
+  .mero-guide-question{text-align:center}
+}

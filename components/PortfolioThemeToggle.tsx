@@ -9,8 +9,9 @@ export default function PortfolioThemeToggle() {
 
   useEffect(() => {
     const saved = window.localStorage.getItem(storageKey) === "night";
-    setNight(saved);
     document.documentElement.dataset.portfolioTheme = saved ? "night" : "day";
+    const frame = window.requestAnimationFrame(() => setNight(saved));
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const toggle = () => {
@@ -20,5 +21,5 @@ export default function PortfolioThemeToggle() {
     window.localStorage.setItem(storageKey, next ? "night" : "day");
   };
 
-  return <button type="button" className="raw-theme-toggle" onClick={toggle} role="switch" aria-checked={night} aria-label={night ? "Cambiar a modo claro" : "Cambiar a modo nocturno"}><span className="raw-theme-toggle-icon">☼</span><span className="raw-theme-toggle-track"><span /></span><span className="raw-theme-toggle-icon">☾</span></button>;
+  return <button type="button" className="raw-theme-toggle raw-night-button" onClick={toggle} role="switch" aria-checked={night} aria-label={night ? "Cambiar a modo claro" : "Cambiar a modo nocturno"} title={night ? "Modo claro" : "Modo nocturno"}><svg aria-hidden="true" viewBox="0 0 24 24">{night ? <><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19" /></> : <path d="M19.2 15.2A8 8 0 0 1 8.8 4.8 8 8 0 1 0 19.2 15.2Z" />}</svg></button>;
 }

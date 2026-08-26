@@ -22,6 +22,7 @@ export function Header() {
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const lastScroll = useRef(0);
+  const workspaceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -34,13 +35,29 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!workspaceOpen) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (!workspaceRef.current?.contains(event.target as Node)) setWorkspaceOpen(false);
+    };
+    const closeOnMove = () => setWorkspaceOpen(false);
+    document.addEventListener("pointerdown", closeOutside);
+    window.addEventListener("scroll", closeOnMove, { passive: true });
+    window.addEventListener("touchmove", closeOnMove, { passive: true });
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      window.removeEventListener("scroll", closeOnMove);
+      window.removeEventListener("touchmove", closeOnMove);
+    };
+  }, [workspaceOpen]);
+
   return <header className={`site-header ${open ? "menu-open" : ""} ${hidden ? "header-hidden" : ""} ${scrolled ? "header-scrolled" : ""}`}>
     <Link className="brand" href="/" aria-label={`${site.name} inicio`}><Image className="brand-logo" src="/logo-tubio.png" alt="" width={42} height={42} priority /><span>{site.name}</span></Link>
     <button className="mobile-menu-toggle" type="button" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} onClick={() => setOpen(!open)}><i /><i /><i /></button>
     <nav aria-label="Navegación principal"><Link href="/" onClick={() => setOpen(false)}>Inicio</Link></nav>
     <div className="header-actions">
       <a className="header-cta" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Contáctame</a>
-      <div className={`workspace-menu ${workspaceOpen ? "is-open" : ""}`}>
+      <div ref={workspaceRef} className={`workspace-menu ${workspaceOpen ? "is-open" : ""}`}>
         <button className="header-profile-link" type="button" aria-label="Abrir accesos" aria-expanded={workspaceOpen} onClick={() => setWorkspaceOpen(!workspaceOpen)}><PersonIcon /></button>
         <div className="workspace-popover" aria-label="Accesos rápidos">
           <p>Tu espacio</p>

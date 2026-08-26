@@ -23,7 +23,7 @@ export default function HomePage() {
           </div>
           <HeroPreview />
           <div className="hero-copy">
-            <h1>{site.hero.title}</h1>
+            <h1><span>Tu idea.</span><span>Tu estilo.</span><span>TuBio.</span></h1>
             <p className="hero-body">{site.hero.body}</p>
             <div className="hero-actions">
               <a className="button button-primary" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
@@ -77,7 +77,7 @@ export default function HomePage() {
       </section>
 
       <Section id="contacto" eyebrow="Ejemplos" title="Permítete antojarte." tone="white">
-        <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en experiencias digitales memorables.</p>
+        <p className="section-lead">Una selección de estructuras que podemos adaptar y convertir en experiencias digitales memorables.</p>
         <LandingWheel />
       </Section>
 
