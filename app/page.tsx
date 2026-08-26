@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { Header } from "@/components/Header";
 import { HeroPreview } from "@/components/HeroPreview";
@@ -72,16 +73,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Section id="contacto" eyebrow="Ruleta de ejemplos" title="Explora posibilidades para cada tipo de cliente." tone="white">
+      <Section id="contacto" eyebrow="Ejemplos" title="Explora posibilidades para cada tipo de cliente." tone="white">
         <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en experiencias reales.</p>
         <LandingWheel />
       </Section>
 
       <footer className="site-footer">
         <div className="container footer-grid">
-          <p>{site.name}</p>
           <p>{site.contact.city}</p>
-          <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+          <Image src="/logo-tubio.png" alt="TuBio" width={46} height={46} />
+          <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
       </footer>
     </main>
