@@ -1,7 +1,10 @@
+import Link from "next/link";
+
 import { Header } from "@/components/Header";
 import { HeroPreview } from "@/components/HeroPreview";
+import { LandingWheel } from "@/components/LandingWheel";
 import { Section } from "@/components/Section";
-import { site, whatsappUrl } from "@/content/site";
+import { landingTemplates, site, whatsappUrl } from "@/content/site";
 
 export default function HomePage() {
   return (
@@ -39,7 +42,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Section id="servicios" eyebrow="Servicios" title="Una base para vender landings sin empezar de cero.">
+      <Section id="servicios" eyebrow="Servicios" title="Soluciones a tu gusto.">
         <div className="card-grid three-columns">
           {site.services.map((service) => (
             <article className="card" key={service.title}>
@@ -50,33 +53,29 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section id="proceso" eyebrow="Proceso" title="Orden simple para trabajar con cada cliente." tone="white">
-        <ol className="process-list">
-          {site.process.map((step, index) => (
-            <li key={step}>
-              <span>{index + 1}</span>
-              <p>{step}</p>
-            </li>
-          ))}
-        </ol>
-      </Section>
-
-
-
-      <section id="contacto" className="cta-section">
-        <div className="container cta-panel">
-          <div>
-            <p className="eyebrow">Siguiente paso</p>
-            <h2>Ahora esta base puede convertirse en la primera landing de un cliente real.</h2>
-            <p>
-              Cambiamos el contenido, definimos estilo visual, agregamos imagenes y luego conectamos GitHub con Vercel.
-            </p>
+      <section id="plantillas" className="portfolio-list-section home-template-inventory">
+        <div className="container">
+          <div className="portfolio-list-heading">
+            <p className="eyebrow">Inventario inicial</p>
+            <h2>Plantillas y landings</h2>
           </div>
-          <a className="button button-light" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
-            Hablar por WhatsApp
-          </a>
+          <div className="portfolio-grid">
+            {landingTemplates.map((landing) => (
+              <Link className="portfolio-card" href={landing.href} key={landing.href}>
+                <span>{landing.label}</span>
+                <h3>{landing.title}</h3>
+                <p>{landing.description}</p>
+                <strong>{landing.status}</strong>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
+
+      <Section id="contacto" eyebrow="Ruleta de ejemplos" title="Explora posibilidades para cada tipo de cliente." tone="white">
+        <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en experiencias reales.</p>
+        <LandingWheel />
+      </Section>
 
       <footer className="site-footer">
         <div className="container footer-grid">

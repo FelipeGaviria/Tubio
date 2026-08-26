@@ -1,4 +1,11 @@
-﻿export const site = {
+﻿export const landingTemplates = [
+  { label: "Template 1", title: "Landing dark glass para marca técnica", description: "Una base visual nocturna, con acentos cian y bloques listos para recibir una marca real.", href: "/template-1", status: "Base editable" },
+  { label: "Template 2", title: "Tarjeta bio editorial con contactos directos", description: "Identidad, enlaces, contacto y acciones directas reunidas en una tarjeta digital profesional.", href: "/template-2", status: "Base editable" },
+  { label: "Template 3", title: "Landing editorial de narrativa visual", description: "Una composición cálida para marcas con historia, producto y una experiencia memorable.", href: "/template-3", status: "Exploración visual" },
+  { label: "Template 4", title: "Biolink con parallax y datos personales", description: "Una tarjeta de perfil para reunir enlaces, trabajo y personalidad en una experiencia con movimiento.", href: "/template-4", status: "Experimento visual" },
+];
+
+export const site = {
   name: "TuBio",
   tagline: "Landings claras para negocios que quieren vender mejor.",
   description:
@@ -11,7 +18,6 @@
   },
   navigation: [
     { label: "Inicio", href: "/" },
-    { label: "Landings", href: "/landings" },
     { label: "Social Calendars", href: "/social-calendars" },
     { label: "Asistencias", href: "/asistencias" },
     { label: "Orden", href: "/orden" },
