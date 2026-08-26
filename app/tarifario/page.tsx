@@ -37,8 +37,8 @@ export default function TarifarioPage() {
 
     <section className="mero-process">
       <div className="mero-section-heading"><div><h2>¿Y cuándo pagan?</h2></div><p>Las condiciones específicas se confirman por proyecto. Conserva siempre los soportes y datos enviados a producción.</p></div>
-      <a className="mero-template-cta" href={paymentTemplate} target="_blank" rel="noopener noreferrer"><span>Plantilla de cuenta de cobro</span><b>ABRIR DOCUMENTO ↗</b></a>
       <ol><li><span>01</span><div><b>Recibes el proyecto</b><p>Producción comparte alcance, escena, complejidad y fechas.</p></div></li><li><span>02</span><div><b>Confirmas la tarifa</b><p>Revisamos dibujos únicos, FPS de referencia y entregables.</p></div></li><li><span>03</span><div><b>Entregas y finalizas</b><p>El proyecto debe quedar aprobado para entrar al ciclo de pago.</p></div></li><li><span>04</span><div><b>Subes tu cuenta de cobro</b><p>Usa la plantilla indicada. Para tarifas en USD se aplica la TRM vigente del día en que la subas.</p></div></li></ol>
+      <a className="mero-template-cta" href={paymentTemplate} target="_blank" rel="noopener noreferrer"><span>Plantilla de cuenta de cobro</span><b>ABRIR DOCUMENTO ↗</b></a>
       <p className="mero-payment-note">MERO no retiene dinero a voluntad. En cada negociación con nuestros clientes procuramos resolver pagos y novedades lo antes posible.</p>
       <p className="mero-guide-question">¿Te queda alguna duda?</p>
       <a className="mero-guide-link" href={paymentGuide} target="_blank" rel="noopener noreferrer"><span>Ver tutorial de pagos</span><b>ABRIR GUÍA ↗</b></a>

@@ -38,6 +38,7 @@ export function Header() {
     <button className="mobile-menu-toggle" type="button" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} onClick={() => setOpen(!open)}><i /><i /><i /></button>
     <nav aria-label="Navegación principal"><Link href="/" onClick={() => setOpen(false)}>Inicio</Link></nav>
     <div className="header-actions">
+      <a className="header-cta" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Contáctame</a>
       <div className={`workspace-menu ${workspaceOpen ? "is-open" : ""}`}>
         <button className="header-profile-link" type="button" aria-label="Abrir accesos" aria-expanded={workspaceOpen} onClick={() => setWorkspaceOpen(!workspaceOpen)}><PersonIcon /></button>
         <div className="workspace-popover" aria-label="Accesos rápidos">
@@ -45,7 +46,6 @@ export function Header() {
           {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}</span><small>{item.note}</small></Link>)}
         </div>
       </div>
-      <a className="header-cta" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Contactar</a>
     </div>
   </header>;
 }

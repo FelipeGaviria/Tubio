@@ -6,6 +6,7 @@ import { FooterShareButton } from "@/components/FooterShareButton";
 import { HeroPreview } from "@/components/HeroPreview";
 import { LandingWheel } from "@/components/LandingWheel";
 import { Section } from "@/components/Section";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { landingTemplates, site, whatsappUrl } from "@/content/site";
 
 export default function HomePage() {
@@ -31,6 +32,7 @@ export default function HomePage() {
               <a className="button button-secondary" href="#servicios">
                 {site.hero.secondaryAction}
               </a>
+              <ThemeToggle />
             </div>
           </div>
           <div className="metrics" aria-label="Ventajas principales">
@@ -74,7 +76,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Section id="contacto" eyebrow="Ejemplos" title="Explora posibilidades para cada tipo de cliente." tone="white">
+      <Section id="contacto" eyebrow="Ejemplos" title="Permítete antojarte." tone="white">
         <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en experiencias reales.</p>
         <LandingWheel />
       </Section>
