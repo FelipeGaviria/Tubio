@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Level = { name: string; description: string; perSecond?: number; perFrame?: number; value?: number };
 type Service = { id: string; title: string; category: "Animación" | "Arte"; unit: string; fps?: string; intro: string; levels: Level[] };
 
-const services: Service[] = [
+const initialServices: Service[] = [
   { id: "storyboard", title: "Storyboard", category: "Animación", unit: "Por cuadro", intro: "La complejidad depende del plano, los personajes y el nivel de definición del fondo.", levels: [
     { name: "Hard", description: "Planos generales o enteros con varios personajes y fondos definidos.", value: 50000 },
     { name: "Medium", description: "Planos con varios personajes o fondos definidos.", value: 35000 },
@@ -47,12 +47,56 @@ const services: Service[] = [
 ];
 
 const cop = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 2 });
+const supabaseUrl = "https://qdxapfnjizissxgkhpxi.supabase.co";
+const publishableKey = "sb_publishable_VBhZcIj3KS9r1nxTaovmBA_QrVQzNzC";
 
 export function TariffExplorer() {
+  const [services, setServices] = useState<Service[]>(initialServices);
   const [filter, setFilter] = useState<"Todas" | "Animación" | "Arte">("Todas");
   const [serviceId, setServiceId] = useState("clean");
   const [levelIndex, setLevelIndex] = useState(1);
   const [quantity, setQuantity] = useState(1);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editorCode, setEditorCode] = useState("");
+  const [editorStatus, setEditorStatus] = useState("");
+  const [saving, setSaving] = useState(false);
+  const beforeEdit = useRef<Service[]>(initialServices);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`${supabaseUrl}/rest/v1/mero_tariff_config?id=eq.current&select=services`, {
+      headers: { apikey: publishableKey }, signal: controller.signal,
+    }).then((response) => response.ok ? response.json() : Promise.reject())
+      .then((rows: Array<{ services?: Service[] }>) => {
+        if (Array.isArray(rows[0]?.services)) requestAnimationFrame(() => setServices(rows[0].services!));
+      }).catch(() => undefined);
+    return () => controller.abort();
+  }, []);
+
+  const unlockEditor = () => {
+    if (editorCode !== "696969") { setEditorStatus("Código incorrecto."); return; }
+    beforeEdit.current = structuredClone(services);
+    setEditing(true); setEditorOpen(false); setEditorStatus("");
+  };
+  const changeRate = (serviceIndex: number, itemIndex: number, key: "perSecond" | "perFrame" | "value", next: number) => {
+    setServices((current) => current.map((service, sIndex) => sIndex !== serviceIndex ? service : {
+      ...service, levels: service.levels.map((item, lIndex) => lIndex !== itemIndex ? item : { ...item, [key]: Math.max(0, next || 0) }),
+    }));
+  };
+  const saveRates = async () => {
+    setSaving(true); setEditorStatus("");
+    try {
+      const response = await fetch(`${supabaseUrl}/functions/v1/update-mero-tariffs`, {
+        method: "POST", headers: { "Content-Type": "application/json", apikey: publishableKey },
+        body: JSON.stringify({ code: editorCode, services }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error ?? "No se pudo guardar");
+      setEditorStatus("Tarifas actualizadas para todos los usuarios."); setEditing(false); setEditorCode("");
+    } catch (error) { setEditorStatus(error instanceof Error ? error.message : "No se pudo guardar"); }
+    finally { setSaving(false); }
+  };
   const selected = services.find((service) => service.id === serviceId) ?? services[0];
   const level = selected.levels[Math.min(levelIndex, selected.levels.length - 1)];
   const unitPrice = level.perFrame ?? level.value ?? level.perSecond ?? 0;
@@ -62,7 +106,7 @@ export function TariffExplorer() {
   return <>
     <section className="mero-explorer" id="tarifas">
       <div className="mero-section-heading">
-        <div><span>02 / TARIFAS</span><h2>Encuentra tu servicio</h2></div>
+        <div><h2>Tarifas</h2></div>
         <p>Todos los valores están expresados en pesos colombianos (COP). Abre cada categoría para revisar alcance, complejidad y unidad de cobro.</p>
       </div>
       <div className="mero-filters" aria-label="Filtrar tarifas">
@@ -74,7 +118,11 @@ export function TariffExplorer() {
           <div className="mero-detail-body">
             <div className="mero-detail-intro"><p>{service.intro}</p>{service.fps && <span>{service.fps}</span>}</div>
             <div className="mero-rate-list">
-              {service.levels.map((item) => <article key={item.name} data-level={item.name.toLowerCase()}><div><small>Complejidad</small><h3>{item.name}</h3><p>{item.description}</p></div><dl>{item.perSecond && <><dt>Por segundo</dt><dd>{cop.format(item.perSecond)}</dd></>}{item.perFrame && <><dt>Por frame</dt><dd>{cop.format(item.perFrame)}</dd></>}{item.value && <><dt>Valor</dt><dd>{cop.format(item.value)}</dd></>}</dl></article>)}
+              {service.levels.map((item, itemIndex) => <article key={item.name} data-level={item.name.toLowerCase()}><div><small>Complejidad</small><h3>{item.name}</h3><p>{item.description}</p></div><dl>
+                {item.perSecond !== undefined && <div><dt>Por segundo · COP</dt><dd>{editing ? <input aria-label={`${service.title} ${item.name} por segundo`} type="number" min="0" value={item.perSecond} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "perSecond", Number(event.target.value))} /> : cop.format(item.perSecond)}</dd></div>}
+                {item.perFrame !== undefined && <div><dt>Por frame · COP</dt><dd>{editing ? <input aria-label={`${service.title} ${item.name} por frame`} type="number" min="0" value={item.perFrame} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "perFrame", Number(event.target.value))} /> : cop.format(item.perFrame)}</dd></div>}
+                {item.value !== undefined && <div><dt>Valor · COP</dt><dd>{editing ? <input aria-label={`${service.title} ${item.name} valor`} type="number" min="0" value={item.value} onChange={(event) => changeRate(services.indexOf(service), itemIndex, "value", Number(event.target.value))} /> : cop.format(item.value)}</dd></div>}
+              </dl></article>)}
             </div>
           </div>
         </details>)}
@@ -82,7 +130,7 @@ export function TariffExplorer() {
     </section>
 
     <section className="mero-calculator" id="calculadora">
-      <div className="mero-calculator-copy"><span>03 / ESTIMADOR</span><h2>Haz una cuenta rápida</h2><p>Úsala para dimensionar el trabajo antes de hablar con producción. No reemplaza la cotización aprobada del proyecto.</p></div>
+      <div className="mero-calculator-copy"><h2>Haz una cuenta rápida</h2><p>Úsala para dimensionar el trabajo antes de hablar con producción. No reemplaza la cotización aprobada del proyecto.</p></div>
       <div className="mero-calculator-panel">
         <label>Servicio<select value={serviceId} onChange={(event) => { setServiceId(event.target.value); setLevelIndex(0); }}>{services.map((service) => <option key={service.id} value={service.id}>{service.title}</option>)}</select></label>
         <label>Complejidad<select value={Math.min(levelIndex, selected.levels.length - 1)} onChange={(event) => setLevelIndex(Number(event.target.value))}>{selected.levels.map((item, index) => <option key={item.name} value={index}>{item.name}</option>)}</select></label>
@@ -90,5 +138,11 @@ export function TariffExplorer() {
         <div className="mero-estimate"><small>Estimado orientativo</small><strong>{cop.format(estimate)}</strong><span>{quantity} × {cop.format(unitPrice)}</span></div>
       </div>
     </section>
+
+    <div className={`mero-editor-dock ${editing ? "is-editing" : ""}`}>
+      {editorStatus && <span role="status">{editorStatus}</span>}
+      {editing ? <><button type="button" onClick={() => { setEditing(false); setServices(beforeEdit.current); setEditorCode(""); }}>Cancelar</button><button type="button" onClick={saveRates} disabled={saving}>{saving ? "Guardando…" : "Guardar para todos"}</button></> : <button type="button" onClick={() => setEditorOpen(true)}>Editar valores</button>}
+    </div>
+    {editorOpen && <div className="mero-editor-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditorOpen(false); }}><div className="mero-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="editor-title"><button className="mero-editor-close" type="button" onClick={() => setEditorOpen(false)} aria-label="Cerrar">×</button><small>Acceso restringido</small><h2 id="editor-title">Editar tarifas</h2><p>Ingresa el código de seis dígitos para habilitar los campos.</p><label>Código<input type="password" inputMode="numeric" maxLength={6} value={editorCode} onChange={(event) => setEditorCode(event.target.value.replace(/\D/g, ""))} onKeyDown={(event) => { if (event.key === "Enter") unlockEditor(); }} autoFocus /></label>{editorStatus && <span className="mero-editor-error">{editorStatus}</span>}<button type="button" onClick={unlockEditor}>Desbloquear</button></div></div>}
   </>;
 }

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { site, whatsappUrl } from "@/content/site";
 
@@ -33,7 +34,7 @@ export function Header() {
   }, []);
 
   return <header className={`site-header ${open ? "menu-open" : ""} ${hidden ? "header-hidden" : ""} ${scrolled ? "header-scrolled" : ""}`}>
-    <Link className="brand" href="/" aria-label={`${site.name} inicio`}><span className="brand-mark">TB</span><span>{site.name}</span></Link>
+    <Link className="brand" href="/" aria-label={`${site.name} inicio`}><Image className="brand-logo" src="/logo-tubio.png" alt="" width={42} height={42} priority /><span>{site.name}</span></Link>
     <button className="mobile-menu-toggle" type="button" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} onClick={() => setOpen(!open)}><i /><i /><i /></button>
     <nav aria-label="Navegación principal"><Link href="/" onClick={() => setOpen(false)}>Inicio</Link></nav>
     <div className="header-actions">
