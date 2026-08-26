@@ -8,5 +8,5 @@ export function accessCode() {
 
 export function accessToken() {
   const secret = process.env.ORDER_COOKIE_SECRET ?? accessCode();
-  return createHash("sha256").update(`tubio-order:${secret}`).digest("hex");
+  return createHash("sha256").update(`tubio-order-v2:${secret}`).digest("hex");
 }

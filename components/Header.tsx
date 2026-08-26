@@ -6,6 +6,7 @@ import Link from "next/link";
 import { site, whatsappUrl } from "@/content/site";
 
 function PersonIcon() { return <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2" /><path d="M5 20c.7-3.7 3-5.5 7-5.5s6.3 1.8 7 5.5" /></svg>; }
+function LockIcon() { return <svg className="workspace-lock" aria-label="Acceso con clave" viewBox="0 0 16 16"><rect x="3.5" y="7" width="9" height="6.5" rx="1.6" /><path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7" /></svg>; }
 
 const workspaceLinks = [
   { label: "Portafolio", href: "/portafolio", note: "Trabajo seleccionado", locked: false },
@@ -43,7 +44,7 @@ export function Header() {
         <button className="header-profile-link" type="button" aria-label="Abrir accesos" aria-expanded={workspaceOpen} onClick={() => setWorkspaceOpen(!workspaceOpen)}><PersonIcon /></button>
         <div className="workspace-popover" aria-label="Accesos rápidos">
           <p>Tu espacio</p>
-          {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}{item.locked && <i className="workspace-lock" aria-label="Acceso con clave">🔒</i>}</span><small>{item.note}</small></Link>)}
+          {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}{item.locked && <LockIcon />}</span><small>{item.note}</small></Link>)}
         </div>
       </div>
     </div>

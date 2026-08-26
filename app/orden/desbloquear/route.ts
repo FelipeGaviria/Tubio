@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
     path: "/orden",
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: 60 * 60 * 2,
   });
   return response;
 }

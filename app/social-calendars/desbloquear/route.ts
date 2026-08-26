@@ -9,6 +9,6 @@ export async function POST(request: Request) {
   } catch { return NextResponse.json({ ok: false }, { status: 400 }); }
   if (submitted !== socialAccessCode()) return NextResponse.json({ ok: false }, { status: 401 });
   const response = NextResponse.json({ ok: true });
-  response.cookies.set(SOCIAL_COOKIE, socialAccessToken(), { httpOnly: true, sameSite: "strict", secure: process.env.NODE_ENV === "production", path: "/social-calendars", maxAge: 60 * 60 * 24 * 30 });
+  response.cookies.set(SOCIAL_COOKIE, socialAccessToken(), { httpOnly: true, sameSite: "strict", secure: process.env.NODE_ENV === "production", path: "/social-calendars", maxAge: 60 * 60 * 2 });
   return response;
 }
