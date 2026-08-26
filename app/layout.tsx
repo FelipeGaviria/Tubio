@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
+import { Bebas_Neue, Inter, Oswald, Roboto } from "next/font/google";
 
 import { site } from "@/content/site";
 
@@ -7,6 +7,8 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-display", display: "swap" });
+const oswald = Oswald({ subsets: ["latin"], variable: "--font-mero-display", display: "swap" });
+const roboto = Roboto({ subsets: ["latin"], variable: "--font-mero-body", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${bebasNeue.variable}`}>
+    <html lang="es" className={`${inter.variable} ${bebasNeue.variable} ${oswald.variable} ${roboto.variable}`}>
       <body>{children}</body>
     </html>
   );
