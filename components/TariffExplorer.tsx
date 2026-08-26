@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 type Level = { name: string; description: string; perSecond?: number; perFrame?: number; value?: number };
@@ -109,7 +110,7 @@ export function TariffExplorer() {
     <section className="mero-explorer" id="tarifas">
       <div className="mero-section-heading">
         <div><h2>Tarifas</h2></div>
-        <p>Todos los valores están expresados en pesos colombianos (COP). Abre cada categoría para revisar alcance, complejidad y unidad de cobro.</p>
+        <p className="mero-cop-note"><strong>COP</strong><span>Todos los valores están expresados en pesos colombianos. Abre cada categoría para revisar alcance, complejidad y unidad de cobro.</span></p>
       </div>
       <div className="mero-filters" aria-label="Filtrar tarifas">
         {(["Todas", "Animación", "Arte"] as const).map((item) => <button className={filter === item ? "active" : ""} key={item} onClick={() => setFilter(item)}>{item}</button>)}
@@ -141,10 +142,7 @@ export function TariffExplorer() {
       </div>
     </section>
 
-    <div className={`mero-editor-dock ${editing ? "is-editing" : ""}`}>
-      {editorStatus && <span role="status">{editorStatus}</span>}
-      {editing ? <><button type="button" onClick={() => { setEditing(false); setServices(beforeEdit.current); setEditorCode(""); }}>Cancelar</button><button type="button" onClick={saveRates} disabled={saving}>{saving ? "Guardando…" : "Guardar para todos"}</button></> : <button type="button" onClick={() => setEditorOpen(true)}>Editar valores</button>}
-    </div>
     {editorOpen && <div className="mero-editor-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setEditorOpen(false); }}><div className="mero-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="editor-title"><button className="mero-editor-close" type="button" onClick={() => setEditorOpen(false)} aria-label="Cerrar">×</button><small>Acceso restringido</small><h2 id="editor-title">Editar tarifas</h2><p>Ingresa el código de seis dígitos para habilitar los campos.</p><label>Código<input type="password" inputMode="numeric" maxLength={6} value={editorCode} onChange={(event) => setEditorCode(event.target.value.replace(/\D/g, ""))} onKeyDown={(event) => { if (event.key === "Enter") unlockEditor(); }} autoFocus /></label>{editorStatus && <span className="mero-editor-error">{editorStatus}</span>}<button type="button" onClick={unlockEditor}>Desbloquear</button></div></div>}
+    <footer className="mero-footer"><div className="mero-footer-center"><Image src="/images/mero/logo-mero.png" alt="MERO Estudio" width={132} height={132} /><div className={`mero-editor-dock ${editing ? "is-editing" : ""}`}>{editorStatus && <span role="status">{editorStatus}</span>}{editing ? <><button type="button" onClick={() => { setEditing(false); setServices(beforeEdit.current); setEditorCode(""); }}>Cancelar</button><button type="button" onClick={saveRates} disabled={saving}>{saving ? "Guardando…" : "Guardar para todos"}</button></> : <button type="button" onClick={() => setEditorOpen(true)}>Editar valores</button>}</div></div></footer>
   </>;
 }
