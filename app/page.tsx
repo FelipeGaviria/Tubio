@@ -77,7 +77,7 @@ export default function HomePage() {
       </section>
 
       <Section id="contacto" eyebrow="Ejemplos" title="Permítete antojarte." tone="white">
-        <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en experiencias reales.</p>
+        <p className="section-lead">Una selección visual de estructuras que podemos adaptar y convertir en experiencias digitales memorables.</p>
         <LandingWheel />
       </Section>
 
