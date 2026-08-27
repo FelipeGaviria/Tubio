@@ -6,7 +6,8 @@ export function FooterShareButton() {
   const [copied, setCopied] = useState(false);
 
   const share = async () => {
-    const data = { title: "TuBio", text: "Mira esta página de TuBio", url: window.location.href };
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]')?.content;
+    const data = { title: document.title || "TuBio", text: description || "Mira esta página de TuBio", url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else await navigator.clipboard.writeText(data.url);
