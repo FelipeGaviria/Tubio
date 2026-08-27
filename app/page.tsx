@@ -13,9 +13,9 @@ export default function HomePage() {
   return (
     <main id="inicio" className="home-art">
       <Header />
-      <ThemeToggle />
 
       <section className="hero-section">
+        <ThemeToggle />
         <div className="container hero-grid">
           <div className="hero-meta">
             <p className="eyebrow">{site.hero.eyebrow}</p>

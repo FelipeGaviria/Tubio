@@ -2079,6 +2079,11 @@ html[data-portfolio-theme="night"] .raw-night-button{border-color:rgba(255,255,2
   .mero-calculator-copy p{max-width:340px}
 }
 
+/* Tema: anclado al hero en escritorio y flotante móvil fuera de su grid */
+.home-art .hero-section>.home-theme-toggle{position:absolute;z-index:40;top:auto;right:24px;bottom:22px;left:auto;width:44px;min-width:44px;height:44px;min-height:44px;aspect-ratio:1;padding:0;border-radius:999px;transform:none}
+.home-art .hero-section>.home-theme-toggle:hover{transform:translateY(-2px)}
+@media(max-width:700px){.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:auto;bottom:14px;left:14px;width:42px;min-width:42px;height:42px;min-height:42px;border-radius:999px;background:rgba(31,38,36,.92);box-shadow:0 10px 30px rgba(0,0,0,.24);transform:none;pointer-events:auto;touch-action:manipulation}.home-art .hero-section>.home-theme-toggle:hover{transform:none}}
+
 /* Glass header y ajustes de lectura finales */
 .home-art .site-header,.home-art .site-header.header-scrolled{border-bottom:1px solid rgba(255,255,255,.22);background:rgba(214,222,216,.52);box-shadow:0 10px 32px rgba(18,27,23,.08);backdrop-filter:blur(22px) saturate(155%);-webkit-backdrop-filter:blur(22px) saturate(155%)}
 html[data-tubio-theme="night"] .home-art .site-header,html[data-tubio-theme="night"] .home-art .site-header.header-scrolled{border-bottom-color:rgba(255,255,255,.1);background:rgba(12,17,15,.58)}

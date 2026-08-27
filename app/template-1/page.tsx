@@ -29,7 +29,7 @@ export default function TemplateOnePage() {
       <div className="template-one-bg" aria-hidden="true" />
 
       <section className="template-one-stage">
-        <Link className="template-back-link" href="/landings">
+        <Link className="template-back-link" href="/">
           Volver al portafolio
         </Link>
 
@@ -79,7 +79,7 @@ export default function TemplateOnePage() {
 
           <footer id="contacto" className="template-footer">
             <span>Landing raw editable</span>
-            <Link href="/landings">Duplicar idea</Link>
+            <Link href="/">Duplicar idea</Link>
           </footer>
         </article>
       </section>
