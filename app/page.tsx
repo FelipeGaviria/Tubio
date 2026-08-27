@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 
 import { Header } from "@/components/Header";
 import { FooterShareButton } from "@/components/FooterShareButton";
+import { FooterGuyUnlock } from "@/components/FooterGuyUnlock";
 import { HeroPreview } from "@/components/HeroPreview";
 import { LandingWheel } from "@/components/LandingWheel";
 import { Section } from "@/components/Section";
@@ -84,7 +84,7 @@ export default function HomePage() {
       <footer className="site-footer">
         <div className="container footer-grid">
           <p>{site.contact.city}</p>
-          <a className="footer-logo-link" href="#inicio" aria-label="Volver al inicio"><Image src="/logo-tubio.png" alt="TuBio" width={46} height={46} /></a>
+          <FooterGuyUnlock />
           <FooterShareButton />
         </div>
       </footer>

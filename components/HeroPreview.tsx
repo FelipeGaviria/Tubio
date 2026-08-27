@@ -10,6 +10,7 @@ const GUYS = [
 
 export function HeroPreview() {
   const [guyIndex, setGuyIndex] = useState(0);
+  const [guyUssiUnlocked, setGuyUssiUnlocked] = useState(false);
   const [popping, setPopping] = useState(false);
   const [assetsReady, setAssetsReady] = useState(false);
 
@@ -37,16 +38,22 @@ export function HeroPreview() {
   }, []);
 
   useEffect(() => {
+    const unlock = () => setGuyUssiUnlocked(true);
+    window.addEventListener("tubio:guy-ussi-unlocked", unlock);
+    return () => window.removeEventListener("tubio:guy-ussi-unlocked", unlock);
+  }, []);
+
+  useEffect(() => {
     if (!popping) return;
 
-    const swapTimer = window.setTimeout(() => setGuyIndex((current) => (current + 1) % GUYS.length), 130);
+    const swapTimer = window.setTimeout(() => setGuyIndex((current) => (current + 1) % (guyUssiUnlocked ? GUYS.length : 2)), 130);
     const resetTimer = window.setTimeout(() => setPopping(false), 420);
 
     return () => {
       window.clearTimeout(swapTimer);
       window.clearTimeout(resetTimer);
     };
-  }, [popping]);
+  }, [popping, guyUssiUnlocked]);
 
   const swapGuy = () => {
     if (!assetsReady || popping) return;
@@ -55,7 +62,7 @@ export function HeroPreview() {
   };
 
   const currentGuy = GUYS[guyIndex];
-  const nextGuy = GUYS[(guyIndex + 1) % GUYS.length];
+  const nextGuy = GUYS[(guyIndex + 1) % (guyUssiUnlocked ? GUYS.length : 2)];
 
   return (
     <div className="hero-preview" aria-label="Vista previa de landing responsive">
