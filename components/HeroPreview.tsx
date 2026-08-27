@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-const GUY_IMAGES = ["/guy-pro-max.webp", "/guyanverse.webp"];
+const GUYS = [
+  { src: "/guy-pro-max.webp", className: "", name: "Guy Pro Max" },
+  { src: "/guyanverse.webp", className: "is-guyanverse", name: "Guyanverse" },
+  { src: "/guy-ussi.webp", className: "is-guy-ussi", name: "GuyUssi" },
+];
 
 export function HeroPreview() {
-  const [alternate, setAlternate] = useState(false);
+  const [guyIndex, setGuyIndex] = useState(0);
   const [popping, setPopping] = useState(false);
   const [assetsReady, setAssetsReady] = useState(false);
 
@@ -23,7 +27,7 @@ export function HeroPreview() {
       try { await image.decode(); } catch { /* El fondo conserva su fallback del navegador. */ }
     };
 
-    void Promise.all(GUY_IMAGES.map(preload)).then(() => {
+    void Promise.all(GUYS.map(({ src }) => preload(src))).then(() => {
       if (active) setAssetsReady(true);
     });
 
@@ -35,7 +39,7 @@ export function HeroPreview() {
   useEffect(() => {
     if (!popping) return;
 
-    const swapTimer = window.setTimeout(() => setAlternate((current) => !current), 130);
+    const swapTimer = window.setTimeout(() => setGuyIndex((current) => (current + 1) % GUYS.length), 130);
     const resetTimer = window.setTimeout(() => setPopping(false), 420);
 
     return () => {
@@ -50,10 +54,13 @@ export function HeroPreview() {
     setPopping(true);
   };
 
+  const currentGuy = GUYS[guyIndex];
+  const nextGuy = GUYS[(guyIndex + 1) % GUYS.length];
+
   return (
     <div className="hero-preview" aria-label="Vista previa de landing responsive">
       <div className="hero-orbit" aria-hidden="true" />
-      <button className={`hero-artifact ${alternate ? "is-guyanverse" : ""} ${popping ? "is-popping" : ""}`} type="button" onClick={swapGuy} disabled={!assetsReady} aria-busy={!assetsReady} aria-label={assetsReady ? (alternate ? "Cambiar a Guy Pro Max" : "Cambiar a Guyanverse") : "Cargando personajes"}>
+      <button className={`hero-artifact ${currentGuy.className} ${popping ? "is-popping" : ""}`} type="button" onClick={swapGuy} disabled={!assetsReady} aria-busy={!assetsReady} aria-label={assetsReady ? `Cambiar de ${currentGuy.name} a ${nextGuy.name}` : "Cargando personajes"}>
       </button>
     </div>
   );
