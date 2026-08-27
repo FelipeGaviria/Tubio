@@ -6,11 +6,23 @@ import { TariffExplorer } from "@/components/TariffExplorer";
 export const metadata: Metadata = {
   title: "Tarifario 2026 | MERO Estudio",
   description: "Tarifas 2026 para proveedores de animación y arte de MERO Estudio.",
+  icons: {
+    icon: [{ url: "/images/mero/logo-mero.png", type: "image/png" }],
+    shortcut: "/images/mero/logo-mero.png",
+    apple: "/images/mero/logo-mero.png",
+  },
   openGraph: {
     title: "Tarifario 2026 | MERO Estudio",
     description: "Tarifas 2026 para proveedores de animación y arte de MERO Estudio.",
     url: "/tarifario",
     type: "website",
+    images: [{ url: "/images/mero/logo-mero.png", alt: "Logo de MERO Estudio" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Tarifario 2026 | MERO Estudio",
+    description: "Tarifas 2026 para proveedores de animación y arte de MERO Estudio.",
+    images: ["/images/mero/logo-mero.png"],
   },
 };
 
