@@ -35,7 +35,7 @@ export function FooterGuyUnlock() {
     document.getElementById("inicio")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  return <button className={`footer-logo-link footer-guy-unlock ${unlocking ? "is-unlocking" : ""}`} type="button" aria-label="Volver al inicio" onPointerDown={startHold} onPointerUp={cancelHold} onPointerCancel={cancelHold} onPointerLeave={cancelHold} onContextMenu={(event) => event.preventDefault()} onClick={goToTop}>
+  return <button className={`footer-logo-link footer-guy-unlock ${unlocking ? "is-unlocking" : ""}`} type="button" aria-label="Volver al inicio" onPointerDown={startHold} onPointerUp={cancelHold} onPointerCancel={cancelHold} onPointerLeave={cancelHold} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onSelect={(event) => event.preventDefault()} onClick={goToTop}>
     <Image src="/logo-tubio.png" alt="TuBio" width={46} height={46} draggable={false} />
   </button>;
 }
