@@ -47,10 +47,21 @@ export function HeroPreview() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setUnlockedCount(Math.min(3, Number(localStorage.getItem(UNLOCK_KEY) ?? 0))), 0);
-    const unlock = () => setUnlockedCount((current) => { const next = Math.min(3, current + 1); localStorage.setItem(UNLOCK_KEY, String(next)); return next; });
-    window.addEventListener("tubio:guy-unlock-next", unlock);
-    return () => { window.clearTimeout(timer); window.removeEventListener("tubio:guy-unlock-next", unlock); };
+    const timer = window.setTimeout(() => {
+      const saved = Number(localStorage.getItem(UNLOCK_KEY) ?? 0);
+      setUnlockedCount(saved > 0 ? 3 : 0);
+    }, 0);
+    const toggleUnlock = () => setUnlockedCount((current) => {
+      const next = current === 0 ? 3 : 0;
+      localStorage.setItem(UNLOCK_KEY, String(next));
+      if (next === 0) {
+        setGuyIndex((index) => index % 2);
+        setNightmareActive(false);
+      }
+      return next;
+    });
+    window.addEventListener("tubio:guy-unlock-next", toggleUnlock);
+    return () => { window.clearTimeout(timer); window.removeEventListener("tubio:guy-unlock-next", toggleUnlock); };
   }, []);
 
   useEffect(() => {

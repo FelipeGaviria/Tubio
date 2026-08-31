@@ -2038,7 +2038,7 @@ html[data-tubio-theme="night"] .home-art{background:#080b0b;color:#e9eeeb}html[d
 /* Compensación óptica del personaje; las órbitas permanecen quietas */
 .home-art .hero-artifact{--guy-shift:0%;transform:translateX(var(--guy-shift)) rotate(-1.5deg)}@media(min-width:701px){.home-art .hero-artifact{--guy-shift:5%}}@keyframes guy-pop{0%,100%{transform:translateX(var(--guy-shift)) rotate(-1.5deg) scale(1)}32%{transform:translateX(var(--guy-shift)) rotate(-1.5deg) scale(.94)}68%{transform:translateX(var(--guy-shift)) rotate(-1.5deg) scale(1.045)}}
 .home-art .hero-artifact.is-guy-ussi{background-image:url('/guy-ussi.webp')}
-.home-art .hero-artifact.is-guy-skull{background-image:url('/guy-skull.webp')}.home-art .hero-artifact.is-guy-muscle{background-image:url('/guy-muscle.webp')}.home-art .hero-artifact.is-guy-nightmare{background-image:url('/guy-nightmare.webp');filter:drop-shadow(0 34px 42px rgba(63,15,92,.62)) saturate(.9) contrast(1.12) brightness(.82)}
+.home-art .hero-artifact.is-guy-skull{background-image:url('/guy-skull.webp')}.home-art .hero-artifact.is-guy-muscle{background-image:url('/guy-muscle.webp')}.home-art .hero-artifact.is-guy-nightmare{background-image:url('/guy-nightmare.webp');filter:drop-shadow(0 34px 42px rgba(63,15,92,.62))}
 .footer-guy-unlock{padding:0;border:0;background:transparent;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}.footer-guy-unlock img{pointer-events:none;-webkit-user-drag:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}.footer-guy-unlock.is-unlocking{animation:footer-secret-spin .68s cubic-bezier(.2,.8,.2,1)}@keyframes footer-secret-spin{0%{transform:rotate(0) scale(1)}45%{transform:rotate(195deg) scale(.88)}78%{transform:rotate(345deg) scale(1.08)}100%{transform:rotate(360deg) scale(1)}}
 @media(min-width:701px){.home-art .hero-orbit{left:56%}}
 
@@ -2120,6 +2120,25 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
   .mero-template-cta{align-items:center}
   .mero-guide-link{align-items:center}
 }
+
+/* Guys secretos, carga del desbloqueo y transición de iluminación */
+.home-art .hero-artifact:not(.is-guy-nightmare){filter:none}
+.home-art .hero-artifact.is-guy-muscle{inset:1% -9% 1%;background-size:88% auto;background-position:center bottom;clip-path:ellipse(43% 49% at 50% 50%)}
+.home-art .hero-artifact.is-guy-nightmare{inset:0 -8%;background-size:87% auto;background-position:center bottom}
+.footer-guy-unlock{position:relative;z-index:0;transform-origin:center;transition:transform .2s cubic-bezier(.2,.8,.2,1)}
+@property --footer-charge{syntax:"<angle>";inherits:false;initial-value:0deg}
+.footer-guy-unlock::before{content:"";position:absolute;z-index:-1;inset:-10px;border-radius:50%;background:conic-gradient(#f5f7f5 var(--footer-charge),rgba(245,247,245,.13) 0);opacity:0;transform:scale(.75);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 0);mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 0)}
+.footer-guy-unlock.is-charging{transform:scale(1.32)}
+.footer-guy-unlock.is-charging::before{opacity:1;animation:footer-charge .75s linear forwards}
+.footer-guy-unlock.is-unlocking{animation:footer-secret-flip .82s cubic-bezier(.16,.84,.24,1)}
+@keyframes footer-charge{0%{--footer-charge:0deg;transform:scale(.75)}100%{--footer-charge:360deg;transform:scale(1)}}
+@keyframes footer-secret-flip{0%{transform:perspective(500px) rotateY(0) scale(1.32)}48%{transform:perspective(500px) rotateY(190deg) scale(1.18)}78%{transform:perspective(500px) rotateY(330deg) scale(1.06)}100%{transform:perspective(500px) rotateY(360deg) scale(1)}}
+.tubio-theme-wipe{position:fixed;z-index:1999;left:var(--wipe-x);top:var(--wipe-y);width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;pointer-events:none;animation:tubio-theme-cover .82s cubic-bezier(.7,0,.2,1) both}
+.tubio-theme-wipe.is-night{background:#080b0b}.tubio-theme-wipe.is-day{background:#eef1ef}
+@keyframes tubio-theme-cover{0%{opacity:1;transform:scale(0)}52%{opacity:1;transform:scale(120)}82%{opacity:1;transform:scale(120)}100%{opacity:0;transform:scale(120)}}
+@media(min-width:701px){.home-art .hero-section>.home-theme-toggle{right:clamp(24px,5vw,74px);bottom:clamp(22px,5vh,58px);width:52px;height:52px}.home-art .home-theme-toggle svg{width:23px}}
+@media(max-width:700px){.home-art .hero-artifact.is-guy-muscle{inset:2% -5%;background-size:86% auto}.home-art .hero-artifact.is-guy-nightmare{inset:1% -4%;background-size:85% auto}.home-art .hero-section>.home-theme-toggle{right:0;left:auto;width:52px;height:60px;border-radius:18px 0 0 18px}.home-art .home-theme-toggle svg{width:25px}}
+@media(prefers-reduced-motion:reduce){.tubio-theme-wipe{animation-duration:.01ms}.footer-guy-unlock.is-charging,.footer-guy-unlock.is-unlocking{animation:none;transform:none}}
 
 /* Pulido final de navegación de sesiones y acciones del calendario. */
 .rotaract-header-logo img{width:154px;height:auto}.calendar-lock-toggle svg{width:15px;height:15px;stroke-width:1.9}.rotaract-events article{grid-template-columns:48px minmax(0,1fr)}.event-actions{grid-column:2;justify-content:flex-end;align-items:center;margin-top:2px}.event-actions button{flex:0 0 auto}.event-actions button svg{width:14px;height:14px}.attendance-sidebar:has(.session-list){padding-bottom:28px}
