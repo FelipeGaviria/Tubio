@@ -20,6 +20,13 @@ function saturday() { const date = new Date(); date.setHours(12, 0, 0, 0); date.
 function shift(date: string, days: number) { const next = new Date(`${date}T12:00:00`); next.setDate(next.getDate() + days); return iso(next); }
 function pretty(date: string, short = false) { const value = new Intl.DateTimeFormat("es-CO", short ? { day: "numeric", month: "short" } : { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(`${date}T12:00:00`)); return value[0].toUpperCase() + value.slice(1); }
 function initialData(): ClubData { const date = iso(saturday()); return { members: [], sessions: [{ date, held: true, marks: {} }], events: [] }; }
+function normalizeData(value: ClubData): ClubData {
+  const fallbackDate = iso(saturday());
+  const members = Array.isArray(value?.members) ? value.members : [];
+  const events = Array.isArray(value?.events) ? value.events : [];
+  const sessions = Array.isArray(value?.sessions) ? value.sessions : [];
+  return { members, events, sessions: sessions.length ? sessions : [{ date: fallbackDate, held: true, marks: {} }] };
+}
 function Icon({ name }: { name: "left" | "right" | "plus" | "calendar" | "people" | "trash" | "close" }) { const paths = { left: <path d="m15 18-6-6 6-6"/>, right: <path d="m9 18 6-6-6-6"/>, plus: <path d="M12 5v14M5 12h14"/>, calendar: <><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></>, people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></>, trash: <><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6"/></>, close: <path d="m6 6 12 12M18 6 6 18"/> }; return <svg aria-hidden="true" viewBox="0 0 24 24">{paths[name]}</svg>; }
 
 export function RotaractApp() {
@@ -41,7 +48,7 @@ export function RotaractApp() {
   const dataLoaded = data !== null;
 
   useEffect(() => { dataRef.current = data; }, [data]);
-  useEffect(() => { const timer = window.setTimeout(() => { try { const stored = localStorage.getItem(STORAGE_KEY); setData(stored ? JSON.parse(stored) : initialData()); } catch { setData(initialData()); } const until = Number(localStorage.getItem(ACCESS_UNTIL_KEY) ?? 0); const storedToken = localStorage.getItem(TOKEN_KEY) ?? ""; setUnlocked(until > Date.now() && Boolean(storedToken)); setToken(storedToken); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => { const timer = window.setTimeout(() => { try { const stored = localStorage.getItem(STORAGE_KEY); setData(stored ? normalizeData(JSON.parse(stored)) : initialData()); } catch { setData(initialData()); } const until = Number(localStorage.getItem(ACCESS_UNTIL_KEY) ?? 0); const storedToken = localStorage.getItem(TOKEN_KEY) ?? ""; setUnlocked(until > Date.now() && Boolean(storedToken)); setToken(storedToken); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }, [data]);
 
   async function tryAccess(code: string) {
@@ -65,9 +72,11 @@ export function RotaractApp() {
         if (!response.ok) throw new Error();
         const remote = await response.json() as { data: ClubData; updated_at: string } | null;
         if (!active || !remote) return;
+        const normalizedRemote = normalizeData(remote.data);
         const local = dataRef.current;
         if (initial && remote.data.members.length === 0 && remote.data.events.length === 0 && local && (local.members.length || local.events.length)) { setCloudReady(true); setSyncStatus("saving"); return; }
-        if (remote.updated_at !== remoteStamp.current) { remoteStamp.current = remote.updated_at; applyingRemote.current = true; setData(remote.data); }
+        if (remote.data.sessions.length === 0) { setData(normalizedRemote); setCloudReady(true); setSyncStatus("saving"); return; }
+        if (remote.updated_at !== remoteStamp.current) { remoteStamp.current = remote.updated_at; applyingRemote.current = true; setData(normalizedRemote); }
         setCloudReady(true); setSyncStatus("saved");
       } catch { if (active) setSyncStatus("error"); }
     }
