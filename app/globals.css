@@ -2119,3 +2119,7 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
   .mero-template-cta{align-items:center}
   .mero-guide-link{align-items:center}
 }
+
+/* Pulido final de navegación de sesiones y acciones del calendario. */
+.rotaract-header-logo img{width:154px;height:auto}.calendar-lock-toggle svg{width:15px;height:15px;stroke-width:1.9}.rotaract-events article{grid-template-columns:48px minmax(0,1fr)}.event-actions{grid-column:2;justify-content:flex-end;align-items:center;margin-top:2px}.event-actions button{flex:0 0 auto}.event-actions button svg{width:14px;height:14px}.attendance-sidebar:has(.session-list){padding-bottom:28px}
+@media(max-width:620px){.rotaract-header-logo img{width:122px}.rotaract-events article{grid-template-columns:44px minmax(0,1fr)}.event-actions{grid-column:1/-1;justify-content:flex-end;margin-top:0}}

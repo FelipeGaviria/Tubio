@@ -131,7 +131,7 @@ export function AttendanceApp() {
     return () => window.clearTimeout(timer);
   }, [data, cloudReady]);
   const ordered = useMemo(() => [...(data?.sessions ?? [])].sort((a, b) => a.date.localeCompare(b.date)), [data]);
-  const session = data?.sessions.find((s) => s.date === date);
+  const session = data?.sessions.find((s) => s.date === date) ?? (data ? { date, kind: "normal" as Kind, marks: {} } : undefined);
   const members = (() => {
     const visible = data?.members.filter((m) => !m.specialGuest && m.joined <= date && (!m.retired || m.retired > date)) ?? [];
     return [...visible].sort((a, b) => {
@@ -143,10 +143,10 @@ export function AttendanceApp() {
     });
   })();
   const specialGuests = (data?.members.filter((m) => m.specialGuest && m.joined <= date && (!m.retired || m.retired > date)) ?? []).sort((a, b) => a.name.localeCompare(b.name, "es"));
-  function go(next: string) { setDate(next); setData((d) => d && (d.sessions.some((s) => s.date === next) ? d : { ...d, sessions: [...d.sessions, { date: next, kind: "normal", marks: {} }] })); }
+  function go(next: string) { setDate(next); }
   const today = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
   const future = date > today;
-  function editSession(patch: Partial<Session>) { if (future) return; setData((d) => d && ({ ...d, sessions: d.sessions.map((s) => s.date === date ? { ...s, ...patch } : s) })); }
+  function editSession(patch: Partial<Session>) { if (future) return; setData((d) => d && ({ ...d, sessions: d.sessions.some((s) => s.date === date) ? d.sessions.map((s) => s.date === date ? { ...s, ...patch } : s) : [...d.sessions, { date, kind: "normal", marks: {}, ...patch }] })); }
   function changeKind(kind: Exclude<Kind, "na">) {
     if (!session || future) return;
     const marks = kind === "virtual"
@@ -195,9 +195,8 @@ export function AttendanceApp() {
       <aside className="attendance-sidebar">
         <div className="sidebar-app-title"><span><Icon name="people" /></span><div><strong>Asistencia</strong><small>a sesiones</small></div></div>
         <p className="sidebar-caption">Sesiones recientes</p>
-        <div className="session-list">{(allDates ? [...ordered].reverse() : [...ordered].reverse().slice(0, 6)).map((s) => <button className={s.date === date ? "active" : ""} key={s.date} onClick={() => go(s.date)}><span><Icon name="calendar" /></span><div><strong>{pretty(s.date, true)}</strong><small>{s.kind === "normal" ? "Sesión normal" : s.kind === "virtual" ? "Sesión virtual" : "No hubo sesión"}{s.extraordinary ? " · Extraordinaria" : ""}</small></div></button>)}</div>
-        {ordered.length > 6 && <button className="show-sessions" onClick={() => setAllDates(!allDates)}>{allDates ? "Ver menos" : "Ver todas las sesiones"}</button>}
-        <div className="sidebar-note"><span>✓</span><strong>Todo queda guardado</strong><p>Los cambios se sincronizan automáticamente entre tus dispositivos.</p></div>
+        <div className="session-list">{(allDates ? [...ordered].filter((s) => s.date <= today || s.kind !== "normal" || Boolean(s.extraordinary) || Object.keys(s.marks).length > 0).reverse() : [...ordered].filter((s) => s.date <= today || s.kind !== "normal" || Boolean(s.extraordinary) || Object.keys(s.marks).length > 0).reverse().slice(0, 6)).map((s) => <button className={s.date === date ? "active" : ""} key={s.date} onClick={() => go(s.date)}><span><Icon name="calendar" /></span><div><strong>{pretty(s.date, true)}</strong><small>{s.kind === "normal" ? "Sesión normal" : s.kind === "virtual" ? "Sesión virtual" : "No hubo sesión"}{s.extraordinary ? " · Extraordinaria" : ""}</small></div></button>)}</div>
+        {ordered.filter((s) => s.date <= today || s.kind !== "normal" || Boolean(s.extraordinary) || Object.keys(s.marks).length > 0).length > 6 && <button className="show-sessions" onClick={() => setAllDates(!allDates)}>{allDates ? "Ver menos" : "Ver todas las sesiones"}</button>}
       </aside>
       <section className="attendance-workspace">
         <div className="attendance-heading"><div><p>Control semanal</p><h1>Asistencia a Sesiones</h1><span>Registra quién vino y detecta a tiempo a quien necesita acompañamiento.</span></div><form className="add-person" onSubmit={add}><input disabled={future} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre del asistente" aria-label="Nombre del nuevo asistente" /><div className="add-person-flags"><label className={`first-session-add ${firstSession ? "checked" : ""}`}><input type="checkbox" checked={firstSession} disabled={future} onChange={(event) => setFirstSession(event.target.checked)} /><span>✓</span> Primera sesión</label><label className={`special-guest-add ${specialGuest ? "checked" : ""}`}><input type="checkbox" checked={specialGuest} disabled={future} onChange={(event) => setSpecialGuest(event.target.checked)} /><span>✓</span> Invitado/a especial</label></div><button disabled={future}><Icon name="plus" /> Agregar persona</button></form></div>
