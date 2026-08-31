@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const GUYS = [
   { src: "/guy-pro-max.webp", className: "", name: "Guy Pro Max" },
@@ -95,7 +94,6 @@ export function HeroPreview() {
   return (
     <div className="hero-preview" aria-label="Vista previa de landing responsive">
       <div className="hero-orbit" aria-hidden="true" />
-      <ThemeToggle />
       <button className={`hero-artifact ${currentGuy.className} ${popping ? "is-popping" : ""}`} type="button" onClick={swapGuy} disabled={!assetsReady} aria-busy={!assetsReady} aria-label={assetsReady ? `Cambiar de ${currentGuy.name} a ${nextGuy.name}` : "Cargando personajes"}>
       </button>
     </div>

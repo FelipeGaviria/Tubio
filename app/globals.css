@@ -2123,8 +2123,9 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 
 /* Guys secretos, carga del desbloqueo y transición de iluminación */
 .home-art .hero-artifact:not(.is-guy-nightmare){filter:none}
-.home-art .hero-artifact.is-guy-muscle{inset:-1% -10% -2%;background-size:92% auto;background-position:center bottom;clip-path:inset(0 round 48% 48% 0 0)}
-.home-art .hero-artifact.is-guy-nightmare{inset:-2% -10%;background-size:91% auto;background-position:center bottom}
+.home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 10px)}
+.home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -3%;background-size:96% auto;background-position:center bottom;clip-path:polygon(25% 0,75% 0,86% 5%,93% 13%,98% 25%,100% 40%,100% 100%,0 100%,0 40%,2% 25%,7% 13%,14% 5%)}
+.home-art .hero-artifact.is-guy-nightmare{inset:-5% -13%;background-size:98% auto;background-position:center bottom}
 .footer-guy-unlock{position:relative;z-index:0;transform-origin:center;transition:transform .2s cubic-bezier(.2,.8,.2,1)}
 @property --footer-charge{syntax:"<angle>";inherits:false;initial-value:0deg}
 .footer-guy-unlock::before{content:"";position:absolute;z-index:-1;inset:-10px;border-radius:50%;background:conic-gradient(#f5f7f5 var(--footer-charge),rgba(245,247,245,.13) 0);opacity:0;transform:scale(.75);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 0);mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 0)}
@@ -2139,11 +2140,9 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 @keyframes footer-secret-flip{0%{transform:perspective(500px) rotateY(0) scale(1.32)}48%{transform:perspective(500px) rotateY(190deg) scale(1.18)}78%{transform:perspective(500px) rotateY(330deg) scale(1.06)}100%{transform:perspective(500px) rotateY(360deg) scale(1)}}
 @keyframes footer-secret-lock-flip{0%{transform:perspective(500px) rotateY(0) scale(1.32)}48%{transform:perspective(500px) rotateY(-190deg) scale(1.18)}78%{transform:perspective(500px) rotateY(-330deg) scale(1.06)}100%{transform:perspective(500px) rotateY(-360deg) scale(1)}}
 @keyframes footer-lock-click{0%,38%{opacity:0;transform:translate(-50%,-70%) scale(.25)}55%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(.94)}86%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.82)}}
-.tubio-theme-wipe{position:fixed;z-index:1999;top:-150vh;right:0;left:0;height:150vh;pointer-events:none;animation:tubio-theme-cover .96s cubic-bezier(.62,0,.25,1) both;backdrop-filter:saturate(.82)}
-.tubio-theme-wipe.is-night{background:rgba(8,11,11,.72)}.tubio-theme-wipe.is-day{background:rgba(238,241,239,.76)}
-@keyframes tubio-theme-cover{from{transform:translateY(0)}to{transform:translateY(250vh)}}
-@media(min-width:701px){.home-art .hero-preview>.home-theme-toggle{position:absolute;z-index:30;top:auto;right:4%;bottom:5%;left:auto;width:52px;height:52px;transform:none}.home-art .hero-preview>.home-theme-toggle:hover{transform:translateY(-2px)}.home-art .home-theme-toggle svg{width:23px}}
-@media(max-width:700px){.home-art .hero-artifact.is-guy-muscle{inset:0 -7% -2%;background-size:90% auto}.home-art .hero-artifact.is-guy-nightmare{inset:-1% -6%;background-size:89% auto}.home-art .hero-preview>.home-theme-toggle{position:absolute;z-index:30;top:auto;right:10px;bottom:12px;left:auto;width:52px;height:52px;border-radius:50%;transform:none}.home-art .hero-preview>.home-theme-toggle:hover{transform:none}.home-art .home-theme-toggle svg{width:25px}}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.72s;animation-timing-function:ease-in-out}
+@media(min-width:701px){.home-art .hero-section>.home-theme-toggle{position:absolute;z-index:30;top:auto;right:2.5%;bottom:5%;left:auto;width:52px;height:52px;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:translateY(-2px)}.home-art .home-theme-toggle svg{width:23px}}
+@media(max-width:700px){.home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 7px)}.home-art .hero-artifact.is-guy-muscle{inset:-2% -9% -3%;background-size:94% auto}.home-art .hero-artifact.is-guy-nightmare{inset:-4% -10%;background-size:96% auto}.home-art .hero-section>.home-theme-toggle{position:absolute;z-index:30;top:auto;right:12px;bottom:14px;left:auto;width:52px;height:52px;border-radius:50%;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:none}.home-art .home-theme-toggle svg{width:25px}}
 @media(prefers-reduced-motion:reduce){.tubio-theme-wipe{animation-duration:.01ms}.footer-guy-unlock.is-charging,.footer-guy-unlock.is-unlocking,.footer-guy-unlock.is-locking{animation:none;transform:none}}
 
 /* Pulido final de navegación de sesiones y acciones del calendario. */
