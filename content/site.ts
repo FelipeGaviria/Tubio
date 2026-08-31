@@ -20,6 +20,7 @@ export const site = {
     { label: "Inicio", href: "/" },
     { label: "Social Calendars", href: "/social-calendars" },
     { label: "Asistencias", href: "/asistencias" },
+    { label: "Rotaract", href: "/rotaract" },
     { label: "Orden", href: "/orden" },
   ],
   hero: {
