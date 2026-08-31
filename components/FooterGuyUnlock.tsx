@@ -22,7 +22,7 @@ export function FooterGuyUnlock() {
       held.current = true;
       setUnlocking(false);
       window.requestAnimationFrame(() => setUnlocking(true));
-      window.dispatchEvent(new CustomEvent("tubio:guy-ussi-unlocked"));
+      window.dispatchEvent(new CustomEvent("tubio:guy-unlock-next"));
       window.setTimeout(() => setUnlocking(false), 720);
     }, HOLD_TIME);
   };
