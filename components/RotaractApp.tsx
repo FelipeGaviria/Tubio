@@ -12,8 +12,7 @@ type ClubData = { members: Member[]; sessions: Meeting[]; events: ClubEvent[] };
 
 const STORAGE_KEY = "tubio-rotaract-state-v1";
 const ACCESS_UNTIL_KEY = "tubio-rotaract-access-until";
-const TOKEN_KEY = "tubio-rotaract-token";
-const SYNC_URL = "https://qdxapfnjizissxgkhpxi.supabase.co/functions/v1/rotaract-sync";
+const SYNC_URL = "/api/club-sync/rotaract";
 const ACCESS_DURATION = 2 * 60 * 60 * 1000;
 const iso = (date: Date) => date.toISOString().slice(0, 10);
 const today = () => iso(new Date());
@@ -40,7 +39,6 @@ export function RotaractApp() {
   const [unlocked, setUnlocked] = useState(false);
   const [accessReady, setAccessReady] = useState(false);
   const [accessError, setAccessError] = useState(false);
-  const [token, setToken] = useState("");
   const [cloudReady, setCloudReady] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"connecting" | "saving" | "saved" | "error">("connecting");
   const [eventDraft, setEventDraft] = useState({ title: "", date: "", time: "", place: "", note: "" });
@@ -52,27 +50,26 @@ export function RotaractApp() {
   const dataLoaded = data !== null;
 
   useEffect(() => { dataRef.current = data; }, [data]);
-  useEffect(() => { const timer = window.setTimeout(() => { try { const stored = localStorage.getItem(STORAGE_KEY); setData(stored ? normalizeData(JSON.parse(stored)) : initialData()); } catch { setData(initialData()); } const until = Number(localStorage.getItem(ACCESS_UNTIL_KEY) ?? 0); const storedToken = localStorage.getItem(TOKEN_KEY) ?? ""; setUnlocked(until > Date.now() && Boolean(storedToken)); setToken(storedToken); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => { const timer = window.setTimeout(() => { try { const stored = localStorage.getItem(STORAGE_KEY); setData(stored ? normalizeData(JSON.parse(stored)) : initialData()); } catch { setData(initialData()); } const until = Number(localStorage.getItem(ACCESS_UNTIL_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }, [data]);
 
   async function tryAccess(code: string) {
     if (code.length !== 4) return;
     try {
       const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "rotaract", code }) });
-      const result = await response.json() as { token?: string };
-      if (!response.ok || !result.token) throw new Error();
+      if (!response.ok) throw new Error();
       const until = Date.now() + ACCESS_DURATION;
-      localStorage.setItem(ACCESS_UNTIL_KEY, String(until)); localStorage.setItem(TOKEN_KEY, result.token);
-      setToken(result.token); setUnlocked(true); setAccessError(false);
+      localStorage.setItem(ACCESS_UNTIL_KEY, String(until));
+      setUnlocked(true); setAccessError(false);
     } catch { setAccessError(true); setPassword(""); }
   }
 
   useEffect(() => {
-    if (!unlocked || !token || !dataLoaded) return;
+    if (!unlocked || !dataLoaded) return;
     let active = true;
     async function readCloud(initial = false) {
       try {
-        const response = await fetch(SYNC_URL, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
+        const response = await fetch(SYNC_URL, { cache: "no-store" });
         if (!response.ok) throw new Error();
         const remote = await response.json() as { data: ClubData; updated_at: string } | null;
         if (!active || !remote) return;
@@ -86,15 +83,15 @@ export function RotaractApp() {
     }
     void readCloud(true); const timer = window.setInterval(() => void readCloud(), 4000);
     return () => { active = false; window.clearInterval(timer); };
-  }, [unlocked, token, dataLoaded]);
+  }, [unlocked, dataLoaded]);
 
   useEffect(() => {
-    if (!cloudReady || !data || !token) return;
+    if (!cloudReady || !data) return;
     if (applyingRemote.current) { applyingRemote.current = false; return; }
     setSyncStatus("saving");
-    const timer = window.setTimeout(async () => { try { const response = await fetch(SYNC_URL, { method: "POST", headers: { Authorization: `Bearer ${token}`, "content-type": "application/json" }, body: JSON.stringify({ data }) }); if (!response.ok) throw new Error(); const saved = await response.json() as { updated_at?: string }; if (saved.updated_at) remoteStamp.current = saved.updated_at; setSyncStatus("saved"); } catch { setSyncStatus("error"); } }, 500);
+    const timer = window.setTimeout(async () => { try { const response = await fetch(SYNC_URL, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ data }) }); if (!response.ok) throw new Error(); const saved = await response.json() as { updated_at?: string }; if (saved.updated_at) remoteStamp.current = saved.updated_at; setSyncStatus("saved"); } catch { setSyncStatus("error"); } }, 500);
     return () => window.clearTimeout(timer);
-  }, [data, cloudReady, token]);
+  }, [data, cloudReady]);
 
   const meetings = useMemo(() => [...(data?.sessions ?? [])].sort((a, b) => a.date.localeCompare(b.date)), [data]);
   const meeting = data?.sessions.find((item) => item.date === date) ?? (data ? { date, held: true, marks: {} } : undefined);

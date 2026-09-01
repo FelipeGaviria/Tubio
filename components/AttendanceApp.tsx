@@ -13,7 +13,7 @@ type Data = { members: Member[]; sessions: Session[]; events: ClubEvent[] };
 const KEY = "tubio-toastmasters-attendance-v2";
 const ACCESS_KEY = "tubio-attendance-access-until";
 const ACCESS_DURATION = 2 * 60 * 60 * 1000;
-const SYNC_URL = "https://qdxapfnjizissxgkhpxi.supabase.co/functions/v1/attendance-sync";
+const SYNC_URL = "/api/club-sync/attendance";
 const choices: { value: Mark; label: string; short: string }[] = [
   { value: "present", label: "Vino presencial", short: "Presencial" },
   { value: "virtual", label: "Vino virtual", short: "Virtual" },
@@ -98,7 +98,7 @@ export function AttendanceApp() {
     let active = true;
     async function readCloud(initial = false) {
       try {
-        const response = await fetch(SYNC_URL, { headers: { "x-attendance-pin": "1234" }, cache: "no-store" });
+        const response = await fetch(SYNC_URL, { cache: "no-store" });
         if (!response.ok) throw new Error("No fue posible sincronizar");
         const remote = await response.json() as { data: Data; updated_at: string } | null;
         if (!active || !remote) return;
@@ -129,7 +129,7 @@ export function AttendanceApp() {
     setSyncStatus("saving");
     const timer = window.setTimeout(async () => {
       try {
-        const response = await fetch(SYNC_URL, { method: "POST", headers: { "Content-Type": "application/json", "x-attendance-pin": "1234" }, body: JSON.stringify({ data }) });
+        const response = await fetch(SYNC_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ data }) });
         if (!response.ok) throw new Error("No fue posible guardar");
         const saved = await response.json() as { updated_at?: string } | null;
         if (saved?.updated_at) remoteStamp.current = saved.updated_at;
