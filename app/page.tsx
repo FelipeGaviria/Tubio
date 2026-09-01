@@ -15,7 +15,7 @@ export default function HomePage() {
       <Header />
 
       <section className="hero-section">
-        <div className="hero-ash" aria-hidden="true"><i/><i/><i/></div>
+        <div className="hero-ash" aria-hidden="true"><i/><i/><i/><i/></div>
         <ThemeToggle />
         <div className="container hero-grid">
           <div className="hero-meta">
