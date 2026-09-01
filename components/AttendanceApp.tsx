@@ -8,7 +8,8 @@ type Mark = "present" | "virtual" | "absent" | "excused";
 type Kind = "normal" | "cancelled" | "virtual" | "na";
 type Member = { id: string; name: string; joined: string; retired?: string; firstSessionAt?: string; specialGuest?: boolean };
 type Session = { date: string; kind: Kind; marks: Record<string, Mark>; extraordinary?: boolean };
-type Data = { members: Member[]; sessions: Session[] };
+type ClubEvent = { id: string; title: string; date: string; time: string; place: string; note: string };
+type Data = { members: Member[]; sessions: Session[]; events: ClubEvent[] };
 const KEY = "tubio-toastmasters-attendance-v2";
 const ACCESS_KEY = "tubio-attendance-access-until";
 const ACCESS_DURATION = 2 * 60 * 60 * 1000;
@@ -25,10 +26,14 @@ function shift(date: string, weeks: number) { const d = new Date(`${date}T12:00:
 function pretty(date: string, compact = false) { const text = new Intl.DateTimeFormat("es-CO", compact ? { day: "numeric", month: "short" } : { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(`${date}T12:00:00`)); return text[0].toUpperCase() + text.slice(1); }
 function starter(): Data {
   const now = toIso(monday());
-  return { members: [], sessions: [{ date: now, kind: "normal", marks: {} }] };
+  return { members: [], sessions: [{ date: now, kind: "normal", marks: {} }], events: [] };
 }
-function Icon({ name }: { name: "left" | "right" | "plus" | "people" | "calendar" | "close" | "trash" }) {
-  const p = { left: <path d="m15 18-6-6 6-6" />, right: <path d="m9 18 6-6-6-6" />, plus: <path d="M12 5v14M5 12h14" />, people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9" /></>, calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" /></>, close: <path d="m6 6 12 12M18 6 6 18" />, trash: <><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v5M14 11v5" /></> };
+function normalizeData(value: Partial<Data> | null | undefined): Data {
+  const fallback = starter();
+  return { members: Array.isArray(value?.members) ? value.members : [], sessions: Array.isArray(value?.sessions) && value.sessions.length ? value.sessions : fallback.sessions, events: Array.isArray(value?.events) ? value.events : [] };
+}
+function Icon({ name }: { name: "left" | "right" | "plus" | "people" | "calendar" | "close" | "trash" | "lock" | "unlock" | "edit" }) {
+  const p = { left: <path d="m15 18-6-6 6-6" />, right: <path d="m9 18 6-6-6-6" />, plus: <path d="M12 5v14M5 12h14" />, people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9" /></>, calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18" /></>, close: <path d="m6 6 12 12M18 6 6 18" />, trash: <><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v5M14 11v5" /></>, lock: <><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></>, unlock: <><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 7-2.6"/></>, edit: <><path d="m4 20 4.2-1 10.5-10.5a2.1 2.1 0 0 0-3-3L5.2 16Z"/><path d="m14.5 6.5 3 3"/></> };
   return <svg aria-hidden="true" viewBox="0 0 24 24">{p[name]}</svg>;
 }
 
@@ -48,6 +53,9 @@ export function AttendanceApp() {
   const [cloudReady, setCloudReady] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"connecting" | "saving" | "saved" | "error">("connecting");
   const [shared, setShared] = useState(false);
+  const [calendarEditorOpen, setCalendarEditorOpen] = useState(false);
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
+  const [eventDraft, setEventDraft] = useState({ title: "", date: "", time: "", place: "", note: "" });
   const remoteStamp = useRef("");
   const applyingRemote = useRef(false);
   const dataRef = useRef<Data | null>(null);
@@ -74,7 +82,7 @@ export function AttendanceApp() {
     };
   }, []);
   useEffect(() => { dataRef.current = data; }, [data]);
-  useEffect(() => { const timer = window.setTimeout(() => { try { const saved = localStorage.getItem(KEY); setData(saved ? JSON.parse(saved) : starter()); } catch { setData(starter()); } }, 0); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => { const timer = window.setTimeout(() => { try { const saved = localStorage.getItem(KEY); setData(saved ? normalizeData(JSON.parse(saved)) : starter()); } catch { setData(starter()); } }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(KEY, JSON.stringify(data)); }, [data]);
   useEffect(() => { const timer = window.setTimeout(() => { const until = Number(localStorage.getItem(ACCESS_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
   function grantAccess() { localStorage.setItem(ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setUnlocked(true); setAccessError(false); }
@@ -103,7 +111,7 @@ export function AttendanceApp() {
         if (remote.updated_at !== remoteStamp.current) {
           remoteStamp.current = remote.updated_at;
           applyingRemote.current = true;
-          setData(remote.data);
+          setData(normalizeData(remote.data));
         }
         setCloudReady(true);
         setSyncStatus("saved");
@@ -146,6 +154,11 @@ export function AttendanceApp() {
   function go(next: string) { setDate(next); }
   const today = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
   const future = date > today;
+  const upcoming = [...(data?.events ?? [])].filter((event) => event.date >= today).sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
+  function saveEvent(event: FormEvent) { event.preventDefault(); if (!eventDraft.title.trim() || !eventDraft.date) return; const clean = { ...eventDraft, title: eventDraft.title.trim() }; setData((current) => current && ({ ...current, events: editingEventId ? current.events.map((item) => item.id === editingEventId ? { ...item, ...clean } : item) : [...current.events, { id: crypto.randomUUID(), ...clean }] })); setEventDraft({ title: "", date: "", time: "", place: "", note: "" }); setEditingEventId(null); }
+  function editEvent(event: ClubEvent) { setEventDraft({ title: event.title, date: event.date, time: event.time, place: event.place, note: event.note }); setEditingEventId(event.id); setCalendarEditorOpen(true); }
+  function removeEvent(id: string) { setData((current) => current && ({ ...current, events: current.events.filter((event) => event.id !== id) })); }
+  function proximityClass(eventDate: string) { const days = Math.ceil((new Date(`${eventDate}T12:00:00`).getTime() - new Date(`${today}T12:00:00`).getTime()) / 86400000); return days <= 3 ? "event-imminent" : days <= 7 ? "event-soon" : days <= 21 ? "event-near" : "event-later"; }
   function editSession(patch: Partial<Session>) { if (future) return; setData((d) => d && ({ ...d, sessions: d.sessions.some((s) => s.date === date) ? d.sessions.map((s) => s.date === date ? { ...s, ...patch } : s) : [...d.sessions, { date, kind: "normal", marks: {}, ...patch }] })); }
   function changeKind(kind: Exclude<Kind, "na">) {
     if (!session || future) return;
@@ -199,6 +212,11 @@ export function AttendanceApp() {
         {ordered.filter((s) => s.date <= today || s.kind !== "normal" || Boolean(s.extraordinary) || Object.keys(s.marks).length > 0).length > 6 && <button className="show-sessions" onClick={() => setAllDates(!allDates)}>{allDates ? "Ver menos" : "Ver todas las sesiones"}</button>}
       </aside>
       <section className="attendance-workspace">
+        <section className={`rotaract-calendar toastmasters-calendar ${calendarEditorOpen ? "is-editing" : ""}`}>
+          <div className="rotaract-section-title"><div><p>Agenda del club</p><h2>Próximas fechas importantes</h2></div><div className="calendar-title-actions"><span>{upcoming.length} programadas</span><button className="calendar-lock-toggle" type="button" aria-expanded={calendarEditorOpen} onClick={() => { setCalendarEditorOpen(!calendarEditorOpen); if (calendarEditorOpen) { setEditingEventId(null); setEventDraft({ title: "", date: "", time: "", place: "", note: "" }); } }}><Icon name={calendarEditorOpen ? "unlock" : "lock"}/>{calendarEditorOpen ? "Cerrar edición" : "Editar calendario"}</button></div></div>
+          <div className="rotaract-events">{upcoming.map((event) => <article className={proximityClass(event.date)} key={event.id}><time dateTime={event.date}><strong>{new Date(`${event.date}T12:00:00`).getDate()}</strong><span>{new Intl.DateTimeFormat("es-CO", { month: "short" }).format(new Date(`${event.date}T12:00:00`))}</span></time><div><h3>{event.title}</h3><p>{[event.time, event.place].filter(Boolean).join(" · ") || "Detalles por confirmar"}</p>{event.note && <small>{event.note}</small>}</div>{calendarEditorOpen && <div className="event-actions"><button type="button" onClick={() => editEvent(event)} aria-label={`Editar ${event.title}`}><Icon name="edit"/></button><button type="button" onClick={() => removeEvent(event.id)} aria-label={`Eliminar ${event.title}`}><Icon name="trash"/></button></div>}</article>)}{!upcoming.length && <div className="rotaract-empty-event">Aún no hay próximas fechas. Abre el candado para agregar la primera.</div>}</div>
+          {calendarEditorOpen && <form className="rotaract-event-form" onSubmit={saveEvent}><input value={eventDraft.title} onChange={(event) => setEventDraft({ ...eventDraft, title: event.target.value })} placeholder="Nombre del evento"/><input type="date" value={eventDraft.date} onChange={(event) => setEventDraft({ ...eventDraft, date: event.target.value })}/><input type="time" value={eventDraft.time} onChange={(event) => setEventDraft({ ...eventDraft, time: event.target.value })}/><input value={eventDraft.place} onChange={(event) => setEventDraft({ ...eventDraft, place: event.target.value })} placeholder="Lugar"/><input value={eventDraft.note} onChange={(event) => setEventDraft({ ...eventDraft, note: event.target.value })} placeholder="Nota breve"/><button><Icon name={editingEventId ? "calendar" : "plus"}/>{editingEventId ? "Guardar cambios" : "Agregar fecha"}</button>{editingEventId && <button className="cancel-event-edit" type="button" onClick={() => { setEditingEventId(null); setEventDraft({ title: "", date: "", time: "", place: "", note: "" }); }}>Cancelar</button>}</form>}
+        </section>
         <div className="attendance-heading"><div><p>Control semanal</p><h1>Asistencia a Sesiones</h1><span>Registra quién vino y detecta a tiempo a quien necesita acompañamiento.</span></div><form className="add-person" onSubmit={add}><input disabled={future} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre del asistente" aria-label="Nombre del nuevo asistente" /><div className="add-person-flags"><label className={`first-session-add ${firstSession ? "checked" : ""}`}><input type="checkbox" checked={firstSession} disabled={future} onChange={(event) => setFirstSession(event.target.checked)} /><span>✓</span> Primera sesión</label><label className={`special-guest-add ${specialGuest ? "checked" : ""}`}><input type="checkbox" checked={specialGuest} disabled={future} onChange={(event) => setSpecialGuest(event.target.checked)} /><span>✓</span> Invitado/a especial</label></div><button disabled={future}><Icon name="plus" /> Agregar persona</button></form></div>
         <div className="session-card"><div className="session-date-control"><button onClick={() => go(shift(date, -1))} aria-label="Sesión anterior"><Icon name="left" /></button><div><span>Sesión del lunes</span><strong>{pretty(date)}</strong></div><button onClick={() => go(shift(date, 1))} aria-label="Sesión siguiente"><Icon name="right" /></button></div><div className="session-kind">{([['normal','Sesión normal'],['cancelled','No hubo sesión'],['virtual','Virtual']] as [Exclude<Kind,"na">,string][]).map(([value,label]) => <button disabled={future} key={value} className={session.kind === value ? "active" : ""} onClick={() => changeKind(value)}>{label}</button>)}</div><label className={`extraordinary-toggle ${session.extraordinary ? "checked" : ""}`}><input type="checkbox" checked={Boolean(session.extraordinary)} disabled={future || !["normal", "virtual"].includes(session.kind)} onChange={(event) => editSession({ extraordinary: event.target.checked })} /><span>✓</span><div><strong>Sesión extraordinaria</strong><small>Festivo o asistencia excepcional</small></div></label></div>
         {future && <div className="future-lock"><span>🔒</span><div><strong>Esta sesión todavía está bloqueada</strong><p>Se habilitará automáticamente el lunes {pretty(date)}.</p></div></div>}
