@@ -12,11 +12,10 @@ import { landingTemplates, site, whatsappUrl } from "@/content/site";
 export default function HomePage() {
   return (
     <main id="inicio" className="home-art">
-      <Header />
+      <Header endAction={<ThemeToggle />} />
 
       <section className="hero-section">
         <div className="hero-ash" aria-hidden="true"><i/><i/><i/><i/></div>
-        <ThemeToggle />
         <div className="container hero-grid">
           <div className="hero-meta">
             <p className="eyebrow">{site.hero.eyebrow}</p>

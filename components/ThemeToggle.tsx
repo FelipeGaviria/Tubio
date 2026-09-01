@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export function ThemeToggle() {
   const [night, setNight] = useState(false);
+  const recentToggles = useRef<number[]>([]);
+  const flashTimer = useRef<number | null>(null);
 
   const toggle = () => {
-    const next = !night;
+    const next = document.documentElement.dataset.tubioTheme !== "night";
+    const now = Date.now();
+    recentToggles.current = [...recentToggles.current.filter((time) => now - time < 1400), now];
+    if (recentToggles.current.length >= 3) {
+      recentToggles.current = [];
+      document.documentElement.classList.remove("tubio-electric-flash");
+      void document.documentElement.offsetWidth;
+      document.documentElement.classList.add("tubio-electric-flash");
+      if (flashTimer.current) window.clearTimeout(flashTimer.current);
+      flashTimer.current = window.setTimeout(() => document.documentElement.classList.remove("tubio-electric-flash"), 2000);
+    }
     const applyTheme = () => {
       setNight(next);
       document.documentElement.dataset.tubioTheme = next ? "night" : "day";

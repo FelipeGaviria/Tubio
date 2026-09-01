@@ -2124,7 +2124,7 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 /* Guys secretos, carga del desbloqueo y transición de iluminación */
 .home-art .hero-artifact:not(.is-guy-nightmare){filter:none}
 .home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 10px)}
-.home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -3%;background-size:auto 77%;background-position:center calc(100% + 7px);clip-path:polygon(31% 0,69% 0,80% 5%,88% 14%,94% 27%,98% 43%,100% 56%,100% 100%,0 100%,0 56%,2% 43%,6% 27%,12% 14%,20% 5%)}
+.home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -3%;background-size:auto 77%;background-position:center calc(100% + 16px);clip-path:polygon(31% 0,69% 0,80% 5%,88% 14%,94% 27%,98% 43%,100% 56%,100% 100%,0 100%,0 56%,2% 43%,6% 27%,12% 14%,20% 5%)}
 .home-art .hero-artifact.is-guy-nightmare{inset:-5% -13%;background-size:auto 79%;background-position:center bottom}
 .footer-guy-unlock{position:relative;z-index:0;transform-origin:center;transition:transform .2s cubic-bezier(.2,.8,.2,1)}
 @property --footer-charge{syntax:"<angle>";inherits:false;initial-value:0deg}
@@ -2142,7 +2142,7 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 @keyframes footer-lock-click{0%,38%{opacity:0;transform:translate(-50%,-70%) scale(.25)}55%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(.94)}86%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.82)}}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.24s;animation-timing-function:ease-in-out}
 @media(min-width:701px){.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:22px;bottom:22px;left:auto;width:52px;height:52px;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:translateY(-2px)}.home-art .home-theme-toggle svg{width:23px}}
-@media(max-width:700px){.home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 7px)}.home-art .hero-artifact.is-guy-muscle{inset:0;background-size:auto 96%;background-position:center calc(50% + 5px)}.home-art .hero-artifact.is-guy-nightmare{inset:0;background-size:auto 95%;background-position:center center}.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:14px;bottom:14px;left:auto;width:62px;height:62px;border-radius:50%;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:none}.home-art .home-theme-toggle svg{width:29px}}
+@media(max-width:700px){.home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 7px)}.home-art .hero-artifact.is-guy-muscle{inset:0;background-size:auto 101%;background-position:center calc(50% + 12px)}.home-art .hero-artifact.is-guy-nightmare{inset:0;background-size:auto 100%;background-position:center calc(50% + 10px)}.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:14px;bottom:14px;left:auto;width:62px;height:62px;border-radius:50%;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:none}.home-art .home-theme-toggle svg{width:29px}}
 @media(min-width:701px){.home-art .hero-artifact.is-guy-muscle{clip-path:polygon(38% 0,62% 0,72% 5%,82% 15%,90% 28%,96% 43%,100% 59%,100% 100%,0 100%,0 59%,4% 43%,10% 28%,18% 15%,28% 5%)}}
 
 /* Agenda Toastmasters antes del control de asistencia */
@@ -2162,3 +2162,19 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 /* Pulido final de navegación de sesiones y acciones del calendario. */
 .rotaract-header-logo img{width:154px;height:auto}.calendar-lock-toggle svg{width:15px;height:15px;stroke-width:1.9}.rotaract-events article{grid-template-columns:48px minmax(0,1fr)}.event-actions{grid-column:2;justify-content:flex-end;align-items:center;margin-top:2px}.event-actions button{flex:0 0 auto}.event-actions button svg{width:14px;height:14px}.attendance-sidebar:has(.session-list){padding-bottom:28px}
 @media(max-width:620px){.rotaract-header-logo img{width:122px}.rotaract-events article{grid-template-columns:44px minmax(0,1fr)}.event-actions{grid-column:1/-1;justify-content:flex-end;margin-top:0}}
+
+/* Sombra de contacto de los Guys, tema en la barra y destello secreto. */
+.home-art .hero-preview::after{content:"";display:block;position:absolute;z-index:4;right:auto;bottom:7.5%;left:50%;width:40%;height:4.2%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(22,25,23,.38) 0,rgba(22,25,23,.2) 44%,rgba(22,25,23,0) 76%);filter:blur(5px);transform:translateX(-50%) scaleX(1.08);pointer-events:none}
+.home-art .hero-artifact.is-guy-nightmare{filter:none}
+.home-art .site-header>.home-theme-toggle{position:static;z-index:auto;flex:0 0 42px;width:42px;min-width:42px;height:42px;min-height:42px;margin-left:0;border-color:rgba(23,28,27,.18);background:rgba(245,247,245,.38);color:var(--archive-ink);box-shadow:none;backdrop-filter:blur(10px);transform:none}
+.home-art .site-header>.home-theme-toggle:hover{background:rgba(245,247,245,.78);transform:translateY(-2px)}
+html[data-tubio-theme="night"] .home-art .site-header>.home-theme-toggle{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#eef2ef}
+html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;inset:0;pointer-events:none;background:#efffff;mix-blend-mode:screen;animation:tubio-electric-flash 2s steps(1,end) both}
+@keyframes tubio-electric-flash{0%,8%,17%,29%,42%,55%,69%,83%,94%,100%{opacity:0}3%,12%,22%,35%,48%,62%,76%,89%,97%{opacity:.72}}
+@media(max-width:700px){
+  .home-art .hero-preview::after{bottom:5.5%;width:46%;height:4.5%;filter:blur(4px)}
+  .home-art .site-header>.home-theme-toggle{position:static;top:auto;right:auto;bottom:auto;left:auto;flex-basis:44px;width:44px;min-width:44px;height:44px;min-height:44px;border-radius:50%;transform:none}
+  .home-art .site-header>.home-theme-toggle:hover{transform:none}
+  .home-art .site-header>.home-theme-toggle svg{width:22px}
+}
+@media(prefers-reduced-motion:reduce){html.tubio-electric-flash::after{animation:none;opacity:0}}

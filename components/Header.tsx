@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { site, whatsappUrl } from "@/content/site";
@@ -17,7 +18,7 @@ const workspaceLinks = [
   { label: "Orden curso", href: "/orden", note: "Ruta de aprendizaje", locked: true },
 ];
 
-export function Header() {
+export function Header({ endAction }: { endAction?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -66,5 +67,6 @@ export function Header() {
         </div>
       </div>
     </div>
+    {endAction}
   </header>;
 }
