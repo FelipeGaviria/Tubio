@@ -57,6 +57,7 @@ export function AttendanceApp() {
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [eventDraft, setEventDraft] = useState({ title: "", date: "", time: "", place: "", note: "" });
   const remoteStamp = useRef("");
+  const accessPending = useRef(false);
   const applyingRemote = useRef(false);
   const dataRef = useRef<Data | null>(null);
   const dataLoaded = data !== null;
@@ -87,11 +88,13 @@ export function AttendanceApp() {
   useEffect(() => { const timer = window.setTimeout(() => { const until = Number(localStorage.getItem(ACCESS_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
   function grantAccess() { localStorage.setItem(ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setUnlocked(true); setAccessError(false); }
   async function tryAccess(next: string) {
-    if (next.length !== 4) return;
+    if (next.length !== 4 || accessPending.current) return;
+    accessPending.current = true;
     try {
       const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "attendance", code: next }) });
       if (response.ok) grantAccess(); else { setAccessError(true); setPassword(""); }
     } catch { setAccessError(true); }
+    finally { accessPending.current = false; }
   }
   useEffect(() => {
     if (!unlocked || !dataLoaded) return;

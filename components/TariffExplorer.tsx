@@ -74,6 +74,7 @@ export function TariffExplorer() {
   const [editorStatus, setEditorStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const beforeEdit = useRef<Service[]>(initialServices);
+  const accessPending = useRef(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -111,11 +112,19 @@ export function TariffExplorer() {
   }, []);
 
   const unlockEditor = async (code = editorCode) => {
-    const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "tariff", code }) });
-    const result = await response.json() as { locked?: boolean; attemptsRemaining?: number };
-    if (!response.ok) { setEditorStatus(result.locked ? "Acceso bloqueado durante 2 horas." : `Código incorrecto. ${result.attemptsRemaining ?? 0} intentos disponibles.`); return; }
-    beforeEdit.current = structuredClone(services);
-    setEditing(true); setEditorOpen(false); setEditorStatus("");
+    if (accessPending.current || code.length !== 6) return;
+    accessPending.current = true;
+    try {
+      const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "tariff", code }) });
+      const result = await response.json() as { locked?: boolean; attemptsRemaining?: number };
+      if (!response.ok) { setEditorStatus(result.locked ? "Acceso bloqueado temporalmente." : `Código incorrecto. ${result.attemptsRemaining ?? 0} intentos disponibles.`); return; }
+      beforeEdit.current = structuredClone(services);
+      setEditing(true); setEditorOpen(false); setEditorStatus("");
+    } catch {
+      setEditorStatus("No fue posible validar el acceso.");
+    } finally {
+      accessPending.current = false;
+    }
   };
   const changeRate = (serviceIndex: number, itemIndex: number, key: "perSecond" | "perFrame" | "value", next: number) => {
     setServices((current) => current.map((service, sIndex) => sIndex !== serviceIndex ? service : {

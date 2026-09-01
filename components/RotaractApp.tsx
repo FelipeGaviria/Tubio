@@ -45,6 +45,7 @@ export function RotaractApp() {
   const [calendarEditorOpen, setCalendarEditorOpen] = useState(false);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const remoteStamp = useRef("");
+  const accessPending = useRef(false);
   const applyingRemote = useRef(false);
   const dataRef = useRef<ClubData | null>(null);
   const dataLoaded = data !== null;
@@ -54,7 +55,8 @@ export function RotaractApp() {
   useEffect(() => { if (data) localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }, [data]);
 
   async function tryAccess(code: string) {
-    if (code.length !== 4) return;
+    if (code.length !== 4 || accessPending.current) return;
+    accessPending.current = true;
     try {
       const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "rotaract", code }) });
       if (!response.ok) throw new Error();
@@ -62,6 +64,7 @@ export function RotaractApp() {
       localStorage.setItem(ACCESS_UNTIL_KEY, String(until));
       setUnlocked(true); setAccessError(false);
     } catch { setAccessError(true); setPassword(""); }
+    finally { accessPending.current = false; }
   }
 
   useEffect(() => {
