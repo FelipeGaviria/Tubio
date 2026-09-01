@@ -2180,10 +2180,10 @@ html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;in
 @media(prefers-reduced-motion:reduce){html.tubio-electric-flash::after{animation:none;opacity:0}}
 /* Un poco más de lienzo inferior sin cambiar la pose visual de Muscle/Nightmare. */
 @media(min-width:701px){
-  .home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -6%;background-size:auto 75%;background-position:center calc(100% + 16px)}
-  .home-art .hero-artifact.is-guy-nightmare{inset:-5% -13% -8%;background-size:auto 77%;background-position:center bottom}
+  .home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -6%;background-size:auto 73.5%;background-position:center calc(100% + 6px)}
+  .home-art .hero-artifact.is-guy-nightmare{inset:-5% -13% -8%;background-size:auto 75.5%;background-position:center calc(100% - 10px)}
 }
 @media(max-width:700px){
-  .home-art .hero-artifact.is-guy-muscle{inset:0 0 -4%;background-size:auto 97%;background-position:center calc(50% + 12px)}
-  .home-art .hero-artifact.is-guy-nightmare{inset:0 0 -4%;background-size:auto 96%;background-position:center calc(50% + 10px)}
+  .home-art .hero-artifact.is-guy-muscle{inset:0 0 -4%;background-size:auto 95.5%;background-position:center calc(50% + 5px)}
+  .home-art .hero-artifact.is-guy-nightmare{inset:0 0 -4%;background-size:auto 94.5%;background-position:center calc(50% + 3px)}
 }
