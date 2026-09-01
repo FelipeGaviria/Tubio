@@ -2124,7 +2124,7 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 /* Guys secretos, carga del desbloqueo y transición de iluminación */
 .home-art .hero-artifact:not(.is-guy-nightmare){filter:none}
 .home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 10px)}
-.home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -3%;background-size:auto 74%;background-position:center bottom;clip-path:polygon(31% 0,69% 0,80% 5%,88% 14%,94% 27%,98% 43%,100% 56%,100% 100%,0 100%,0 56%,2% 43%,6% 27%,12% 14%,20% 5%)}
+.home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -3%;background-size:auto 77%;background-position:center calc(100% + 7px);clip-path:polygon(31% 0,69% 0,80% 5%,88% 14%,94% 27%,98% 43%,100% 56%,100% 100%,0 100%,0 56%,2% 43%,6% 27%,12% 14%,20% 5%)}
 .home-art .hero-artifact.is-guy-nightmare{inset:-5% -13%;background-size:auto 79%;background-position:center bottom}
 .footer-guy-unlock{position:relative;z-index:0;transform-origin:center;transition:transform .2s cubic-bezier(.2,.8,.2,1)}
 @property --footer-charge{syntax:"<angle>";inherits:false;initial-value:0deg}
@@ -2142,7 +2142,7 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 @keyframes footer-lock-click{0%,38%{opacity:0;transform:translate(-50%,-70%) scale(.25)}55%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}70%{opacity:1;transform:translate(-50%,-50%) scale(.94)}86%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.82)}}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.24s;animation-timing-function:ease-in-out}
 @media(min-width:701px){.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:22px;bottom:22px;left:auto;width:52px;height:52px;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:translateY(-2px)}.home-art .home-theme-toggle svg{width:23px}}
-@media(max-width:700px){.home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 7px)}.home-art .hero-artifact.is-guy-muscle{inset:0;background-size:auto 94%;background-position:center center}.home-art .hero-artifact.is-guy-nightmare{inset:0;background-size:auto 95%;background-position:center center}.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:14px;bottom:14px;left:auto;width:62px;height:62px;border-radius:50%;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:none}.home-art .home-theme-toggle svg{width:29px}}
+@media(max-width:700px){.home-art .hero-artifact.is-guyanverse{background-position:center calc(100% + 7px)}.home-art .hero-artifact.is-guy-muscle{inset:0;background-size:auto 96%;background-position:center calc(50% + 5px)}.home-art .hero-artifact.is-guy-nightmare{inset:0;background-size:auto 95%;background-position:center center}.home-art .hero-section>.home-theme-toggle{position:fixed;z-index:999;top:auto;right:14px;bottom:14px;left:auto;width:62px;height:62px;border-radius:50%;transform:none}.home-art .hero-section>.home-theme-toggle:hover{transform:none}.home-art .home-theme-toggle svg{width:29px}}
 @media(min-width:701px){.home-art .hero-artifact.is-guy-muscle{clip-path:polygon(38% 0,62% 0,72% 5%,82% 15%,90% 28%,96% 43%,100% 59%,100% 100%,0 100%,0 59%,4% 43%,10% 28%,18% 15%,28% 5%)}}
 
 /* Agenda Toastmasters antes del control de asistencia */
