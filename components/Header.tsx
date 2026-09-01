@@ -66,7 +66,7 @@ export function Header({ endAction }: { endAction?: ReactNode }) {
           {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}{item.locked && <LockIcon />}</span><small>{item.note}</small></Link>)}
         </div>
       </div>
+      {endAction}
     </div>
-    {endAction}
   </header>;
 }

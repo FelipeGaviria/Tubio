@@ -2164,17 +2164,25 @@ html[data-tubio-theme="night"] .home-art .hero-section::before{color:rgba(238,24
 @media(max-width:620px){.rotaract-header-logo img{width:122px}.rotaract-events article{grid-template-columns:44px minmax(0,1fr)}.event-actions{grid-column:1/-1;justify-content:flex-end;margin-top:0}}
 
 /* Sombra de contacto de los Guys, tema en la barra y destello secreto. */
-.home-art .hero-preview::after{content:"";display:block;position:absolute;z-index:4;right:auto;bottom:7.5%;left:50%;width:40%;height:4.2%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(22,25,23,.38) 0,rgba(22,25,23,.2) 44%,rgba(22,25,23,0) 76%);filter:blur(5px);transform:translateX(-50%) scaleX(1.08);pointer-events:none}
+.home-art .hero-preview::after{content:"";display:block;position:absolute;z-index:4;right:auto;bottom:4.5%;left:50%;width:44%;height:4.8%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(15,18,16,.5) 0,rgba(15,18,16,.3) 45%,rgba(15,18,16,0) 78%);filter:blur(4px);transform:translateX(-50%) scaleX(1.08);pointer-events:none}
 .home-art .hero-artifact.is-guy-nightmare{filter:none}
 .home-art .site-header>.home-theme-toggle{position:static;z-index:auto;flex:0 0 42px;width:42px;min-width:42px;height:42px;min-height:42px;margin-left:0;border-color:rgba(23,28,27,.18);background:rgba(245,247,245,.38);color:var(--archive-ink);box-shadow:none;backdrop-filter:blur(10px);transform:none}
 .home-art .site-header>.home-theme-toggle:hover{background:rgba(245,247,245,.78);transform:translateY(-2px)}
 html[data-tubio-theme="night"] .home-art .site-header>.home-theme-toggle{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#eef2ef}
-html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;inset:0;pointer-events:none;background:#efffff;mix-blend-mode:screen;animation:tubio-electric-flash 2s steps(1,end) both}
-@keyframes tubio-electric-flash{0%,8%,17%,29%,42%,55%,69%,83%,94%,100%{opacity:0}3%,12%,22%,35%,48%,62%,76%,89%,97%{opacity:.72}}
+html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;inset:0;pointer-events:none;background:#efffff;mix-blend-mode:screen;animation:tubio-electric-flash .8s steps(1,end) both}
+@keyframes tubio-electric-flash{0%,16%,34%,53%,72%,90%,100%{opacity:0}7%,24%,43%,62%,81%,96%{opacity:.8}}
 @media(max-width:700px){
-  .home-art .hero-preview::after{bottom:5.5%;width:46%;height:4.5%;filter:blur(4px)}
+  .home-art .hero-preview::after{bottom:1.5%;width:50%;height:5%;filter:blur(3.5px)}
   .home-art .site-header>.home-theme-toggle{position:static;top:auto;right:auto;bottom:auto;left:auto;flex-basis:44px;width:44px;min-width:44px;height:44px;min-height:44px;border-radius:50%;transform:none}
   .home-art .site-header>.home-theme-toggle:hover{transform:none}
   .home-art .site-header>.home-theme-toggle svg{width:22px}
 }
 @media(prefers-reduced-motion:reduce){html.tubio-electric-flash::after{animation:none;opacity:0}}
+@media(min-width:701px){
+  .home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -9%;background-size:auto 73%;background-position:center calc(94.6% + 16px)}
+  .home-art .hero-artifact.is-guy-nightmare{inset:-5% -13% -11%;background-size:auto 75%;background-position:center 94.8%}
+}
+@media(max-width:700px){
+  .home-art .hero-artifact.is-guy-muscle{inset:0 0 -8%;background-size:auto 93.5%;background-position:center calc(46.3% + 12px)}
+  .home-art .hero-artifact.is-guy-nightmare{inset:0 0 -8%;background-size:auto 92.6%;background-position:center calc(46.3% + 10px)}
+}

@@ -10,14 +10,14 @@ export function ThemeToggle() {
   const toggle = () => {
     const next = document.documentElement.dataset.tubioTheme !== "night";
     const now = Date.now();
-    recentToggles.current = [...recentToggles.current.filter((time) => now - time < 1400), now];
-    if (recentToggles.current.length >= 3) {
+    recentToggles.current = [...recentToggles.current.filter((time) => now - time < 1800), now];
+    if (recentToggles.current.length >= 4) {
       recentToggles.current = [];
       document.documentElement.classList.remove("tubio-electric-flash");
       void document.documentElement.offsetWidth;
       document.documentElement.classList.add("tubio-electric-flash");
       if (flashTimer.current) window.clearTimeout(flashTimer.current);
-      flashTimer.current = window.setTimeout(() => document.documentElement.classList.remove("tubio-electric-flash"), 2000);
+      flashTimer.current = window.setTimeout(() => document.documentElement.classList.remove("tubio-electric-flash"), 850);
     }
     const applyTheme = () => {
       setNight(next);
