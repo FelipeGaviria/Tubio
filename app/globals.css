@@ -2178,3 +2178,12 @@ html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;in
   .home-art .site-header .header-actions>.home-theme-toggle svg{width:20px}
 }
 @media(prefers-reduced-motion:reduce){html.tubio-electric-flash::after{animation:none;opacity:0}}
+/* Un poco más de lienzo inferior sin cambiar la pose visual de Muscle/Nightmare. */
+@media(min-width:701px){
+  .home-art .hero-artifact.is-guy-muscle{inset:-3% -12% -6%;background-size:auto 75%;background-position:center calc(100% + 16px)}
+  .home-art .hero-artifact.is-guy-nightmare{inset:-5% -13% -8%;background-size:auto 77%;background-position:center bottom}
+}
+@media(max-width:700px){
+  .home-art .hero-artifact.is-guy-muscle{inset:0 0 -4%;background-size:auto 97%;background-position:center calc(50% + 12px)}
+  .home-art .hero-artifact.is-guy-nightmare{inset:0 0 -4%;background-size:auto 96%;background-position:center calc(50% + 10px)}
+}
