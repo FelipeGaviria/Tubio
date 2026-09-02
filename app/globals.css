@@ -2187,3 +2187,11 @@ html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;in
   .home-art .hero-artifact.is-guy-muscle{inset:0 0 -4%;background-size:auto 95.5%;background-position:center calc(50% + 5px)}
   .home-art .hero-artifact.is-guy-nightmare{inset:0 0 -4%;background-size:auto 94.5%;background-position:center calc(50% + 3px)}
 }
+
+/* Lienzos centrados incluso cuando el navegador se aleja mucho. */
+.mero-page{width:min(100%,1600px);margin-inline:auto}
+.attendance-page,.attendance-lock,.social-page,.order-page{width:min(100%,1920px);margin-inline:auto}
+@media(min-width:1601px){
+  .mero-calculator-copy{padding-left:210px}
+  .mero-calculator-panel{padding-right:210px}
+}
