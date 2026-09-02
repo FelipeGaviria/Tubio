@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 type Mark = "present" | "virtual" | "absent" | "excused";
 type Kind = "normal" | "cancelled" | "virtual" | "na";
@@ -11,6 +12,7 @@ type ClubEvent = { id: string; title: string; date: string; time: string; place:
 type Data = { members: Member[]; sessions: Session[]; events: ClubEvent[] };
 const KEY = "tubio-toastmasters-attendance-v2";
 const ACCESS_KEY = "tubio-attendance-access-until";
+const EDIT_ACCESS_KEY = "tubio-attendance-edit-access-until";
 const ACCESS_DURATION = 2 * 60 * 60 * 1000;
 const SYNC_URL = "/api/club-sync/attendance";
 const choices: { value: Mark; label: string; short: string }[] = [
@@ -46,7 +48,10 @@ export function AttendanceApp() {
   const [profileId, setProfileId] = useState<string | null>(null);
   const [allDates, setAllDates] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
+  const [accessed, setAccessed] = useState(false);
   const [accessReady, setAccessReady] = useState(false);
+  const [accessPassword, setAccessPassword] = useState("");
+  const [pageAccessError, setPageAccessError] = useState(false);
   const [password, setPassword] = useState("");
   const [accessError, setAccessError] = useState(false);
   const [cloudReady, setCloudReady] = useState(false);
@@ -88,19 +93,20 @@ export function AttendanceApp() {
   useEffect(() => { dataRef.current = data; }, [data]);
   useEffect(() => { const timer = window.setTimeout(() => { try { const saved = localStorage.getItem(KEY); setData(saved ? normalizeData(JSON.parse(saved)) : starter()); } catch { setData(starter()); } }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(KEY, JSON.stringify(data)); }, [data]);
-  useEffect(() => { const timer = window.setTimeout(() => { const until = Number(localStorage.getItem(ACCESS_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
-  function grantAccess() { localStorage.setItem(ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setUnlocked(true); setAccessError(false); }
+  useEffect(() => { const timer = window.setTimeout(() => { setAccessed(Number(localStorage.getItem(ACCESS_KEY) ?? 0) > Date.now()); setUnlocked(Number(localStorage.getItem(EDIT_ACCESS_KEY) ?? 0) > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
+  function grantAccess() { localStorage.setItem(EDIT_ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setUnlocked(true); setAccessError(false); }
+  async function tryPageAccess(next: string) { if (next.length !== 4 || accessPending.current) return; accessPending.current = true; try { const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "attendance", code: next }) }); if (!response.ok) throw new Error(); localStorage.setItem(ACCESS_KEY, String(Date.now() + ACCESS_DURATION)); setAccessed(true); setPageAccessError(false); } catch { setPageAccessError(true); setAccessPassword(""); } finally { accessPending.current = false; } }
   async function tryAccess(next: string) {
     if (next.length !== 6 || accessPending.current) return;
     accessPending.current = true;
     try {
-      const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "attendance", code: next }) });
+      const response = await fetch("/api/access-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ gate: "attendance-edit", code: next }) });
       if (response.ok) grantAccess(); else { setAccessError(true); setPassword(""); }
     } catch { setAccessError(true); }
     finally { accessPending.current = false; }
   }
   useEffect(() => {
-    if (!dataLoaded) return;
+    if (!accessed || !dataLoaded) return;
     let active = true;
     async function readCloud(initial = false) {
       try {
@@ -128,7 +134,7 @@ export function AttendanceApp() {
     void readCloud(true);
     const interval = window.setInterval(() => void readCloud(), 4000);
     return () => { active = false; window.clearInterval(interval); };
-  }, [dataLoaded]);
+  }, [accessed, dataLoaded]);
   useEffect(() => {
     if (!unlocked || !cloudReady || !data) return;
     if (applyingRemote.current) { applyingRemote.current = false; return; }
@@ -166,7 +172,7 @@ export function AttendanceApp() {
   const selectedDayEvents = [...(data?.events ?? [])].filter((event) => event.date === selectedCalendarDate).sort((a, b) => a.time.localeCompare(b.time));
   function moveCalendarMonth(delta: number) { const [year, month] = calendarMonth.split("-").map(Number); const next = new Date(year, month - 1 + delta, 1, 12); const nextMonth = toIso(next).slice(0, 7); setCalendarMonth(nextMonth); setSelectedCalendarDate(`${nextMonth}-01`); }
   function selectCalendarDay(day: string, outside: boolean) { setSelectedCalendarDate(day); if (outside) setCalendarMonth(day.slice(0, 7)); if (new Date(`${day}T12:00:00`).getDay() === 1) { setDate(day); window.setTimeout(() => document.querySelector(".attendance-page .session-card")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80); } }
-  async function leaveEditMode() { localStorage.removeItem(ACCESS_KEY); setUnlocked(false); setCalendarEditorOpen(false); setEditingEventId(null); setEventDraft({ title: "", date: "", time: "", place: "", note: "" }); await fetch("/api/access-check?gate=attendance", { method: "DELETE" }).catch(() => undefined); }
+  async function leaveEditMode() { localStorage.removeItem(EDIT_ACCESS_KEY); setUnlocked(false); setCalendarEditorOpen(false); setEditingEventId(null); setEventDraft({ title: "", date: "", time: "", place: "", note: "" }); await fetch("/api/access-check?gate=attendance-edit", { method: "DELETE" }).catch(() => undefined); }
   function saveEvent(event: FormEvent) { event.preventDefault(); if (!unlocked || !eventDraft.title.trim() || !eventDraft.date) return; const clean = { ...eventDraft, title: eventDraft.title.trim() }; setData((current) => current && ({ ...current, events: editingEventId ? current.events.map((item) => item.id === editingEventId ? { ...item, ...clean } : item) : [...current.events, { id: crypto.randomUUID(), ...clean }] })); setEventDraft({ title: "", date: "", time: "", place: "", note: "" }); setEditingEventId(null); }
   function editEvent(event: ClubEvent) { if (!unlocked) return; setEventDraft({ title: event.title, date: event.date, time: event.time, place: event.place, note: event.note }); setEditingEventId(event.id); setCalendarEditorOpen(true); }
   function removeEvent(id: string) { if (!unlocked) return; setData((current) => current && ({ ...current, events: current.events.filter((event) => event.id !== id) })); }
@@ -193,6 +199,7 @@ export function AttendanceApp() {
   function setMemberSpecialGuest(id: string, checked: boolean) { if (!unlocked) return; setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, specialGuest: checked } : m) })); }
   function retire(id: string) { if (!unlocked || future) return; setData((d) => d && ({ ...d, members: d.members.map((m) => m.id === id ? { ...m, retired: date } : m) })); setProfileId(null); }
   if (!accessReady) return <main className="attendance-page"><div className="attendance-loading">Preparando tus sesiones…</div></main>;
+  if (!accessed) return <main className="attendance-lock"><form onSubmit={(event) => { event.preventDefault(); void tryPageAccess(accessPassword); }}><div className="lock-mark">TM</div><p>Acceso privado</p><h1>Asistencia a Sesiones</h1><span>Ingresa la contraseña para consultar las sesiones. El acceso se recordará durante 2 horas.</span><label>Contraseña<input autoFocus type="password" inputMode="numeric" maxLength={4} value={accessPassword} onChange={(event) => { const next = event.target.value.replace(/\D/g, ""); setAccessPassword(next); setPageAccessError(false); if (next.length === 4) void tryPageAccess(next); }} placeholder="••••" aria-invalid={pageAccessError}/></label>{pageAccessError && <small>La contraseña no es correcta o el acceso está temporalmente bloqueado.</small>}<button type="submit">Entrar al aplicativo</button><Link href="/">Volver a TuBio</Link></form></main>;
   if (!data || !session) return <main className="attendance-page"><div className="attendance-loading">Preparando tus sesiones…</div></main>;
   const currentSession = session;
   async function shareApp() {
