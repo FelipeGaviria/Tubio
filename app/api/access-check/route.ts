@@ -24,3 +24,11 @@ export async function POST(request: Request) {
   }
   return nextResponse;
 }
+
+export async function DELETE(request: Request) {
+  const gate = new URL(request.url).searchParams.get("gate");
+  if (!gate || !isClubGate(gate)) return Response.json({ error: "Solicitud inválida" }, { status: 400 });
+  const response = NextResponse.json({ ok: true });
+  response.cookies.set(clubCookieName(gate), "", { httpOnly: true, sameSite: "strict", secure: process.env.NODE_ENV === "production", path: "/api/club-sync", maxAge: 0 });
+  return response;
+}
