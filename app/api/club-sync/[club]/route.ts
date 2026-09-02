@@ -24,7 +24,6 @@ export async function GET(_request: Request, context: ClubRouteContext) {
   const destination = await publicTarget(context);
   if (!destination) return Response.json({ error: "Club inválido" }, { status: 404 });
   const access = await target(context);
-  if (!access && destination.club !== "rotaract") return Response.json({ error: "Acceso denegado" }, { status: 401 });
   const response = await fetch(destination.url, { headers: access ? { Authorization: `Bearer ${access.token}` } : undefined, cache: "no-store" });
   return new Response(await response.text(), { status: response.status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
 }
