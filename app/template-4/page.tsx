@@ -44,7 +44,7 @@ export default function TemplateFourPage() {
     </div>
     <header className="template-four-header"><Link href="/">TuBio</Link><span>Negociación · Estrategia · Resultados</span></header>
     <section className="template-four-hero">
-      <div className="template-four-portrait" style={{ transform: `translate3d(-50%, ${scrollY * -.018}px, 0) scale(${1 + scrollY * .000015})` }}><div className="template-four-photo-halo"/><Image className="template-four-photo-night" src="/images/landings/tona-1.png" alt="Retrato de Mariantonia Sepúlveda" fill priority quality={100} sizes="(max-width: 700px) 125vw, 900px" /><Image className="template-four-photo-light" src="/images/landings/tona-2.png" alt="Retrato de Mariantonia Sepúlveda" fill priority quality={100} sizes="(max-width: 700px) 125vw, 900px" /></div>
+      <div className="template-four-portrait" style={{ transform: `translate3d(-50%, ${scrollY * -.018}px, 0) scale(${1 + scrollY * .000015})` }}><div className="template-four-photo-halo"/><Image className="template-four-photo-main" src="/images/landings/tona-1.png" alt="Retrato de Mariantonia Sepúlveda" fill priority quality={100} sizes="(max-width: 700px) 112vw, 900px" /></div>
       <div className="template-four-hero-fade" />
       <div className="template-four-identity"><p className="template-four-kicker">Negociadora internacional</p><h1><span>Mariantonia</span><em>Sepúlveda</em></h1><p className="template-four-bio">Adaptación a cada proceso, <strong>con resultados medibles.</strong></p>
         <div className="template-four-profile-glass">
