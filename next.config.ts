@@ -19,6 +19,9 @@ const contentSecurityPolicy = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    qualities: [75, 100],
+  },
   async headers() {
     return [{
       source: "/:path*",
