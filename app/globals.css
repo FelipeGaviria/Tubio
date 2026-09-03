@@ -1359,6 +1359,22 @@ html { scroll-behavior: smooth; }
 .template-four-shell.is-light .template-four-footer { background: #15201d; color: rgba(241,233,220,.64); }
 @media (max-width: 700px) { .template-four-portrait { width: 100vw; height: 720px; }.template-four-hero-fade { background: linear-gradient(to right, var(--t4-page) 0%, rgba(var(--t4-page-rgb),.22) 3%, transparent 12%, transparent 88%, rgba(var(--t4-page-rgb),.22) 97%, var(--t4-page) 100%), linear-gradient(to bottom, transparent 0%, transparent 41%, rgba(var(--t4-page-rgb),.13) 53%, rgba(var(--t4-page-rgb),.88) 69%, var(--t4-page) 81%, var(--t4-page) 100%); }.template-four-identity h1 { font-size: clamp(3rem, 15.5vw, 4.25rem); letter-spacing: .045em; }.template-four-identity h1 span { letter-spacing: .055em; }.template-four-links h2 { letter-spacing: .04em; }.template-four-actions { padding-top: 30px; }.template-four-footer { min-height: 128px; padding-block: 28px; } }
 @media (max-width: 420px) { .template-four-portrait { width: 100vw; height: 690px; }.template-four-identity h1 { font-size: 3.12rem; } }
+
+/* Template 4 — portrait and contact pass */
+.template-four-photo-halo { inset: 5% -22% 2%; background: radial-gradient(ellipse at 50% 45%, rgba(232,154,122,.3), rgba(111,160,138,.17) 48%, transparent 74%); filter: blur(26px); }
+.template-four-shell.is-light .template-four-photo-halo { background: radial-gradient(ellipse at 50% 45%, rgba(238,177,143,.36), rgba(117,157,132,.16) 52%, transparent 76%); }
+.template-four-portrait .template-four-photo-night, .template-four-portrait .template-four-photo-light { mask-image: linear-gradient(to bottom, #000 0%, #000 65%, rgba(0,0,0,.92) 76%, transparent 98%); }
+.template-four-socials { gap: clamp(22px, 5vw, 38px); }
+.template-four-socials a { width: 72px; height: 72px; }
+.template-four-socials svg { width: 32px; height: 32px; }
+.template-four-socials .template-four-whatsapp { width: 39px; height: 39px; object-fit: contain; filter: drop-shadow(0 3px 7px rgba(0,0,0,.14)); }
+.template-four-actions { padding-top: 52px; }
+.template-four-primary-action { position: relative; min-height: 72px; padding-inline: 76px 28px; }
+.template-four-primary-action i { position: absolute; left: 8px; display: grid; width: 56px; height: 56px; place-items: center; border: 1px solid rgba(255,255,255,.32); border-radius: 50%; background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.07)); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 8px 22px rgba(0,0,0,.14); font-style: normal; backdrop-filter: blur(12px); }
+.template-four-primary-action i svg { width: 24px; height: 24px; }
+.template-four-footer { min-height: 118px; padding-block: 22px; }
+@media (max-width: 700px) { .template-four-photo-halo { inset: 7% -28% 0; filter: blur(28px); }.template-four-hero-fade { background: linear-gradient(to right, var(--t4-page) 0%, rgba(var(--t4-page-rgb),.27) 4%, transparent 14%, transparent 86%, rgba(var(--t4-page-rgb),.27) 96%, var(--t4-page) 100%), linear-gradient(to bottom, transparent 0%, transparent 38%, rgba(var(--t4-page-rgb),.18) 50%, rgba(var(--t4-page-rgb),.94) 68%, var(--t4-page) 79%, var(--t4-page) 100%); }.template-four-profile-glass { margin-top: 25px; }.template-four-socials { gap: 25px; }.template-four-socials a { width: 68px; height: 68px; }.template-four-socials svg { width: 30px; height: 30px; }.template-four-socials .template-four-whatsapp { width: 38px; height: 38px; }.template-four-actions { padding-top: 50px; }.template-four-primary-action { min-height: 68px; padding: 17px 24px 17px 72px; }.template-four-primary-action i { left: 7px; width: 54px; height: 54px; }.template-four-footer { min-height: 110px; padding-block: 19px; }.template-four-seal { width: 66px; height: 66px; } }
+@media (max-width: 380px) { .template-four-socials { gap: 18px; }.template-four-socials a { width: 64px; height: 64px; } }
 .raw-hero-title { text-align: center; }.raw-role-title { margin-top: 24px; font-size: .78rem; font-weight: 850; letter-spacing: .08em; }.raw-hero-title h1 { letter-spacing: .035em; }
 .raw-intro h2, .raw-work h2, .raw-experience h2, .raw-contact h2 { letter-spacing: .015em; }.raw-intro-subtitle h3 { letter-spacing: .025em; }.raw-discipline-list h3 { letter-spacing: .005em; }.raw-project-info h3 { letter-spacing: .01em; }
 @media (max-width: 700px) { .raw-role-title { max-width: 300px; margin-inline: auto; line-height: 1.7; }.raw-hero-title h1 { letter-spacing: .025em; } }
