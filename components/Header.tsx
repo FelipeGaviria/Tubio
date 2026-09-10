@@ -63,7 +63,7 @@ export function Header({ endAction }: { endAction?: ReactNode }) {
         <button className="header-profile-link" type="button" aria-label="Abrir accesos" aria-expanded={workspaceOpen} onClick={() => setWorkspaceOpen(!workspaceOpen)}><PersonIcon /></button>
         <div className="workspace-popover" aria-label="Accesos rápidos">
           <p>Tu espacio</p>
-          {workspaceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}{item.locked && <LockIcon />}</span><small>{item.note}</small></Link>)}
+          {workspaceLinks.map((item) => ["/asistencias", "/rotaract"].includes(item.href) ? <a key={item.href} href={item.href}><span>{item.label}{item.locked && <LockIcon />}</span><small>{item.note}</small></a> : <Link key={item.href} href={item.href} onClick={() => setWorkspaceOpen(false)}><span>{item.label}{item.locked && <LockIcon />}</span><small>{item.note}</small></Link>)}
         </div>
       </div>
       {endAction}

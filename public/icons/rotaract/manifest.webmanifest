@@ -1,0 +1,32 @@
+{
+  "id": "/rotaract",
+  "name": "Rotaract Nuevo Medellín",
+  "short_name": "Rotaract",
+  "description": "Calendario y asistencia de Rotaract Nuevo Medellín.",
+  "lang": "es-CO",
+  "start_url": "/rotaract",
+  "scope": "/rotaract",
+  "display": "standalone",
+  "background_color": "#d41367",
+  "theme_color": "#d41367",
+  "icons": [
+    {
+      "src": "/icons/rotaract/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/rotaract/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/rotaract/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

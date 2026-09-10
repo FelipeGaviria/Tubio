@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, Oswald, Roboto } from "next/font/google";
 
 import { site } from "@/content/site";
+import { InstallPromptProvider } from "@/components/InstallPromptProvider";
 
 import "./globals.css";
+import "./club-app.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-display", display: "swap" });
@@ -51,7 +53,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${inter.variable} ${bebasNeue.variable} ${oswald.variable} ${roboto.variable}`}>
-      <body>{children}</body>
+      <body><InstallPromptProvider>{children}</InstallPromptProvider></body>
     </html>
   );
 }

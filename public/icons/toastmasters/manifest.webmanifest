@@ -1,0 +1,32 @@
+{
+  "id": "/asistencias",
+  "name": "Toastmasters",
+  "short_name": "Toastmasters",
+  "description": "Calendario y asistencia de Toastmasters.",
+  "lang": "es-CO",
+  "start_url": "/asistencias",
+  "scope": "/asistencias",
+  "display": "standalone",
+  "background_color": "#14274d",
+  "theme_color": "#14274d",
+  "icons": [
+    {
+      "src": "/icons/toastmasters/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/toastmasters/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/toastmasters/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

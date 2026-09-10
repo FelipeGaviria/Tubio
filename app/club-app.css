@@ -1,0 +1,50 @@
+.club-app-controls { display: flex; align-items: center; gap: 6px; }
+.club-icon-button { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 1px solid #d5dce7; border-radius: 11px; background: #fff; color: #233857; cursor: pointer; }
+.club-icon-button:hover { background: #edf1f7; }
+.club-icon-button svg, .club-report-action svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.club-icon-button:focus-visible, .club-report-action button:focus-visible { outline: 3px solid #839ad2; outline-offset: 3px; }
+.club-report-action { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; margin: 15px 0; }
+.club-report-action button { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 10px 15px; border: 1px solid #d2dae7; border-radius: 10px; background: #fff; color: #24395b; font: inherit; font-size: .75rem; font-weight: 750; cursor: pointer; }
+.club-report-action button:disabled { opacity: .65; cursor: wait; }
+.club-report-action small { color: #65728b; font-size: .67rem; line-height: 1.5; }
+.club-report-action [role="alert"] { color: #b12745; }
+.club-app-controls .install-dialog { font-size: 1rem; }
+.club-app-controls .install-dialog p { margin: 0 0 24px; line-height: 1.6; }
+.club-app-controls .install-dialog h2 { font-family: var(--font-inter), sans-serif; text-transform: none; }
+
+.attendance-page[data-club-theme="night"] { --att-ink: #edf1fa; --att-navy: #d9e3f7; --att-wine: #f2a6bd; --att-wine-soft: #3b2330; color-scheme: dark; background: #0d1421; color: #edf1fa; }
+.attendance-page[data-club-theme="night"] :is(.attendance-topbar, .session-card, .people-card, .attendance-summary, .no-session, .profile-panel, .special-guests, .rotaract-edit-mode, .applicant-progress, .selected-day-agenda, .rotaract-events article) { background: #172133; border-color: #344058; color: #edf1fa; box-shadow: none; }
+.attendance-page[data-club-theme="night"] :is(.rotaract-calendar, .club-month-calendar) { background: #141f31; border-color: #344058; box-shadow: none; }
+.attendance-page[data-club-theme="night"] :is(.attendance-heading h1, .attendance-logo strong, .session-date-control strong, .people-card h2, .profile-name-input, .rotaract-section-title h2, .rotaract-edit-mode strong, .rotaract-events h3, .month-calendar-toolbar strong, .selected-day-agenda strong, .applicant-progress strong, .person-identity strong) { color: #edf1fa; }
+.attendance-page[data-club-theme="night"] :is(.attendance-heading p, .rotaract-section-title p, .profile-header p) { color: #f2a6bd; }
+.attendance-page[data-club-theme="night"] :is(.attendance-heading>div>span, .people-card-title p, .people-tools label, .attendance-logo small, .session-date-control span, .attendance-summary span, .profile-header small, .profile-stats span, .history-list small, .rotaract-edit-mode small, .rotaract-events p, .rotaract-events small, .selected-day-events small, .selected-day-events p, .selected-day-agenda>p, .selected-day-agenda small, .club-report-action small, .applicant-progress small, .applicant-progress legend, .empty-people, .rotaract-empty-event, .no-session p) { color: #afbdd2; }
+.attendance-page[data-club-theme="night"] :is(.person-row, .people-card-title, .profile-stats, .profile-stats div, .history-list>div, .rotaract-edit-mode form, .special-guests summary) { border-color: #344058; }
+.attendance-page[data-club-theme="night"] :is(input, select, .club-icon-button, .club-report-action button, .share-attendance, .session-date-control button, .profile-close, .month-calendar-toolbar button, .people-tools>span, .calendar-title-actions>span) { background: #22314a; border-color: #465773; color: #e5ecf9; }
+.attendance-page[data-club-theme="night"] input::placeholder { color: #adbad0; }
+.attendance-page[data-club-theme="night"] .session-kind { background: #0d1728; }
+.attendance-page[data-club-theme="night"] .session-kind button { color: #b0bed4; }
+.attendance-page[data-club-theme="night"] .session-kind button.active { background: #30425f; color: #fff; box-shadow: none; }
+.attendance-page[data-club-theme="night"] .attendance-options button { background: #1a283d; border-color: #42526d; color: #bcc9dd; }
+.attendance-page[data-club-theme="night"] .attendance-options .present.selected { background: #133a32; border-color: #338d6d; color: #9be8c8; }
+.attendance-page[data-club-theme="night"] .attendance-options .virtual.selected { background: #18365a; border-color: #4b7bbb; color: #b8d5ff; }
+.attendance-page[data-club-theme="night"] .attendance-options .absent.selected { background: #452331; border-color: #bd536d; color: #ffb8c7; }
+.attendance-page[data-club-theme="night"] .attendance-options .excused.selected { background: #344154; border-color: #72839b; color: #e1e7f0; }
+.attendance-page[data-club-theme="night"] :is(.month-weekdays, .month-days) { background: #344058; border-color: #344058; }
+.attendance-page[data-club-theme="night"] .month-weekdays span { color: #d3dded; border-color: #46516b; }
+.attendance-page[data-club-theme="night"] .month-days>button { background: #1a283e; color: #dce5f5; }
+.attendance-page[data-club-theme="night"] .month-days>button.outside { background: #111b2c; color: #91a0b8; }
+.attendance-page[data-club-theme="night"] .month-days>button.selected { background: #2a3e60; }
+.attendance-page[data-club-theme="night"] .month-event-titles>i { background: #25364f; color: #e3ebf9; }
+.attendance-page[data-club-theme="night"] :is(.future-lock, .extraordinary-note, .guest-followup-note) { background: #302b27; border-color: #665740; color: #f2d8aa; }
+.attendance-page[data-club-theme="night"] :is(.future-lock p, .extraordinary-note p, .guest-followup-note p) { color: #dbcaad; }
+.attendance-page[data-club-theme="night"] :is(.first-session-add, .special-guest-add, .profile-first-session, .profile-special-guest, .profile-applicant, .applicant-add) { background: #25324b; border-color: #57657f; color: #e5d9ed; }
+.attendance-page[data-club-theme="night"] :is(.calendar-add-event:disabled, .add-on-selected-day:disabled) { background: #253148; border-color: #46516b; color: #aab6cb; }
+.attendance-page[data-club-theme="night"] .person-row.first-session-person { background: #302238; }
+.attendance-page[data-club-theme="night"] .retire-person { background: #3d2330; border-color: #815069; color: #ffb9ce; }
+
+@media (max-width: 700px) {
+  .attendance-page[data-club] .attendance-topbar { flex-wrap: wrap; gap: 12px; }
+  .attendance-page[data-club] .attendance-top-actions { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+  .attendance-page[data-club] .attendance-top-actions .autosave { font-size: .58rem; }
+  .club-report-action { align-items: flex-start; flex-direction: column; gap: 7px; }
+}
