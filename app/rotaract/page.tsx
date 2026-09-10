@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Calendario y asistencia compartida de Rotaract Nuevo Medellín.",
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#f6f7fc" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false, viewportFit: "cover", themeColor: "#f6f7fc" };
 
 export default function RotaractPage() {
   return <RotaractApp />;
