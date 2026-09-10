@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Header } from "@/components/Header";
 import { FooterShareButton } from "@/components/FooterShareButton";
+import { FooterInstallButton } from "@/components/FooterInstallButton";
 import { FooterGuyUnlock } from "@/components/FooterGuyUnlock";
 import { HeroPreview } from "@/components/HeroPreview";
 import { LandingWheel } from "@/components/LandingWheel";
@@ -83,7 +84,7 @@ export default function HomePage() {
 
       <footer className="site-footer">
         <div className="container footer-grid">
-          <p>{site.contact.city}</p>
+          <FooterInstallButton />
           <FooterGuyUnlock />
           <FooterShareButton />
         </div>

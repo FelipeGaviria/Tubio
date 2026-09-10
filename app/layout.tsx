@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, Oswald, Roboto } from "next/font/google";
 
 import { site } from "@/content/site";
@@ -11,6 +11,12 @@ const oswald = Oswald({ subsets: ["latin"], variable: "--font-mero-display", dis
 const roboto = Roboto({ subsets: ["latin"], variable: "--font-mero-body", display: "swap" });
 
 export const metadata: Metadata = {
+  applicationName: "TuBio",
+  appleWebApp: {
+    capable: true,
+    title: "TuBio",
+    statusBarStyle: "default",
+  },
   metadataBase: new URL(site.url),
   title: {
     default: `${site.name} | ${site.tagline}`,
@@ -36,6 +42,10 @@ export const metadata: Metadata = {
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#080808",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
