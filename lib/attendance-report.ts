@@ -11,10 +11,11 @@ export type AttendanceReport = {
 };
 
 const labels: Record<string, string> = {
-  present: "Presencial", virtual: "Virtual", absent: "No asistió", excused: "No aplica", pending: "Sin registrar",
+  present: "Presencial", virtual: "Virtual",
 };
 
 export function createAttendanceReport(report: AttendanceReport, logo?: string) {
+  const attendees = report.people.filter((person) => person.mark === "present" || person.mark === "virtual");
   const pdf = new jsPDF({ unit: "mm", format: "a4" });
   const accent = report.club === "rotaract" ? "#d41367" : "#77213f";
   const formattedDate = new Intl.DateTimeFormat("es-CO", { day: "numeric", month: "long", year: "numeric" }).format(new Date(`${report.date}T12:00:00`));
@@ -53,16 +54,16 @@ export function createAttendanceReport(report: AttendanceReport, logo?: string) 
   if (!report.held) {
     text("No hubo reunión. Esta fecha no suma asistencias ni ausencias.", 16, y, 10);
   } else {
-    const totals = Object.keys(labels).map((mark) => `${labels[mark]}: ${report.people.filter((person) => (person.mark ?? "pending") === mark).length}`);
-    text(`Personas: ${report.people.length}`, 16, y, 11, true);
+    const totals = Object.keys(labels).map((mark) => `${labels[mark]}: ${attendees.filter((person) => person.mark === mark).length}`);
+    text(`Asistentes: ${attendees.length}`, 16, y, 11, true);
     y += 8;
     pdf.setFontSize(9);
     const summary = pdf.splitTextToSize(totals.join("   |   "), 178) as string[];
     summary.forEach((line) => { text(line, 16, y, 9); y += 5; });
     y += 5;
     tableHeading();
-    if (!report.people.length) text("No hay personas registradas para esta fecha.", 19, y + 5);
-    for (const person of report.people) {
+    if (!attendees.length) text("No hay asistencias registradas para esta fecha.", 19, y + 5);
+    for (const person of attendees) {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(10);
       const nameLines = pdf.splitTextToSize(person.name, 88) as string[];

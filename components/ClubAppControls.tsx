@@ -7,21 +7,15 @@ export function ClubAppControls({ club, appName }: { club: "toastmasters" | "rot
   const [night, setNight] = useState(false);
   useEffect(() => {
     const page = document.querySelector<HTMLElement>(`[data-club="${club}"]`);
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
     let preference: string | null = null;
-    try { preference = localStorage.getItem(`tubio-${club}-theme`); } catch { /* Usar el tema del sistema. */ }
+    try { preference = localStorage.getItem(`tubio-${club}-theme`); } catch { /* Usar el modo diurno. */ }
     const apply = () => {
-      const dark = preference ? preference === "night" : media.matches;
+      const dark = preference === "night";
       if (page) page.dataset.clubTheme = dark ? "night" : "day";
       setNight(dark);
     };
     const timer = window.setTimeout(apply, 0);
-    const followSystem = () => {
-      try { preference = localStorage.getItem(`tubio-${club}-theme`); } catch { /* Usar el tema del sistema. */ }
-      apply();
-    };
-    media.addEventListener("change", followSystem);
-    return () => { window.clearTimeout(timer); media.removeEventListener("change", followSystem); };
+    return () => window.clearTimeout(timer);
   }, [club]);
 
   function toggleTheme() {

@@ -1,4 +1,21 @@
 .club-app-controls { display: flex; align-items: center; gap: 6px; }
+.club-logo-refresh { padding: 0; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+.club-logo-refresh:focus-visible { outline: 3px solid #839ad2; outline-offset: 4px; border-radius: 8px; }
+.attendance-page .autosave.saved { display: none; }
+.rotaract-navigation { display: flex; justify-content: center; gap: 8px; padding: 14px 20px; border-bottom: 1px solid #e1e6ef; background: #fff; }
+.rotaract-navigation a { display: flex; align-items: center; justify-content: center; gap: 9px; min-width: 130px; min-height: 46px; padding: 10px 18px; border-radius: 12px; color: #68758e; font-size: .8rem; font-weight: 750; text-decoration: none; }
+.rotaract-navigation a:hover { background: #f5f6fc; }
+.rotaract-navigation a[aria-current="page"] { background: #fceaf2; color: #bb135b; }
+.rotaract-navigation svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.rotaract-navigation a:focus-visible { outline: 3px solid #839ad2; outline-offset: 2px; }
+.rotaract-page .rotaract-section-layout:not(.with-history) { grid-template-columns: minmax(0, 1fr); }
+.rotaract-page .rotaract-section-layout:not(.with-history) .attendance-workspace { width: 100%; max-width: 1180px; margin-inline: auto; }
+.rotaract-home { display: grid; min-height: 45vh; place-items: center; }
+.rotaract-home img { width: min(364px, 80%); height: auto; }
+.rotaract-empty-section { min-height: 45vh; }
+.rotaract-page[data-club-theme="night"] .rotaract-navigation { background: #172133; border-color: #344058; }
+.rotaract-page[data-club-theme="night"] .rotaract-navigation a { color: #bbc7db; }
+.rotaract-page[data-club-theme="night"] .rotaract-navigation a[aria-current="page"] { background: #42253b; color: #ffbad8; }
 .club-icon-button { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 1px solid #d5dce7; border-radius: 11px; background: #fff; color: #233857; cursor: pointer; }
 .club-icon-button:hover { background: #edf1f7; }
 .club-icon-button svg, .club-report-action svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
@@ -43,6 +60,11 @@
 .attendance-page[data-club-theme="night"] .retire-person { background: #3d2330; border-color: #815069; color: #ffb9ce; }
 
 @media (max-width: 700px) {
+  .rotaract-page[data-club] { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+  .rotaract-navigation { position: fixed; z-index: 40; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #e1e6ef; border-bottom: 0; box-shadow: 0 -5px 24px #15284c0a; }
+  .rotaract-navigation a { min-width: 0; min-height: 56px; flex-direction: column; gap: 5px; padding: 7px 2px; font-size: .63rem; }
+  .rotaract-navigation svg { width: 21px; height: 21px; }
+  .rotaract-page .applicant-progress-floating { bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
   .attendance-page[data-club] .attendance-topbar { flex-wrap: wrap; gap: 12px; }
   .attendance-page[data-club] .attendance-top-actions { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
   .attendance-page[data-club] .attendance-top-actions .autosave { font-size: .58rem; }
