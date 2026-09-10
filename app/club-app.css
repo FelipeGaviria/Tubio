@@ -61,7 +61,7 @@
 
 @media (max-width: 700px) {
   .rotaract-page[data-club] { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
-  .rotaract-navigation { position: fixed; z-index: 40; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #e1e6ef; border-bottom: 0; box-shadow: 0 -5px 24px #15284c0a; }
+  .rotaract-navigation { position: fixed; z-index: 40; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #e1e6ef; border-bottom: 0; box-shadow: 0 -5px 24px #15284c0a; }
   .rotaract-navigation a { min-width: 0; min-height: 56px; flex-direction: column; gap: 5px; padding: 7px 2px; font-size: .63rem; }
   .rotaract-navigation svg { width: 21px; height: 21px; }
   .rotaract-page .applicant-progress-floating { bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
@@ -70,3 +70,28 @@
   .attendance-page[data-club] .attendance-top-actions .autosave { font-size: .58rem; }
   .club-report-action { align-items: flex-start; flex-direction: column; gap: 7px; }
 }
+html:has(.rotaract-page), body:has(.rotaract-page) { background: #f6f7fc; }
+html:has(.rotaract-page[data-club-theme="night"]), body:has(.rotaract-page[data-club-theme="night"]) { background: #0d1421; color-scheme: dark; }
+.rotaract-page { min-height: 100dvh; }
+.rotaract-page[data-club-theme="night"] .rotaract-header-logo img { filter: brightness(0) invert(1); }
+.rotaract-home img { width: min(280px, 70%); border-radius: 28px; }
+.meeting-minutes { margin: 16px 0; border: 1px solid #d2dae7; border-radius: 14px; background: #fff; color: #24395b; overflow: hidden; }
+.meeting-minutes button { min-height: 44px; padding: 10px 14px; border: 1px solid #d2dae7; border-radius: 10px; background: #edf2ff; color: #1746b0; font: inherit; cursor: pointer; }
+.meeting-minutes .minutes-toggle { display: flex; justify-content: space-between; width: 100%; padding: 16px; border: 0; border-radius: 0; font-weight: 750; }
+.minutes-editor { display: grid; gap: 18px; padding: 18px; }
+.minutes-editor p { margin: 0; font-size: .8rem; line-height: 1.6; }
+.minutes-editor label { display: grid; gap: 8px; font-size: .85rem; }
+.minutes-editor input, .minutes-editor textarea { width: 100%; min-width: 0; padding: 12px; border: 1px solid #c4cfe0; border-radius: 10px; background: #fff; color: inherit; font: inherit; font-size: 16px; line-height: 1.5; }
+.minutes-editor textarea { resize: vertical; }
+.minutes-editor :disabled { opacity: 1; }
+.minutes-editor fieldset { display: grid; gap: 14px; min-width: 0; margin: 0; padding: 16px; border: 1px solid #d2dae7; border-radius: 12px; }
+.minutes-editor legend { padding: 0 6px; font-weight: 750; }
+.minutes-entry { display: grid; gap: 8px; }
+.minutes-entry button { justify-self: end; }
+.meeting-minutes :focus-visible { outline: 3px solid #839ad2; outline-offset: 2px; }
+.rotaract-page[data-club-theme="night"] .meeting-minutes { background: #172133; border-color: #344058; color: #edf1fa; }
+.rotaract-page[data-club-theme="night"] .meeting-minutes :is(button, input, textarea) { background: #22314a; border-color: #465773; color: #fff; }
+.rotaract-page[data-club-theme="night"] .minutes-editor fieldset { border-color: #465773; }
+@media (min-width: 701px) and (max-width: 800px) { .rotaract-navigation a { min-width: 0; padding-inline: 12px; } }
+.rotaract-page .attendance-topbar { height: auto; min-height: calc(72px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
+@media (max-width: 700px) { .rotaract-page .attendance-topbar { min-height: calc(62px + env(safe-area-inset-top, 0px)); } }

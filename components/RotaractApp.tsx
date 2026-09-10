@@ -6,13 +6,17 @@ import { RotaractNavigation, rotaractSections, type RotaractSection } from "@/co
 import { ClubAppControls } from "@/components/ClubAppControls";
 import { AttendanceReportButton } from "@/components/AttendanceReportButton";
 
+import { MeetingMinutes, type Minutes } from "@/components/MeetingMinutes";
+import { mergeMinutes, remainingMinutes, type MinutesDrafts } from "@/lib/rotaract-minutes";
+
 type Mark = "present" | "absent" | "excused";
 type Member = { id: string; name: string; joined: string; retired?: string; applicant?: boolean; applicantMeetings?: boolean[]; applicantWorks?: boolean[] };
-type Meeting = { date: string; held: boolean; marks: Record<string, Mark> };
+type Meeting = { date: string; held: boolean; marks: Record<string, Mark>; minutes?: Minutes };
 type ClubEvent = { id: string; title: string; date: string; time: string; place: string; note: string };
 type ClubData = { members: Member[]; sessions: Meeting[]; events: ClubEvent[] };
 
 const STORAGE_KEY = "tubio-rotaract-state-v1";
+const MINUTES_DRAFTS_KEY = "tubio-rotaract-minutes-drafts-v1";
 const ACCESS_UNTIL_KEY = "tubio-rotaract-access-until";
 const SYNC_URL = "/api/club-sync/rotaract";
 const ACCESS_DURATION = 2 * 60 * 60 * 1000;
@@ -32,12 +36,12 @@ function normalizeData(value: ClubData): ClubData {
 function Icon({ name }: { name: "left" | "right" | "plus" | "calendar" | "people" | "trash" | "close" | "lock" | "unlock" | "edit" }) { const paths = { left: <path d="m15 18-6-6 6-6"/>, right: <path d="m9 18 6-6-6-6"/>, plus: <path d="M12 5v14M5 12h14"/>, calendar: <><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></>, people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></>, trash: <><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6"/></>, close: <path d="m6 6 12 12M18 6 6 18"/>, lock: <><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></>, unlock: <><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 7-2.6"/></>, edit: <><path d="m4 20 4.2-1 10.5-10.5a2.1 2.1 0 0 0-3-3L5.2 16Z"/><path d="m14.5 6.5 3 3"/></> }; return <svg aria-hidden="true" viewBox="0 0 24 24">{paths[name]}</svg>; }
 
 export function RotaractApp() {
-  const [section, setSection] = useState<RotaractSection>("fechas");
+  const [section, setSection] = useState<RotaractSection>("inicio");
   useEffect(() => {
     const syncSection = () => {
       const requested = window.location.hash.slice(1);
       if (rotaractSections.some((item) => item.id === requested)) setSection(requested as RotaractSection);
-      else setSection("fechas");
+      else setSection("inicio");
     };
     const timer = window.setTimeout(syncSection, 0);
     window.addEventListener("hashchange", syncSection);
@@ -74,10 +78,13 @@ export function RotaractApp() {
   const accessPending = useRef(false);
   const applyingRemote = useRef(false);
   const dataRef = useRef<ClubData | null>(null);
+  const minutesDrafts = useRef<MinutesDrafts>({});
+  const saveQueue = useRef<Promise<void>>(Promise.resolve());
+  const [retrySave, setRetrySave] = useState(0);
   const dataLoaded = data !== null;
 
   useEffect(() => { dataRef.current = data; }, [data]);
-  useEffect(() => { const timer = window.setTimeout(() => { try { const stored = localStorage.getItem(STORAGE_KEY); setData(stored ? normalizeData(JSON.parse(stored)) : initialData()); } catch { setData(initialData()); } const until = Number(localStorage.getItem(ACCESS_UNTIL_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => { const timer = window.setTimeout(() => { try { const stored = localStorage.getItem(STORAGE_KEY); minutesDrafts.current = JSON.parse(localStorage.getItem(MINUTES_DRAFTS_KEY) ?? "{}"); setData(mergeMinutes(stored ? normalizeData(JSON.parse(stored)) : initialData(), minutesDrafts.current)); } catch { setData(initialData()); } const until = Number(localStorage.getItem(ACCESS_UNTIL_KEY) ?? 0); setUnlocked(until > Date.now()); setAccessReady(true); }, 0); return () => window.clearTimeout(timer); }, []);
   useEffect(() => { if (data) localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }, [data]);
 
   async function tryAccess(code: string) {
@@ -98,11 +105,20 @@ export function RotaractApp() {
     let active = true;
     async function readCloud(initial = false) {
       try {
+        const stampAtStart = remoteStamp.current;
         const response = await fetch(SYNC_URL, { cache: "no-store" });
         if (!response.ok) throw new Error();
         const remote = await response.json() as { data: ClubData; updated_at: string } | null;
-        if (!active || !remote) return;
-        const normalizedRemote = normalizeData(remote.data);
+        if (!active || !remote || remoteStamp.current !== stampAtStart) return;
+        const normalizedRemote = mergeMinutes(normalizeData(remote.data), minutesDrafts.current);
+        if (Object.keys(minutesDrafts.current).length) {
+          remoteStamp.current = remote.updated_at;
+          applyingRemote.current = false;
+          setData((current) => !initial && current ? mergeMinutes(current, minutesDrafts.current) : normalizedRemote);
+          setCloudReady(true);
+          setRetrySave((value) => value + 1);
+          return;
+        }
         const local = dataRef.current;
         if (initial && remote.data.members.length === 0 && remote.data.events.length === 0 && local && (local.members.length || local.events.length)) { setCloudReady(true); setSyncStatus("saving"); return; }
         if (remote.data.sessions.length === 0) { setData(normalizedRemote); setCloudReady(true); setSyncStatus("saving"); return; }
@@ -118,9 +134,24 @@ export function RotaractApp() {
     if (!unlocked || !cloudReady || !data) return;
     if (applyingRemote.current) { applyingRemote.current = false; return; }
     setSyncStatus("saving");
-    const timer = window.setTimeout(async () => { try { const response = await fetch(SYNC_URL, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ data }) }); if (!response.ok) throw new Error(); const saved = await response.json() as { updated_at?: string }; if (saved.updated_at) remoteStamp.current = saved.updated_at; setSyncStatus("saved"); } catch { setSyncStatus("error"); } }, 500);
-    return () => window.clearTimeout(timer);
-  }, [data, cloudReady, unlocked]);
+    let canceled = false;
+    const timer = window.setTimeout(() => {
+      saveQueue.current = saveQueue.current.then(async () => {
+        if (canceled) return;
+        try {
+          const response = await fetch(SYNC_URL, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ data }) });
+          if (!response.ok) throw new Error();
+          const saved = await response.json() as { data?: ClubData; updated_at?: string };
+          if (!saved.data || !saved.updated_at) throw new Error();
+          remoteStamp.current = saved.updated_at;
+          minutesDrafts.current = remainingMinutes(minutesDrafts.current, saved.data);
+          localStorage.setItem(MINUTES_DRAFTS_KEY, JSON.stringify(minutesDrafts.current));
+          if (!canceled) setSyncStatus(Object.keys(minutesDrafts.current).length ? "error" : "saved");
+        } catch { if (!canceled) setSyncStatus("error"); }
+      });
+    }, 500);
+    return () => { canceled = true; window.clearTimeout(timer); };
+  }, [data, cloudReady, unlocked, retrySave]);
 
   const meetings = useMemo(() => [...(data?.sessions ?? [])].sort((a, b) => a.date.localeCompare(b.date)), [data]);
   const meeting = data?.sessions.find((item) => item.date === date) ?? (data ? { date, held: true, marks: {} } : undefined);
@@ -172,7 +203,7 @@ export function RotaractApp() {
     <div className={`attendance-layout rotaract-section-layout ${section === "asistencias" ? "with-history" : ""}`} data-section={section}>
       {section === "asistencias" && <aside className="attendance-sidebar"><div className="sidebar-app-title"><span><Icon name="people"/></span><div><strong>Rotaract</strong><small>Nuevo Medellín</small></div></div><p className="sidebar-caption">Reuniones quincenales</p><div className="session-list">{[...meetings].filter((item) => item.date <= today() || !item.held || Object.keys(item.marks).length > 0).reverse().slice(0, 8).map((item) => <button className={item.date === date ? "active" : ""} key={item.date} onClick={() => go(item.date)}><span><Icon name="calendar"/></span><div><strong>{pretty(item.date, true)}</strong><small>{item.held ? "Reunión del club" : "No hubo reunión"}</small></div></button>)}</div></aside>}
       <section className="attendance-workspace" aria-label={rotaractSections.find((item) => item.id === section)?.label}>
-        <div className="attendance-heading"><div><p>Club en movimiento</p><h1>{section === "fechas" ? "Fechas del club" : section === "asistencias" ? "Asistencias" : section === "tesoreria" ? "Tesorería" : "Rotaract Nuevo Medellín"}</h1>{(section === "fechas" || section === "asistencias") && <span>{section === "fechas" ? "Calendario, actividades y próximas reuniones." : "Socios, aspirantes y asistencia por reunión."}</span>}</div>{unlocked && section === "asistencias" && <form className="add-person rotaract-add-person" onSubmit={addMember}><input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nombre del socio o aspirante"/><label className={`applicant-add ${newApplicant ? "checked" : ""}`}><input type="checkbox" checked={newApplicant} onChange={(event) => setNewApplicant(event.target.checked)}/><span>✓</span> Es aspirante</label><button><Icon name="plus"/> Agregar persona</button></form>}</div>
+        <div className="attendance-heading"><div><h1>{section === "fechas" ? "Fechas del club" : section === "asistencias" ? "Asistencias" : section === "tesoreria" ? "Tesorería" : section === "varios" ? "Varios" : "Rotaract Nuevo Medellín"}</h1>{(section === "fechas" || section === "asistencias") && <span>{section === "fechas" ? "Calendario, actividades y próximas reuniones." : "Socios, aspirantes y asistencia por reunión."}</span>}</div>{unlocked && section === "asistencias" && <form className="add-person rotaract-add-person" onSubmit={addMember}><input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nombre del socio o aspirante"/><label className={`applicant-add ${newApplicant ? "checked" : ""}`}><input type="checkbox" checked={newApplicant} onChange={(event) => setNewApplicant(event.target.checked)}/><span>✓</span> Es aspirante</label><button><Icon name="plus"/> Agregar persona</button></form>}</div>
 
         {section === "fechas" && <section className={`rotaract-calendar ${unlocked && calendarEditorOpen ? "is-editing" : ""}`}>
           <div className="rotaract-section-title">
@@ -197,11 +228,13 @@ export function RotaractApp() {
 
         {section === "asistencias" && <>
         <div className="session-card"><div className="session-date-control"><button onClick={() => go(shift(date, -7))} aria-label="Sábado anterior"><Icon name="left"/></button><div><span>Reunión del sábado</span><strong>{pretty(date)}</strong></div><button onClick={() => go(shift(date, 7))} aria-label="Sábado siguiente"><Icon name="right"/></button></div><div className="session-kind"><button disabled={!unlocked || date > today()} className={meeting.held ? "active" : ""} onClick={() => editMeeting({ held: true })}>Reunión normal</button><button disabled={!unlocked || date > today()} className={!meeting.held ? "active" : ""} onClick={() => editMeeting({ held: false })}>No hubo reunión</button></div></div>
-        <AttendanceReportButton report={{ club: "rotaract", title: "Rotaract Nuevo Medellín", date, held: meeting.held, meetingLabel: meeting.held ? "Reunión del club" : "No hubo reunión", syncPending: syncStatus !== "saved", people: members.map((member) => ({ name: member.name, role: member.applicant ? "Aspirante" : "Socio", mark: meeting.marks[member.id] })) }} />
+        <MeetingMinutes key={date} value={meeting.minutes} editable={unlocked} onChange={(minutes) => { minutesDrafts.current = { ...minutesDrafts.current, [date]: minutes }; localStorage.setItem(MINUTES_DRAFTS_KEY, JSON.stringify(minutesDrafts.current)); editMeeting({ minutes }); }} />
+        <AttendanceReportButton report={{ minutes: meeting.minutes, club: "rotaract", title: "Rotaract Nuevo Medellín", date, held: meeting.held, meetingLabel: meeting.held ? "Reunión del club" : "No hubo reunión", syncPending: syncStatus !== "saved", people: members.map((member) => ({ name: member.name, role: member.applicant ? "Aspirante" : "Socio", mark: meeting.marks[member.id] })) }} />
         {date > today() && <div className="future-lock"><span>🔒</span><div><strong>Esta reunión todavía está bloqueada</strong><p>La asistencia se habilitará el sábado correspondiente.</p></div></div>}
         {!meeting.held ? <div className="no-session"><span>—</span><h2>No hubo reunión</h2><p>Esta fecha no contará como asistencia ni ausencia.</p></div> : <><div className="attendance-summary"><div><strong>{members.length}</strong><span>Personas</span></div><div className="present"><i/><strong>{count("present")}</strong><span>Asistieron</span></div><div className="absent"><i/><strong>{count("absent")}</strong><span>No asistieron</span></div><div><strong>{count("excused")}</strong><span>No aplica</span></div></div><div className="people-card"><div className="people-card-title"><div><h2>Socios y aspirantes</h2><p>{unlocked ? "Toca el estado para actualizarlo y el nombre para consultar su historial." : "Consulta quién asistió en la fecha seleccionada y toca un nombre para ver su historial."}</p></div><div className="people-tools"><label>Ordenar por<select value={sortOrder} onChange={(event) => setSortOrder(event.target.value as typeof sortOrder)}><option value="alphabetical">Orden alfabético</option><option value="applicants">Aspirantes primero</option><option value="frequency-desc">Mayor frecuencia</option><option value="frequency-asc">Menor frecuencia</option></select></label><span>{members.length} registrados</span></div></div><div className="people-list">{members.map((member) => { const selected = meeting.marks[member.id] ?? "excused"; const status = level(member.id); return <article className="person-row" key={member.id}><button className="person-identity" onClick={() => setProfileId(member.id)}><span className={`avatar ${status}`}>{member.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}</span><div><strong>{member.name}</strong><div className="person-badges"><small className={status}>{status === "danger" ? "Necesita acompañamiento" : status === "warning" ? "Atención" : "Activo"}</small>{member.applicant && <em className="applicant-badge">Aspirante</em>}</div></div></button><div className="attendance-options rotaract-options">{([ ["present", "Asistió"], ["absent", "No asistió"], ["excused", "No aplica"] ] as [Mark, string][]).map(([value, label]) => <button disabled={!unlocked || date > today()} key={value} className={`${value} ${selected === value ? "selected" : ""}`} onClick={() => setMark(member.id, value)}><i>{selected === value ? "✓" : ""}</i><span>{label}</span></button>)}</div></article>; })}{!members.length && <div className="empty-people">Todavía no hay personas registradas para esta fecha.</div>}</div></div></>}
         </>}
-        {section === "inicio" && <div className="rotaract-home"><Image src="/images/clubs/rotaract-nuevo-medellin.png" alt="Rotaract Nuevo Medellín" width={364} height={126} /></div>}
+        {section === "inicio" && <div className="rotaract-home"><Image src="/icons/rotaract/icon-512.png" alt="Rueda rotaria de Rotaract" width={512} height={512} /></div>}
+        {section === "varios" && <div className="rotaract-empty-section"><p>Próximamente añadiremos contenido aquí.</p></div>}
         {section === "tesoreria" && <div className="rotaract-empty-section" />}
       </section>
     </div>

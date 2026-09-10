@@ -6,6 +6,13 @@ import { FooterInstallButton } from "@/components/FooterInstallButton";
 export function ClubAppControls({ club, appName }: { club: "toastmasters" | "rotaract"; appName: string }) {
   const [night, setNight] = useState(false);
   useEffect(() => {
+    if (club !== "rotaract") return;
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const previous = meta?.content;
+    if (meta) meta.content = night ? "#0d1421" : "#f6f7fc";
+    return () => { if (meta && previous) meta.content = previous; };
+  }, [club, night]);
+  useEffect(() => {
     const page = document.querySelector<HTMLElement>(`[data-club="${club}"]`);
     let preference: string | null = null;
     try { preference = localStorage.getItem(`tubio-${club}-theme`); } catch { /* Usar el modo diurno. */ }

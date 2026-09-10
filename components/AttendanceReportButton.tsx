@@ -33,7 +33,7 @@ export function AttendanceReportButton({ report }: { report: AttendanceReport })
   return <div className="club-report-action">
     <button type="button" onClick={() => void download()} disabled={busy}>
       <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7Z"/><path d="M17 11h.01"/></svg>
-      {busy ? "Generando PDF…" : "Imprimir resumen"}
+      {busy ? "Generando PDF…" : report.club === "rotaract" ? "Generar PDF" : "Imprimir resumen"}
     </button>
     <small role={error ? "alert" : undefined}>{error ? "No se pudo generar el PDF. Inténtalo de nuevo." : "Descarga el PDF de esta reunión para guardarlo o imprimirlo."}</small>
   </div>;
