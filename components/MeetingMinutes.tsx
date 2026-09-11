@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import type { Minutes } from "@/lib/rotaract-minutes";
 export type { Minutes } from "@/lib/rotaract-minutes";
 
-export function MeetingMinutes({ value, editable, onChange, onRequestEdit }: { value?: Minutes; editable: boolean; onChange: (value: Minutes) => void; onRequestEdit: () => void }) {
+export function MeetingMinutes({ value, editable, dirty, saving, onChange, onRequestEdit, onSave }: { value?: Minutes; editable: boolean; dirty: boolean; saving: boolean; onChange: (value: Minutes) => void; onRequestEdit: () => void; onSave: () => void }) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (!open) return;
@@ -31,6 +31,7 @@ export function MeetingMinutes({ value, editable, onChange, onRequestEdit }: { v
           {editable && <button type="button" onClick={() => update({ [field]: [...minutes[field], ""] })}>+ Agregar {singular}</button>}
         </fieldset>)}
       </div>
+      {editable && <footer><button type="button" disabled={!dirty || saving} onClick={onSave}>{saving ? "Guardando…" : "Guardar acta"}</button></footer>}
     </section>
   </div>;
   return <section className="meeting-minutes">
