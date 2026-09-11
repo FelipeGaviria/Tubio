@@ -14,7 +14,7 @@ export function AttendanceReportButton({ report }: { report: AttendanceReport })
       const { createAttendanceReport } = await import("@/lib/attendance-report");
       let logo: string | undefined;
       try {
-        const response = await fetch(`/icons/${report.club}/icon-192.png`);
+        const response = await fetch(report.club === "rotaract" ? "/images/clubs/rotaract-nuevo-medellin.png" : `/icons/${report.club}/icon-192.png`);
         if (response.ok) {
           const blob = await response.blob();
           logo = await new Promise<string>((resolve, reject) => {

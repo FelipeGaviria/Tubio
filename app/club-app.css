@@ -70,6 +70,18 @@
   .attendance-page[data-club] .attendance-top-actions .autosave { font-size: .58rem; }
   .club-report-action { align-items: flex-start; flex-direction: column; gap: 7px; }
 }
+
+.rotaract-home .interactive-wheel-face .rotary-wheel { width: 100%; height: 100%; max-height: none; }
+
+.interactive-rotary-wheel { width: min(280px, 70%); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; outline: none; }
+.interactive-rotary-wheel.is-dragging { cursor: grabbing; }
+.interactive-wheel-face { display: grid; width: 100%; height: 100%; place-items: center; transform-origin: center; will-change: transform; }
+.interactive-wheel-face .rotary-wheel { width: 100%; height: 100%; max-height: none; pointer-events: none; }
+.interactive-rotary-wheel.is-dragging .interactive-wheel-face { filter: drop-shadow(0 12px 20px rgba(212,19,103,.18)); }
+.interactive-rotary-wheel.is-returning .interactive-wheel-face { transition: transform 1s cubic-bezier(.22,1,.36,1); }
+.interactive-rotary-wheel:focus-visible { outline: 3px solid #839ad2; outline-offset: 8px; }
+@media (max-width: 700px) { .rotaract-home .interactive-rotary-wheel { width: min(240px, 60%); max-height: 90%; } }
+@media (prefers-reduced-motion: reduce) { .interactive-rotary-wheel.is-returning .interactive-wheel-face { transition-duration: .15s; } }
 html:has(.rotaract-page), body:has(.rotaract-page) { background: #f6f7fc; }
 html:has(.rotaract-page[data-club-theme="night"]), body:has(.rotaract-page[data-club-theme="night"]) { background: #0d1421; color-scheme: dark; }
 .rotaract-page { min-height: 100dvh; }
@@ -201,7 +213,57 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .rotaract-page[data-club-theme="night"] .rotaract-misc summary { color: #edf1fa; }
 .rotaract-page[data-club-theme="night"] .rotaract-misc details p { color: #c2cde0; }
 
+.rotaract-sync-dot { width: 18px; min-width: 18px; height: 18px; padding: 0; border: 0; background: transparent; }
+.rotaract-sync-dot span { width: 9px; height: 9px; margin: 0; }
+.rotaract-save-bar { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: min(880px, 100%); margin: 0 auto 22px; padding: 14px 16px; border: 1px solid #cdd8e9; border-radius: 15px; background: #fff; box-shadow: 0 10px 28px rgba(23,70,176,.07); }
+.rotaract-save-bar>div { display: grid; gap: 3px; }
+.rotaract-save-bar strong { color: #24395b; font-size: .86rem; }
+.rotaract-save-bar small { color: #68758e; font-size: .74rem; line-height: 1.4; }
+.rotaract-save-bar button { min-height: 42px; flex: 0 0 auto; padding: 10px 16px; border: 0; border-radius: 10px; background: #1746b0; color: #fff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; }
+.rotaract-save-bar button:disabled { opacity: .48; cursor: default; }
+.rotaract-save-bar.has-warning { border-color: #e9b852; background: #fff9e9; }
+.rotaract-save-bar.has-warning strong { color: #875012; }
+.rotaract-page[data-club-theme="night"] .rotaract-save-bar { background: #172133; border-color: #344058; }
+.rotaract-page[data-club-theme="night"] .rotaract-save-bar strong { color: #fff; }
+.rotaract-page[data-club-theme="night"] .rotaract-save-bar small { color: #afbdd2; }
+.rotaract-page[data-club-theme="night"] .rotaract-save-bar.has-warning { background: #302b27; border-color: #665740; }
+.rotaract-page[data-club-theme="night"] .rotaract-save-bar.has-warning strong { color: #f2d8aa; }
+
+.rotaract-page .attendance-heading { align-items: center; justify-content: center; text-align: center; }
+.rotaract-page .attendance-heading>div { width: 100%; }
+.rotaract-page .rotaract-add-person { justify-content: center; width: 100%; }
+.rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }
+.rotaract-page .calendar-title-actions { justify-content: center; width: 100%; }
+.rotaract-page .rotaract-event-preview, .rotaract-page .rotaract-empty-event, .rotaract-page .treasury-note { text-align: center; }
+.minutes-primary-action { justify-self: center; min-width: 160px; }
+
+.treasury-rates { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.treasury-rates article { display: grid; gap: 7px; padding: 18px; border: 1px solid #d2dae7; border-radius: 15px; background: #fff; text-align: center; }
+.treasury-rates span, .treasury-rates small { color: #68758e; font-size: .7rem; }
+.treasury-rates strong { color: #24395b; font-size: 1.15rem; }
+.treasury-period { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.treasury-period>div { display: grid; min-width: 190px; gap: 4px; text-align: center; text-transform: capitalize; }
+.treasury-period small { color: #68758e; }
+.treasury-period button { width: 42px; height: 42px; border: 1px solid #cbd5e4; border-radius: 50%; background: #fff; color: #1746b0; font-size: 1.5rem; cursor: pointer; }
+.treasury-person { display: grid; flex: 1; gap: 4px; min-width: 150px; }
+.treasury-members article select { min-height: 40px; padding: 8px; border: 1px solid #cbd5e4; border-radius: 9px; background: #fff; color: #24395b; }
+.treasury-members article button { min-height: 40px; padding: 8px 12px; border: 0; border-radius: 9px; color: #fff; font: inherit; font-size: .72rem; font-weight: 800; cursor: pointer; }
+.treasury-pay { background: #17845e; }
+.treasury-unpay { background: #68758e; }
+.treasury-members article.is-paid { border-left: 4px solid #1ca879; }
+.treasury-members article.is-pending { border-left: 4px solid #e9b852; }
+.rotaract-page[data-club-theme="night"] .treasury-rates article { background: #172133; border-color: #344058; }
+.rotaract-page[data-club-theme="night"] :is(.treasury-rates strong, .treasury-period strong) { color: #fff; }
+.rotaract-page[data-club-theme="night"] :is(.treasury-rates span, .treasury-rates small, .treasury-period small) { color: #afbdd2; }
+.rotaract-page[data-club-theme="night"] :is(.treasury-period button, .treasury-members article select) { background: #22314a; border-color: #465773; color: #fff; }
+
 @media (max-width: 700px) {
+  .rotaract-save-bar { align-items: stretch; flex-direction: column; margin-bottom: 18px; text-align: center; }
+  .rotaract-save-bar button { width: 100%; }
+  .treasury-rates { grid-template-columns: 1fr 1fr; }
+  .treasury-members article { align-items: stretch; }
+  .treasury-person { min-width: calc(100% - 52px); }
+  .treasury-members article select, .treasury-members article button { flex: 1 1 120px; }
   .rotaract-page .attendance-heading { align-items: center; text-align: center; }
   .rotaract-page .attendance-heading>div { width: 100%; }
   .rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }

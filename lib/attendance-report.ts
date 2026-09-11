@@ -31,7 +31,7 @@ export function createAttendanceReport(report: AttendanceReport, logo?: string) 
   function heading(continued = false) {
     pdf.setFillColor(accent);
     pdf.rect(0, 0, 210, 5, "F");
-    if (logo) pdf.addImage(logo, "PNG", 172, 15, 22, 22);
+    if (logo) pdf.addImage(logo, "PNG", report.club === "rotaract" ? 145 : 172, 15, report.club === "rotaract" ? 49 : 22, report.club === "rotaract" ? 17 : 22);
     text(report.title, 16, 22, 16, true);
     text(continued ? "Resumen de asistencia · continuación" : "Resumen de asistencia", 16, 31, 11);
     text(`Fecha de reunión: ${formattedDate}`, 16, 41, 10, true);
@@ -48,10 +48,6 @@ export function createAttendanceReport(report: AttendanceReport, logo?: string) 
   }
   function nextPage() { pdf.addPage(); heading(true); tableHeading(); }
   heading();
-  if (report.syncPending) {
-    text("Copia local: hay cambios pendientes de sincronización.", 16, y, 9, true, "#875012");
-    y += 9;
-  }
   if (!report.held) {
     text("No hubo reunión. Esta fecha no suma asistencias ni ausencias.", 16, y, 10);
   } else {

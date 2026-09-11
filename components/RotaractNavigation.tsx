@@ -7,7 +7,7 @@ export const rotaractSections = [
   { id: "fechas", label: "Fechas" },
   { id: "tesoreria", label: "Tesorería" },
   { id: "inicio", label: "Inicio" },
-  { id: "asistencias", label: "Asistencias" },
+  { id: "asistencias", label: "Reuniones" },
   { id: "varios", label: "Varios" },
 ] as const;
 
