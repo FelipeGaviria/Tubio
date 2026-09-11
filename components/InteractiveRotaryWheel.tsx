@@ -61,10 +61,10 @@ export function InteractiveRotaryWheel() {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
       oscillator.type = "square";
-      const duration = kind === "tac" ? .045 : .012;
-      oscillator.frequency.setValueAtTime(kind === "tac" ? 250 : 1550, context.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(kind === "tac" ? 120 : 1050, context.currentTime + duration);
-      gain.gain.setValueAtTime(kind === "tac" ? .03 : .012, context.currentTime);
+      const duration = kind === "tac" ? .009 : .018;
+      oscillator.frequency.setValueAtTime(kind === "tac" ? 1050 : 720, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(kind === "tac" ? 680 : 440, context.currentTime + duration);
+      gain.gain.setValueAtTime(kind === "tac" ? .018 : .015, context.currentTime);
       gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
       oscillator.connect(gain).connect(context.destination);
       oscillator.start();
