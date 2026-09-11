@@ -63,34 +63,19 @@ export function InteractiveRotaryWheel() {
       const context = audioContext.current ?? new Context();
       audioContext.current = context;
       const play = () => {
-        const duration = kind === "tac" ? .011 : .026;
+        const duration = kind === "tac" ? .012 : .038;
         const oscillator = context.createOscillator();
         const gain = context.createGain();
-        const noise = context.createBufferSource();
-        const noiseGain = context.createGain();
-        const filter = context.createBiquadFilter();
         oscillator.type = "square";
         const isTap = kind === "tac";
         const isReturn = kind === "return";
-        oscillator.frequency.setValueAtTime(isTap ? 1180 : isReturn ? 520 : 610, context.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(isTap ? 760 : isReturn ? 350 : 410, context.currentTime + duration);
-        gain.gain.setValueAtTime(isTap ? .022 : .018, context.currentTime);
+        oscillator.frequency.setValueAtTime(isTap ? 1260 : isReturn ? 720 : 820, context.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(isTap ? 900 : isReturn ? 520 : 590, context.currentTime + duration);
+        gain.gain.setValueAtTime(isTap ? .025 : .022, context.currentTime);
         gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
-        const buffer = context.createBuffer(1, Math.max(1, Math.floor(context.sampleRate * duration)), context.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let index = 0; index < data.length; index += 1) data[index] = Math.random() * 2 - 1;
-        noise.buffer = buffer;
-        filter.type = "bandpass";
-        filter.frequency.value = isTap ? 2200 : 1500;
-        filter.Q.value = 1.5;
-        noiseGain.gain.setValueAtTime(isTap ? .018 : .012, context.currentTime);
-        noiseGain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
         oscillator.connect(gain).connect(context.destination);
-        noise.connect(filter).connect(noiseGain).connect(context.destination);
         oscillator.start();
-        noise.start();
         oscillator.stop(context.currentTime + duration + .002);
-        noise.stop(context.currentTime + duration + .002);
       };
       if (context.state === "suspended") void context.resume().then(play).catch(() => undefined); else play();
     } catch { /* El fidget sigue funcionando si el navegador bloquea audio. */ }
