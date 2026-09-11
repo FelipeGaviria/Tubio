@@ -57,18 +57,20 @@ export function InteractiveRotaryWheel() {
       if (!Context) return;
       const context = audioContext.current ?? new Context();
       audioContext.current = context;
-      if (context.state === "suspended") void context.resume();
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = "square";
-      const duration = kind === "tac" ? .009 : .018;
-      oscillator.frequency.setValueAtTime(kind === "tac" ? 1050 : 720, context.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(kind === "tac" ? 680 : 440, context.currentTime + duration);
-      gain.gain.setValueAtTime(kind === "tac" ? .018 : .015, context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
-      oscillator.connect(gain).connect(context.destination);
-      oscillator.start();
-      oscillator.stop(context.currentTime + duration + .002);
+      const play = () => {
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        oscillator.type = "square";
+        const duration = kind === "tac" ? .009 : .018;
+        oscillator.frequency.setValueAtTime(kind === "tac" ? 1050 : 720, context.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(kind === "tac" ? 680 : 440, context.currentTime + duration);
+        gain.gain.setValueAtTime(kind === "tac" ? .035 : .027, context.currentTime);
+        gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
+        oscillator.connect(gain).connect(context.destination);
+        oscillator.start();
+        oscillator.stop(context.currentTime + duration + .002);
+      };
+      if (context.state === "suspended") void context.resume().then(play).catch(() => undefined); else play();
     } catch { /* El fidget sigue funcionando si el navegador bloquea audio. */ }
   }
 
