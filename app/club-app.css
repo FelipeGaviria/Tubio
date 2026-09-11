@@ -159,8 +159,8 @@ html:has(.rotaract-page[data-club-theme="night"]), body:has(.rotaract-page[data-
 .rotaract-navigation .home-hold-progress { position: absolute; width: 38px; height: 38px; inset: -6px; fill: none; stroke: currentColor; stroke-width: 2; transform: rotate(-90deg); opacity: 0; pointer-events: none; }
 .home-hold-progress circle { stroke-dasharray: 100; stroke-dashoffset: 100; }
 .is-holding .home-hold-progress { opacity: 1; }
-.is-holding .home-hold-progress circle { animation: rotaract-hold-fill 2s linear forwards; }
-.is-holding .home-wheel-wrap>.rotary-wheel { animation: rotaract-hold-spin 2s cubic-bezier(.35,0,.35,1) forwards; }
+.is-holding .home-hold-progress circle { animation: rotaract-hold-fill 1.5s linear forwards; }
+.is-holding .home-wheel-wrap>.rotary-wheel { animation: rotaract-hold-spin 1.5s cubic-bezier(.35,0,.35,1) forwards; }
 .hold-complete .home-wheel-wrap>.rotary-wheel { animation: rotaract-wheel-finish .7s cubic-bezier(.16,1,.3,1) both; }
 .is-editing .home-wheel-wrap::after { content: ''; position: absolute; width: 6px; height: 6px; right: -3px; top: -2px; border-radius: 50%; background: #1ca879; }
 @keyframes rotaract-hold-fill { to { stroke-dashoffset: 0; } }
@@ -200,7 +200,7 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .meeting-document-actions .meeting-minutes, .meeting-document-actions .club-report-action { margin: 0; }
 .meeting-document-actions .club-report-action { flex-wrap: nowrap; justify-content: flex-end; }
 .meeting-document-actions .club-report-action small { display: none; }
-.meeting-document-actions .meeting-minutes:has(.minutes-editor) { grid-column: 1 / -1; }
+.meeting-document-actions .meeting-minutes.is-open { grid-column: 1 / -1; }
 .meeting-document-actions .minutes-toggle, .meeting-document-actions .club-report-action button { min-height: 46px; }
 .rotaract-misc { width: min(760px, 100%); margin: 28px auto 0; }
 .rotaract-misc details { overflow: hidden; border: 1px solid #d2dae7; border-radius: 18px; background: #fff; box-shadow: 0 14px 38px rgba(23,70,176,.08); }
@@ -215,11 +215,11 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 
 .rotaract-sync-dot { width: 18px; min-width: 18px; height: 18px; padding: 0; border: 0; background: transparent; }
 .rotaract-sync-dot span { width: 9px; height: 9px; margin: 0; }
-.rotaract-save-bar { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: min(880px, 100%); margin: 0 auto 22px; padding: 14px 16px; border: 1px solid #cdd8e9; border-radius: 15px; background: #fff; box-shadow: 0 10px 28px rgba(23,70,176,.07); }
+.rotaract-save-bar { position: fixed; z-index: 80; right: 22px; bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 12px; width: min(390px, calc(100vw - 44px)); margin: 0; padding: 10px 12px; border: 1px solid #cdd8e9; border-radius: 13px; background: #fff; box-shadow: 0 12px 38px rgba(23,70,176,.16); }
 .rotaract-save-bar>div { display: grid; gap: 3px; }
 .rotaract-save-bar strong { color: #24395b; font-size: .86rem; }
 .rotaract-save-bar small { color: #68758e; font-size: .74rem; line-height: 1.4; }
-.rotaract-save-bar button { min-height: 42px; flex: 0 0 auto; padding: 10px 16px; border: 0; border-radius: 10px; background: #1746b0; color: #fff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; }
+.rotaract-save-bar button { min-height: 36px; flex: 0 0 auto; padding: 8px 13px; border: 0; border-radius: 9px; background: #1746b0; color: #fff; font: inherit; font-size: .72rem; font-weight: 800; cursor: pointer; }
 .rotaract-save-bar button:disabled { opacity: .48; cursor: default; }
 .rotaract-save-bar.has-warning { border-color: #e9b852; background: #fff9e9; }
 .rotaract-save-bar.has-warning strong { color: #875012; }
@@ -229,9 +229,12 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .rotaract-page[data-club-theme="night"] .rotaract-save-bar.has-warning { background: #302b27; border-color: #665740; }
 .rotaract-page[data-club-theme="night"] .rotaract-save-bar.has-warning strong { color: #f2d8aa; }
 
-.rotaract-page .attendance-heading { align-items: center; justify-content: center; text-align: center; }
-.rotaract-page .attendance-heading>div { width: 100%; }
-.rotaract-page .rotaract-add-person { justify-content: center; width: 100%; }
+.rotaract-page .attendance-heading { align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+.rotaract-page .attendance-heading>div { width: 100%; text-align: center; }
+.rotaract-page .attendance-heading h1 { width: 100%; text-align: center; }
+.rotaract-page .rotaract-add-person { display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; width: 100%; }
+.rotaract-page .rotaract-add-person input { flex: 1 1 250px; width: min(360px, 100%); }
+.rotaract-page .rotaract-add-person .applicant-add { flex: 0 0 auto; }
 .rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }
 .rotaract-page .calendar-title-actions { justify-content: center; width: 100%; }
 .rotaract-page .rotaract-event-preview, .rotaract-page .rotaract-empty-event, .rotaract-page .treasury-note { text-align: center; }
@@ -246,24 +249,31 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .treasury-period small { color: #68758e; }
 .treasury-period button { width: 42px; height: 42px; border: 1px solid #cbd5e4; border-radius: 50%; background: #fff; color: #1746b0; font-size: 1.5rem; cursor: pointer; }
 .treasury-person { display: grid; flex: 1; gap: 4px; min-width: 150px; }
+.treasury-actions { display: flex; align-items: center; gap: 8px; }
+.treasury-debt { display: flex; align-items: center; gap: 6px; }
+.treasury-debt button { display: grid; width: 27px; min-height: 27px !important; padding: 0 !important; place-items: center; border: 1px solid #cbd5e4 !important; border-radius: 50% !important; background: transparent !important; color: #1746b0 !important; font-size: .9rem !important; }
 .treasury-members article select { min-height: 40px; padding: 8px; border: 1px solid #cbd5e4; border-radius: 9px; background: #fff; color: #24395b; }
 .treasury-members article button { min-height: 40px; padding: 8px 12px; border: 0; border-radius: 9px; color: #fff; font: inherit; font-size: .72rem; font-weight: 800; cursor: pointer; }
 .treasury-pay { background: #17845e; }
 .treasury-unpay { background: #68758e; }
-.treasury-members article.is-paid { border-left: 4px solid #1ca879; }
-.treasury-members article.is-pending { border-left: 4px solid #e9b852; }
 .rotaract-page[data-club-theme="night"] .treasury-rates article { background: #172133; border-color: #344058; }
 .rotaract-page[data-club-theme="night"] :is(.treasury-rates strong, .treasury-period strong) { color: #fff; }
 .rotaract-page[data-club-theme="night"] :is(.treasury-rates span, .treasury-rates small, .treasury-period small) { color: #afbdd2; }
 .rotaract-page[data-club-theme="night"] :is(.treasury-period button, .treasury-members article select) { background: #22314a; border-color: #465773; color: #fff; }
 
 @media (max-width: 700px) {
-  .rotaract-save-bar { align-items: stretch; flex-direction: column; margin-bottom: 18px; text-align: center; }
-  .rotaract-save-bar button { width: 100%; }
+  .rotaract-save-bar { right: 10px; bottom: calc(82px + env(safe-area-inset-bottom, 0px)); align-items: center; width: min(350px, calc(100vw - 20px)); text-align: left; }
+  .rotaract-save-bar button { width: auto; }
   .treasury-rates { grid-template-columns: 1fr 1fr; }
-  .treasury-members article { align-items: stretch; }
-  .treasury-person { min-width: calc(100% - 52px); }
-  .treasury-members article select, .treasury-members article button { flex: 1 1 120px; }
+  .treasury-members article { display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; width: 100%; }
+  .treasury-person { min-width: 0; }
+  .treasury-actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+  .treasury-members article select, .treasury-members article .treasury-actions>button { width: 100%; min-width: 0; }
+  .rotaract-page .rotaract-add-person { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px; }
+  .rotaract-page .rotaract-add-person input { width: 100%; }
+  .rotaract-page .rotaract-add-person button { min-width: 44px; }
+  .meeting-document-actions .meeting-minutes.is-open { width: 100%; min-width: 0; }
+  .minutes-editor { min-width: 0; padding: 14px; }
   .rotaract-page .attendance-heading { align-items: center; text-align: center; }
   .rotaract-page .attendance-heading>div { width: 100%; }
   .rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }

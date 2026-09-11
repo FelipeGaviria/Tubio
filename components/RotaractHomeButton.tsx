@@ -31,14 +31,14 @@ export function RotaractHomeButton({ active, unlocked, onNavigate, onEdit }: { a
       setCompleted(true);
       callback.current();
       completedTimer.current = setTimeout(() => setCompleted(false), 700);
-    }, 2000);
+    }, 1500);
   }
   function navigate() {
     if (fired.current) { fired.current = false; return; }
     onNavigate();
     window.location.hash = "inicio";
   }
-  return <button type="button" className={`rotaract-home-button ${holding ? "is-holding" : ""} ${completed ? "hold-complete" : ""} ${unlocked ? "is-editing" : ""}`} aria-current={active ? "page" : undefined} aria-label={`Inicio. Mantén pulsado 2 segundos para ${unlocked ? "cerrar" : "desbloquear"} edición`} title={`Mantén 2 segundos para ${unlocked ? "cerrar" : "desbloquear"} edición`}
+  return <button type="button" className={`rotaract-home-button ${holding ? "is-holding" : ""} ${completed ? "hold-complete" : ""} ${unlocked ? "is-editing" : ""}`} aria-current={active ? "page" : undefined} aria-label={`Inicio. Mantén pulsado un momento para ${unlocked ? "cerrar" : "desbloquear"} edición`} title={`Mantén un momento para ${unlocked ? "cerrar" : "desbloquear"} edición`}
     onPointerDown={(event) => { if (!event.isPrimary || event.button !== 0) return; origin.current = { x: event.clientX, y: event.clientY }; start(); }}
     onPointerMove={(event) => { if (origin.current && Math.hypot(event.clientX - origin.current.x, event.clientY - origin.current.y) > 12) cancel(); }}
     onPointerUp={cancel} onPointerCancel={cancel} onPointerLeave={cancel} onBlur={cancel}
