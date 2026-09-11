@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { AttendanceReport } from "@/lib/attendance-report";
 
-export function AttendanceReportButton({ report }: { report: AttendanceReport }) {
+export function AttendanceReportButton({ report, disabled = false }: { report: AttendanceReport; disabled?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
   async function download() {
@@ -31,7 +31,7 @@ export function AttendanceReportButton({ report }: { report: AttendanceReport })
     finally { setBusy(false); }
   }
   return <div className="club-report-action">
-    <button type="button" onClick={() => void download()} disabled={busy}>
+    <button type="button" onClick={() => void download()} disabled={busy || disabled}>
       <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7Z"/><path d="M17 11h.01"/></svg>
       {busy ? "Generando PDF…" : report.club === "rotaract" ? "Generar PDF" : "Imprimir resumen"}
     </button>

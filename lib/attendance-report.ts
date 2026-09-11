@@ -8,7 +8,7 @@ export type AttendanceReport = {
   held: boolean;
   syncPending: boolean;
   people: { name: string; role: string; mark?: string }[];
-  minutes?: { title: string; notes: string; points: string[]; responsibilities: string[] };
+  minutes?: { title: string; agenda?: { title: string; details: string }[]; notes?: string; points?: string[]; responsibilities: string[] };
 };
 
 const labels: Record<string, string> = {
@@ -95,8 +95,13 @@ export function createAttendanceReport(report: AttendanceReport, logo?: string) 
       y += 4;
     }
     paragraph(report.minutes.title || "Acta de reunión", true);
+    const agenda = report.minutes.agenda ?? (report.minutes.points ?? []).map((title) => ({ title, details: "" }));
+    const titles = agenda.map((item) => item.title.trim()).filter(Boolean);
+    if (titles.length) { paragraph("Orden del día", true); titles.forEach((item, index) => paragraph(`${index + 1}. ${item}`)); }
+    const developed = agenda.filter((item) => item.title.trim() && item.details.trim());
+    if (developed.length) { paragraph("Desarrollo", true); developed.forEach((item, index) => paragraph(`${index + 1}. ${item.title}: ${item.details}`)); }
     if (report.minutes.notes) paragraph(report.minutes.notes);
-    for (const [title, entries] of [["Puntos", report.minutes.points], ["Responsabilidades", report.minutes.responsibilities]] as const) {
+    for (const [title, entries] of [["Responsabilidades", report.minutes.responsibilities]] as const) {
       const filled = entries.filter((entry) => entry.trim());
       if (filled.length) {
         paragraph(title, true);

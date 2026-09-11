@@ -1,4 +1,5 @@
-export type Minutes = { title: string; notes: string; points: string[]; responsibilities: string[] };
+export type AgendaItem = { id: string; title: string; details: string };
+export type Minutes = { title: string; agenda: AgendaItem[]; responsibilities: string[]; notes?: string; points?: string[] };
 export type MinutesDrafts = Record<string, Minutes>;
 
 // Keep unsent minutes separate from the last shared snapshot, including after reload.

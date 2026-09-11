@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-import type { Minutes } from "@/lib/rotaract-minutes";
+import type { AgendaItem, Minutes } from "@/lib/rotaract-minutes";
 export type { Minutes } from "@/lib/rotaract-minutes";
 
 export function MeetingMinutes({ value, editable, dirty, saving, onChange, onRequestEdit, onSave }: { value?: Minutes; editable: boolean; dirty: boolean; saving: boolean; onChange: (value: Minutes) => void; onRequestEdit: () => void; onSave: () => void }) {
@@ -14,7 +14,8 @@ export function MeetingMinutes({ value, editable, dirty, saving, onChange, onReq
     document.addEventListener("keydown", close);
     return () => document.removeEventListener("keydown", close);
   }, [open]);
-  const minutes = value ?? { title: "", notes: "", points: [], responsibilities: [] };
+  const minutes = value ?? { title: "", agenda: [], responsibilities: [] };
+  const agenda = minutes.agenda ?? (minutes.points ?? []).map((title, index) => ({ id: `legacy-${index}`, title, details: "" }));
   const update = (patch: Partial<Minutes>) => onChange({ ...minutes, title: minutes.title || "Acta de reunión", ...patch });
   const editor = <div className="minutes-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false); }}>
     <section className="minutes-modal" role="dialog" aria-modal="true" aria-labelledby="minutes-title">
@@ -23,13 +24,17 @@ export function MeetingMinutes({ value, editable, dirty, saving, onChange, onReq
         <p>{editable ? "Escribe el acta y guarda los cambios cuando termines." : "Desbloquea la edición para crearla o modificarla."}</p>
         {!editable && <button type="button" className="minutes-primary-action" onClick={onRequestEdit}>{value ? "Editar acta" : "Crear acta"}</button>}
         <label>Título<input disabled={!editable} value={minutes.title} placeholder="Acta de reunión" onChange={(event) => update({ title: event.target.value })}/></label>
-        <label>Notas de la reunión<textarea rows={4} disabled={!editable} value={minutes.notes} placeholder="¿Qué conversamos y qué acordamos?" onChange={(event) => update({ notes: event.target.value })}/></label>
-        {([ ["points", "Puntos", "punto"], ["responsibilities", "Responsabilidades", "responsabilidad"] ] as const).map(([field, label, singular]) => <fieldset key={field}>
-          <legend>{label}</legend>
-          {minutes[field].map((entry, index) => <div className="minutes-entry" key={index}><label>{singular === "punto" ? "Punto" : "Responsabilidad"} {index + 1}<textarea rows={3} disabled={!editable} value={entry} placeholder={field === "points" ? "Describe el tema y las decisiones…" : "Escribe la tarea, quién se encarga y para cuándo…"} onChange={(event) => update({ [field]: minutes[field].map((item, position) => position === index ? event.target.value : item) })}/></label>{editable && <button type="button" aria-label={`Eliminar ${singular} ${index + 1}`} onClick={() => update({ [field]: minutes[field].filter((_, position) => position !== index) })}>Eliminar</button>}</div>)}
-          {!minutes[field].length && <p className="minutes-empty">Todavía no hay {label.toLocaleLowerCase("es")}.</p>}
-          {editable && <button type="button" onClick={() => update({ [field]: [...minutes[field], ""] })}>+ Agregar {singular}</button>}
-        </fieldset>)}
+        <fieldset><legend>Orden del día</legend>
+          {agenda.map((item, index) => <div className="minutes-entry" key={item.id}><label>Item {index + 1}<input disabled={!editable} value={item.title} placeholder="Tema o nombre del punto" onChange={(event) => update({ agenda: agenda.map((entry) => entry.id === item.id ? { ...entry, title: event.target.value } : entry) })}/></label><label>Detalles<textarea rows={3} disabled={!editable} value={item.details} placeholder="Lo que se habló, decisiones o acuerdos…" onChange={(event) => update({ agenda: agenda.map((entry) => entry.id === item.id ? { ...entry, details: event.target.value } : entry) })}/></label>{editable && <button type="button" onClick={() => update({ agenda: agenda.filter((entry) => entry.id !== item.id) })}>Eliminar</button>}</div>)}
+          {!agenda.length && <p className="minutes-empty">Agrega los temas de la reunión.</p>}
+          {editable && <button type="button" onClick={() => update({ agenda: [...agenda, { id: crypto.randomUUID(), title: "", details: "" }] as AgendaItem[] })}>+ Agregar item</button>}
+        </fieldset>
+        <fieldset>
+          <legend>Responsabilidades</legend>
+          {minutes.responsibilities.map((entry, index) => <div className="minutes-entry" key={index}><label>Responsabilidad {index + 1}<textarea rows={3} disabled={!editable} value={entry} placeholder="Escribe la tarea, quién se encarga y para cuándo…" onChange={(event) => update({ responsibilities: minutes.responsibilities.map((item, position) => position === index ? event.target.value : item) })}/></label>{editable && <button type="button" aria-label={`Eliminar responsabilidad ${index + 1}`} onClick={() => update({ responsibilities: minutes.responsibilities.filter((_, position) => position !== index) })}>Eliminar</button>}</div>)}
+          {!minutes.responsibilities.length && <p className="minutes-empty">Todavía no hay responsabilidades.</p>}
+          {editable && <button type="button" onClick={() => update({ responsibilities: [...minutes.responsibilities, ""] })}>+ Agregar responsabilidad</button>}
+        </fieldset>
       </div>
       {editable && <footer><button type="button" disabled={!dirty || saving} onClick={onSave}>{saving ? "Guardando…" : "Guardar acta"}</button></footer>}
     </section>

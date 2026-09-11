@@ -31,6 +31,8 @@ const cycleMonths = (month: string) => {
 export function RotaractTreasury({ members, unlocked, value, onChange, onRequestEdit }: { members: TreasuryMember[]; unlocked: boolean; value: TreasuryData; onChange: (value: TreasuryData) => void; onRequestEdit: () => void }) {
   const [month, setMonth] = useState(currentMonth);
   const [visibleDebts, setVisibleDebts] = useState<Record<string, boolean>>({});
+  const [paymentInfoOpen, setPaymentInfoOpen] = useState(false);
+  const [copied, setCopied] = useState("");
   const socios = useMemo(() => members.filter((member) => !member.applicant && !member.retired).sort((a, b) => a.name.localeCompare(b.name, "es")), [members]);
   const monthLabel = new Intl.DateTimeFormat("es-CO", { month: "long", year: "numeric" }).format(new Date(`${month}-01T12:00:00`));
   const paid = socios.filter((member) => value.payments.some((payment) => payment.memberId === member.id && covers(payment, month)));
@@ -46,6 +48,7 @@ export function RotaractTreasury({ members, unlocked, value, onChange, onRequest
     const plan = value.plans[member.id] ?? "monthly";
     onChange({ ...value, payments: [...value.payments, { id: crypto.randomUUID(), memberId: member.id, plan, period: periodFor(plan, month), amount: planPrice(plan, month), paidAt: new Date().toISOString().slice(0, 10) }] });
   }
+  async function copy(value: string, label: string) { try { await navigator.clipboard.writeText(value); setCopied(label); window.setTimeout(() => setCopied(""), 1600); } catch { setCopied("No se pudo copiar"); } }
   return <section className="rotaract-treasury">
     <div className="treasury-rates">
       <article><span>Pronto pago</span><strong>{money.format(25000)}</strong><small>Antes del 16 de cada mes</small></article>
@@ -55,7 +58,9 @@ export function RotaractTreasury({ members, unlocked, value, onChange, onRequest
     </div>
     <div className="treasury-period"><button type="button" onClick={() => moveMonth(-1)} aria-label="Mes anterior">‹</button><div><small>{rotaryYear(month)}</small><strong>{monthLabel}</strong></div><button type="button" onClick={() => moveMonth(1)} aria-label="Mes siguiente">›</button></div>
     <div className="treasury-overview"><div><span>Al día este mes</span><strong>{paid.length}</strong></div><div><span>Pendientes este mes</span><strong>{socios.length - paid.length}</strong></div></div>
+    <button type="button" className="treasury-payment-info" onClick={() => setPaymentInfoOpen(true)}>Pagar</button>
     <p className="treasury-note">Los aspirantes no pagan cuota. Pago anticipado: primer semestre hasta el 30 de septiembre; segundo semestre hasta el 28 de febrero.</p>
     <details className="treasury-payments"><summary>Ver pagos <span>+</span></summary><div className="treasury-members"><h2>Socios del club</h2>{socios.map((member) => { const payment = value.payments.find((item) => item.memberId === member.id && covers(item, month)); const plan = value.plans[member.id] ?? "monthly"; const debt = debtFor(member); return <article key={member.id}><span className="treasury-avatar">{member.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}</span><div className="treasury-person"><strong>{member.name}</strong><small>{payment ? `Pagó ${money.format(payment.amount)} · ${payment.paidAt}` : "Pago pendiente"}</small>{unlocked && <span className="treasury-debt"><button type="button" onClick={() => setVisibleDebts((current) => ({ ...current, [member.id]: !current[member.id] }))} aria-label={visibleDebts[member.id] ? `Ocultar deuda de ${member.name}` : `Ver deuda de ${member.name}`}>{visibleDebts[member.id] ? "◉" : "◎"}</button><small>Deuda acumulada: {visibleDebts[member.id] ? money.format(debt) : "••••••"}</small></span>}</div><div className="treasury-actions">{unlocked && <select aria-label={`Plan de ${member.name}`} value={plan} onChange={(event) => onChange({ ...value, plans: { ...value.plans, [member.id]: event.target.value as TreasuryPlan } })}><option value="monthly">Mensual</option><option value="semester">Semestral</option><option value="annual">Anual</option></select>}<button type="button" className={payment ? "treasury-unpay" : "treasury-pay"} onClick={() => togglePayment(member)}>{payment ? "Desmarcar" : "Marcar pago"}</button></div></article>; })}{!socios.length && <p>Aún no hay socios activos. Puedes agregarlos desde Reuniones.</p>}</div></details>
+    {paymentInfoOpen && <div className="payment-info-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setPaymentInfoOpen(false)}><section className="payment-info-modal" role="dialog" aria-modal="true" aria-label="Datos para pagar"><button type="button" className="payment-close" onClick={() => setPaymentInfoOpen(false)} aria-label="Cerrar">×</button><h2>Datos para pagar</h2>{([ ["BANCOLOMBIA", "23013750785"], ["Nequi", "3046518891"], ["NU · Cuenta de ahorros", "21329881"], ["Nu Placa", "COR223"] ] as const).map(([label, number]) => <div className="payment-line" key={label}><span><strong>{label}</strong><small>{number}</small></span><button type="button" onClick={() => void copy(number, label)}>Copiar</button></div>)}{copied && <p role="status">{copied === "No se pudo copiar" ? copied : `${copied} copiado`}</p>}</section></div>}
   </section>;
 }
