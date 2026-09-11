@@ -111,6 +111,7 @@ export function RotaractApp() {
   const remoteStamp = useRef("");
   const accessPending = useRef(false);
   const dataRef = useRef<ClubData | null>(null);
+  const savedDataRef = useRef<ClubData | null>(null);
   const minutesDrafts = useRef<MinutesDrafts>({});
   const editorId = useRef("");
   const dirtyRef = useRef(false);
@@ -145,7 +146,7 @@ export function RotaractApp() {
         if (!active || !remote) return;
         const normalizedRemote = mergeMinutes(normalizeData(remote.data), minutesDrafts.current);
         if (dirtyRef.current && remoteStamp.current && remote.updated_at !== remoteStamp.current) setSaveConflict(true);
-        else if (!dirtyRef.current && remote.updated_at !== remoteStamp.current) { remoteStamp.current = remote.updated_at; setData(normalizedRemote); setSaveConflict(false); }
+        else if (!dirtyRef.current && remote.updated_at !== remoteStamp.current) { const remoteBase = normalizeData(remote.data); remoteStamp.current = remote.updated_at; savedDataRef.current = remoteBase; setData(normalizedRemote); setDirty(JSON.stringify(normalizedRemote) !== JSON.stringify(remoteBase)); setSaveConflict(false); }
         setCloudReady(true); setSyncStatus("saved");
       } catch { if (active) setSyncStatus("error"); }
     }
@@ -169,8 +170,12 @@ export function RotaractApp() {
 
   function mutateData(update: (current: ClubData) => ClubData) {
     if (!unlocked) return;
-    setData((current) => current ? update(current) : current);
-    setDirty(true); setSaveConflict(false);
+    const current = dataRef.current;
+    if (!current) return;
+    const next = update(current);
+    dataRef.current = next;
+    setData(next);
+    setDirty(JSON.stringify(next) !== JSON.stringify(savedDataRef.current)); setSaveConflict(false);
   }
 
   async function saveChanges() {
@@ -183,6 +188,7 @@ export function RotaractApp() {
       const saved = await response.json() as { data?: ClubData; updated_at?: string };
       if (!saved.data || !saved.updated_at) throw new Error();
       remoteStamp.current = saved.updated_at;
+      savedDataRef.current = normalizeData(saved.data);
       minutesDrafts.current = remainingMinutes(minutesDrafts.current, saved.data);
       localStorage.setItem(MINUTES_DRAFTS_KEY, JSON.stringify(minutesDrafts.current));
       setDirty(false); setSaveConflict(false); setSyncStatus("saved");
@@ -241,13 +247,11 @@ export function RotaractApp() {
       {section === "asistencias" && <aside className="attendance-sidebar"><div className="sidebar-app-title"><span><Icon name="people"/></span><div><strong>Rotaract</strong><small>Nuevo Medellín</small></div></div><p className="sidebar-caption">Reuniones quincenales</p><div className="session-list">{[...meetings].filter((item) => item.date <= today() || !item.held || Object.keys(item.marks).length > 0).reverse().slice(0, 8).map((item) => <button className={item.date === date ? "active" : ""} key={item.date} onClick={() => go(item.date)}><span><Icon name="calendar"/></span><div><strong>{pretty(item.date, true)}</strong><small>{item.held ? "Reunión del club" : "No hubo reunión"}</small></div></button>)}</div></aside>}
       <section className="attendance-workspace" aria-label={rotaractSections.find((item) => item.id === section)?.label}>
         {unlocked && (dirty || otherEditor || saveConflict) && <div className={`rotaract-save-bar ${otherEditor || saveConflict ? "has-warning" : ""}`} role="status"><div>{saveConflict ? <><strong>Hay una versión más reciente</strong><small>Otro dispositivo guardó primero. Recarga antes de continuar.</small></> : otherEditor ? <><strong>Ya hay alguien editando</strong><small>Guarda para evitar sobreescribir información.</small></> : <><strong>Cambios sin guardar</strong><small>Guárdalos cuando termines.</small></>}</div>{dirty && <button type="button" disabled={syncStatus === "saving" || saveConflict} onClick={() => void saveChanges()}>{syncStatus === "saving" ? "Guardando…" : "Guardar"}</button>}</div>}
-        <div className="attendance-heading"><div><h1>{section === "fechas" ? "Fechas del club" : section === "asistencias" ? "Reuniones" : section === "tesoreria" ? "Tesorería" : section === "varios" ? "Varios" : "Rotaract Nuevo Medellín"}</h1>{(section === "fechas" || section === "asistencias") && <span>{section === "fechas" ? "Calendario, actividades y próximas reuniones." : "Socios, aspirantes y asistencia por reunión."}</span>}</div>{unlocked && section === "asistencias" && <form className="add-person rotaract-add-person" onSubmit={addMember}><input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nombre del socio o aspirante"/><label className={`applicant-add ${newApplicant ? "checked" : ""}`}><input type="checkbox" checked={newApplicant} onChange={(event) => setNewApplicant(event.target.checked)}/><span>✓</span> Es aspirante</label><button><Icon name="plus"/> Agregar persona</button></form>}</div>
+        <div className="attendance-heading"><div><h1>{section === "fechas" ? "Fechas del club" : section === "asistencias" ? "Reuniones" : section === "tesoreria" ? "Tesorería" : section === "varios" ? "Varios" : "Rotaract Nuevo Medellín"}</h1>{(section === "fechas" || section === "asistencias") && <span>{section === "fechas" ? "Calendario, actividades y próximas reuniones." : "Socios, aspirantes y asistencia por reunión."}</span>}</div>{unlocked && section === "asistencias" && <form className="add-person rotaract-add-person" onSubmit={addMember}><input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nombre del socio o aspirante"/><label className={`applicant-add ${newApplicant ? "checked" : ""}`}><input type="checkbox" checked={newApplicant} onChange={(event) => setNewApplicant(event.target.checked)}/><span>✓</span> Aspirante</label><button><Icon name="plus"/> Agregar</button></form>}</div>
 
         {section === "fechas" && <section className={`rotaract-calendar ${unlocked && calendarEditorOpen ? "is-editing" : ""}`}>
-          <div className="rotaract-section-title">
-            <div><p>Lo que viene</p><h2>Próximas fechas del club</h2></div>
+          <div className="rotaract-section-title calendar-only-actions">
             <div className="calendar-title-actions">
-              <span>{upcoming.length} programadas</span>
               <button className="calendar-view-toggle" type="button" aria-expanded={monthCalendarOpen} onClick={() => setMonthCalendarOpen((current) => !current)}><Icon name="calendar"/>{monthCalendarOpen ? "Cerrar calendario" : "Ver mes completo"}</button>
               <button className="calendar-lock-toggle calendar-add-event" type="button" disabled={!unlocked} aria-expanded={calendarEditorOpen} title={unlocked ? "Agregar una fecha" : "Mantén presionada la rueda de Inicio para editar"} onClick={() => { setCalendarEditorOpen(!calendarEditorOpen); setEditingEventId(null); setEventDraft({ title: "", date: selectedCalendarDate, time: "", place: "", note: "" }); }}><Icon name="plus"/>{calendarEditorOpen ? "Cerrar formulario" : "Agregar fecha"}</button>
             </div>

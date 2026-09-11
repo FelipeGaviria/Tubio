@@ -242,6 +242,18 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .rotaract-page .calendar-title-actions { justify-content: center; width: 100%; }
 .rotaract-page .rotaract-event-preview, .rotaract-page .rotaract-empty-event, .rotaract-page .treasury-note { text-align: center; }
 .minutes-primary-action { justify-self: center; min-width: 160px; }
+.minutes-modal-backdrop { position: fixed; z-index: 300; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(8,14,32,.66); backdrop-filter: blur(5px); }
+.minutes-modal { display: flex; width: min(680px, 100%); max-height: calc(100dvh - 40px); flex-direction: column; overflow: hidden; border: 1px solid #d2dae7; border-radius: 20px; background: #fff; color: #24395b; box-shadow: 0 24px 90px rgba(0,0,0,.28); }
+.minutes-modal>header { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; padding: 15px 18px; border-bottom: 1px solid #d2dae7; }
+.minutes-modal>header strong { font-size: .95rem; }
+.minutes-modal>header button { display: grid; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 50%; background: #edf2ff; color: #1746b0; font-size: 1.35rem; cursor: pointer; }
+.minutes-modal .minutes-editor { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.minutes-modal .minutes-editor button { min-height: 44px; padding: 10px 14px; border: 1px solid #d2dae7; border-radius: 10px; background: #edf2ff; color: #1746b0; font: inherit; cursor: pointer; }
+body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal { border-color: #344058; background: #172133; color: #edf1fa; }
+body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal :is(input, textarea, button) { border-color: #465773; background: #22314a; color: #fff; }
+.rotaract-save-bar>div { flex: 1; justify-items: center; text-align: center; }
+.rotaract-save-bar { text-align: center; }
+.calendar-only-actions { display: flex; justify-content: center; }
 
 .treasury-rates { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .treasury-rates article { display: grid; gap: 7px; padding: 18px; border: 1px solid #d2dae7; border-radius: 15px; background: #fff; text-align: center; }
@@ -289,10 +301,10 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
   .rotaract-page .rotaract-add-person { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px; }
   .rotaract-page .rotaract-add-person input { width: 100%; }
   .rotaract-page .rotaract-add-person button { min-width: 44px; }
-  .meeting-document-actions .meeting-minutes.is-open { position: fixed; z-index: 180; inset: max(8px, env(safe-area-inset-top, 0px)) 8px calc(78px + env(safe-area-inset-bottom, 0px)); display: flex; width: auto; min-width: 0; flex-direction: column; border-radius: 18px; box-shadow: 0 20px 70px rgba(8,14,32,.35); overflow: hidden; }
-  .meeting-minutes.is-open .minutes-toggle { position: sticky; z-index: 2; top: 0; flex: 0 0 auto; border-bottom: 1px solid #d2dae7; }
-  .meeting-minutes.is-open .minutes-editor { display: grid !important; min-width: 0; padding: 16px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-  .meeting-minutes.is-open .minutes-editor label, .meeting-minutes.is-open .minutes-editor fieldset, .meeting-minutes.is-open .minutes-entry { display: grid !important; visibility: visible !important; min-width: 0; }
+  .minutes-modal-backdrop { align-items: stretch; padding: max(8px, env(safe-area-inset-top, 0px)) 8px calc(8px + env(safe-area-inset-bottom, 0px)); }
+  .minutes-modal { width: 100%; max-height: 100%; border-radius: 18px; }
+  .minutes-modal .minutes-editor { display: grid !important; min-width: 0; padding: 16px; }
+  .minutes-modal .minutes-editor label, .minutes-modal .minutes-editor fieldset, .minutes-modal .minutes-entry { display: grid !important; visibility: visible !important; min-width: 0; }
   .rotaract-page .attendance-heading { align-items: center; text-align: center; }
   .rotaract-page .attendance-heading>div { width: 100%; }
   .rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }
@@ -303,7 +315,7 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
   .meeting-document-actions .club-report-action { align-items: stretch; justify-content: flex-end; flex-direction: row; }
   .meeting-document-actions .club-report-action button { height: 100%; padding-inline: 13px; white-space: nowrap; }
   .meeting-document-actions .minutes-toggle { height: 100%; }
-  .rotaract-misc summary { justify-content: center; padding: 18px; text-align: center; }
+  .rotaract-misc summary { justify-content: space-between; padding: 18px; text-align: left; }
   .rotaract-misc details p { padding: 0 18px 22px; font-size: .87rem; line-height: 1.75; }
   .rotaract-navigation { --nav-position: 2; isolation: isolate; overflow: hidden; background: rgba(255,255,255,.76); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); }
   .rotaract-navigation::before { content: ''; position: absolute; z-index: 0; top: 7px; bottom: calc(7px + env(safe-area-inset-bottom, 0px)); left: calc(var(--nav-position) * 20% + 6px); width: calc(20% - 12px); border: 1px solid rgba(255,255,255,.72); border-radius: 15px; background: linear-gradient(145deg,rgba(255,255,255,.92),rgba(244,190,216,.48)); box-shadow: 0 8px 24px rgba(130,31,81,.15), inset 0 1px 0 rgba(255,255,255,.92); transition: left .5s cubic-bezier(.2,.85,.2,1), width .5s cubic-bezier(.2,.85,.2,1); }
