@@ -25,17 +25,17 @@ function setup() {
 }
 const down = { isPrimary: true, button: 0, clientX: 20, clientY: 20 };
 test('a short tap navigates without requesting the code', () => {
-  const s = setup(); s.props.onPointerDown(down); s.advance(500); s.props.onPointerUp(); s.props.onClick(); s.advance(4000);
+  const s = setup(); s.props.onPointerDown(down); s.advance(500); s.props.onPointerUp(); s.props.onClick(); s.advance(2000);
   assert.deepEqual(s.counts(), { edits: 0, navigations: 1 });
 });
-test('holding requires 4000ms and suppresses the subsequent navigation click', () => {
-  const s = setup(); s.props.onPointerDown(down); s.advance(3999); assert.equal(s.counts().edits, 0);
+test('holding requires 2000ms and suppresses the subsequent navigation click', () => {
+  const s = setup(); s.props.onPointerDown(down); s.advance(1999); assert.equal(s.counts().edits, 0);
   s.advance(1); assert.equal(s.counts().edits, 1); s.props.onPointerUp(); s.props.onClick();
   assert.deepEqual(s.counts(), { edits: 1, navigations: 0 });
 });
 test('movement, cancellation, leaving, blur and unmount cancel the timer', () => {
   for (const cancel of ['onPointerCancel', 'onPointerLeave', 'onBlur', 'move', 'unmount']) {
-    const s = setup(); s.props.onPointerDown(down); s.advance(2000);
+    const s = setup(); s.props.onPointerDown(down); s.advance(1000);
     if (cancel === 'move') s.props.onPointerMove({ clientX: 60, clientY: 20 });
     else if (cancel === 'unmount') s.cleanup();
     else s.props[cancel]();
@@ -44,6 +44,6 @@ test('movement, cancellation, leaving, blur and unmount cancel the timer', () =>
 });
 test('keyboard holds support the same duration without auto-repeat restarting it', () => {
   const s = setup(); const key = { key: ' ', repeat: false, preventDefault() {} };
-  s.props.onKeyDown(key); s.advance(2000); s.props.onKeyDown({ ...key, repeat: true }); s.advance(2000); s.props.onKeyUp(key);
+  s.props.onKeyDown(key); s.advance(1000); s.props.onKeyDown({ ...key, repeat: true }); s.advance(1000); s.props.onKeyUp(key);
   assert.deepEqual(s.counts(), { edits: 1, navigations: 0 });
 });

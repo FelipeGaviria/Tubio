@@ -1,7 +1,7 @@
 .club-app-controls { display: flex; align-items: center; gap: 6px; }
 .club-logo-refresh { padding: 0; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; }
 .club-logo-refresh:focus-visible { outline: 3px solid #839ad2; outline-offset: 4px; border-radius: 8px; }
-.attendance-page .autosave.saved { display: none; }
+.attendance-page .autosave.saved { color: #428264; }
 .rotaract-navigation { display: flex; justify-content: center; gap: 8px; padding: 14px 20px; border-bottom: 1px solid #e1e6ef; background: #fff; }
 .rotaract-navigation a { display: flex; align-items: center; justify-content: center; gap: 9px; min-width: 130px; min-height: 46px; padding: 10px 18px; border-radius: 12px; color: #68758e; font-size: .8rem; font-weight: 750; text-decoration: none; }
 .rotaract-navigation a:hover { background: #f5f6fc; }
@@ -147,8 +147,8 @@ html:has(.rotaract-page[data-club-theme="night"]), body:has(.rotaract-page[data-
 .rotaract-navigation .home-hold-progress { position: absolute; width: 38px; height: 38px; inset: -6px; fill: none; stroke: currentColor; stroke-width: 2; transform: rotate(-90deg); opacity: 0; pointer-events: none; }
 .home-hold-progress circle { stroke-dasharray: 100; stroke-dashoffset: 100; }
 .is-holding .home-hold-progress { opacity: 1; }
-.is-holding .home-hold-progress circle { animation: rotaract-hold-fill 4s linear forwards; }
-.is-holding .home-wheel-wrap>.rotary-wheel { animation: rotaract-hold-spin 4s cubic-bezier(.35,0,.35,1) forwards; }
+.is-holding .home-hold-progress circle { animation: rotaract-hold-fill 2s linear forwards; }
+.is-holding .home-wheel-wrap>.rotary-wheel { animation: rotaract-hold-spin 2s cubic-bezier(.35,0,.35,1) forwards; }
 .hold-complete .home-wheel-wrap>.rotary-wheel { animation: rotaract-wheel-finish .7s cubic-bezier(.16,1,.3,1) both; }
 .is-editing .home-wheel-wrap::after { content: ''; position: absolute; width: 6px; height: 6px; right: -3px; top: -2px; border-radius: 50%; background: #1ca879; }
 @keyframes rotaract-hold-fill { to { stroke-dashoffset: 0; } }
@@ -182,4 +182,47 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 }
 @media (prefers-reduced-motion: reduce) {
   .rotaract-splash .rotary-wheel, .is-holding .home-wheel-wrap>.rotary-wheel, .hold-complete .home-wheel-wrap>.rotary-wheel { animation: none; }
+}
+
+.meeting-document-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 10px; margin: 16px 0; }
+.meeting-document-actions .meeting-minutes, .meeting-document-actions .club-report-action { margin: 0; }
+.meeting-document-actions .club-report-action { flex-wrap: nowrap; justify-content: flex-end; }
+.meeting-document-actions .club-report-action small { display: none; }
+.meeting-document-actions .meeting-minutes:has(.minutes-editor) { grid-column: 1 / -1; }
+.meeting-document-actions .minutes-toggle, .meeting-document-actions .club-report-action button { min-height: 46px; }
+.rotaract-misc { width: min(760px, 100%); margin: 28px auto 0; }
+.rotaract-misc details { overflow: hidden; border: 1px solid #d2dae7; border-radius: 18px; background: #fff; box-shadow: 0 14px 38px rgba(23,70,176,.08); }
+.rotaract-misc summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 22px; color: #20345d; font-weight: 800; cursor: pointer; list-style: none; }
+.rotaract-misc summary::-webkit-details-marker { display: none; }
+.rotaract-misc summary span { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #fceaf2; color: #bb135b; font-size: 1.2rem; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.rotaract-misc details[open] summary span { transform: rotate(45deg); }
+.rotaract-misc details p { margin: 0; padding: 0 22px 24px; color: #59677e; font-size: .93rem; line-height: 1.85; text-align: center; }
+.rotaract-page[data-club-theme="night"] .rotaract-misc details { background: #172133; border-color: #344058; box-shadow: none; }
+.rotaract-page[data-club-theme="night"] .rotaract-misc summary { color: #edf1fa; }
+.rotaract-page[data-club-theme="night"] .rotaract-misc details p { color: #c2cde0; }
+
+@media (max-width: 700px) {
+  .rotaract-page .attendance-heading { align-items: center; text-align: center; }
+  .rotaract-page .attendance-heading>div { width: 100%; }
+  .rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }
+  .rotaract-page .calendar-title-actions { justify-content: center; width: 100%; }
+  .rotaract-page .calendar-title-actions>span { text-align: center; }
+  .rotaract-page .rotaract-event-preview, .rotaract-page .rotaract-empty-event, .rotaract-page .treasury-note { text-align: center; }
+  .meeting-document-actions { grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; }
+  .meeting-document-actions .club-report-action { align-items: stretch; justify-content: flex-end; flex-direction: row; }
+  .meeting-document-actions .club-report-action button { height: 100%; padding-inline: 13px; white-space: nowrap; }
+  .meeting-document-actions .minutes-toggle { height: 100%; }
+  .rotaract-misc summary { justify-content: center; padding: 18px; text-align: center; }
+  .rotaract-misc details p { padding: 0 18px 22px; font-size: .87rem; line-height: 1.75; }
+  .rotaract-navigation { --nav-position: 2; isolation: isolate; overflow: hidden; background: rgba(255,255,255,.76); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); }
+  .rotaract-navigation::before { content: ''; position: absolute; z-index: 0; top: 7px; bottom: calc(7px + env(safe-area-inset-bottom, 0px)); left: calc(var(--nav-position) * 20% + 6px); width: calc(20% - 12px); border: 1px solid rgba(255,255,255,.72); border-radius: 15px; background: linear-gradient(145deg,rgba(255,255,255,.92),rgba(244,190,216,.48)); box-shadow: 0 8px 24px rgba(130,31,81,.15), inset 0 1px 0 rgba(255,255,255,.92); transition: left .5s cubic-bezier(.2,.85,.2,1), width .5s cubic-bezier(.2,.85,.2,1); }
+  .rotaract-navigation[data-active-section="fechas"] { --nav-position: 0; }
+  .rotaract-navigation[data-active-section="tesoreria"] { --nav-position: 1; }
+  .rotaract-navigation[data-active-section="inicio"] { --nav-position: 2; }
+  .rotaract-navigation[data-active-section="asistencias"] { --nav-position: 3; }
+  .rotaract-navigation[data-active-section="varios"] { --nav-position: 4; }
+  .rotaract-navigation>a, .rotaract-navigation>.rotaract-home-button { position: relative; z-index: 1; }
+  .rotaract-navigation a[aria-current="page"], .rotaract-navigation .rotaract-home-button[aria-current="page"] { background: transparent; }
+  .rotaract-page[data-club-theme="night"] .rotaract-navigation { background: rgba(23,33,51,.78); }
+  .rotaract-page[data-club-theme="night"] .rotaract-navigation::before { border-color: rgba(255,255,255,.12); background: linear-gradient(145deg,rgba(255,255,255,.16),rgba(212,19,103,.3)); box-shadow: 0 8px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18); }
 }
