@@ -73,12 +73,14 @@
 
 .rotaract-home .interactive-wheel-face .rotary-wheel { width: 100%; height: 100%; max-height: none; }
 
-.interactive-rotary-wheel { width: min(280px, 70%); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; outline: none; }
+.interactive-rotary-wheel { width: min(340px, 70%); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; outline: none; }
 .interactive-rotary-wheel.is-dragging { cursor: grabbing; }
 .interactive-wheel-face { display: grid; width: 100%; height: 100%; place-items: center; transform-origin: center; will-change: transform; }
 .interactive-wheel-face .rotary-wheel { width: 100%; height: 100%; max-height: none; pointer-events: none; }
 .interactive-rotary-wheel.is-dragging .interactive-wheel-face { filter: drop-shadow(0 12px 20px rgba(212,19,103,.18)); }
 .interactive-rotary-wheel.is-returning .interactive-wheel-face { transition: transform 1s cubic-bezier(.22,1,.36,1); }
+.interactive-rotary-wheel.is-tapped { animation: wheel-tap .26s cubic-bezier(.22,1.5,.4,1); }
+@keyframes wheel-tap { 0% { transform: scale(1); } 45% { transform: scale(.925); } 100% { transform: scale(1); } }
 .interactive-rotary-wheel:focus-visible { outline: 3px solid #839ad2; outline-offset: 8px; }
 @media (max-width: 700px) { .rotaract-home .interactive-rotary-wheel { width: min(240px, 60%); max-height: 90%; } }
 @media (prefers-reduced-motion: reduce) { .interactive-rotary-wheel.is-returning .interactive-wheel-face { transition-duration: .15s; } }
@@ -138,6 +140,7 @@ html:has(.rotaract-page[data-club-theme="night"]), body:has(.rotaract-page[data-
 .treasury-overview span { display: block; color: #68758e; font-size: .8rem; }
 .treasury-overview strong { display: block; margin-top: 10px; font-size: clamp(1.4rem, 4vw, 2rem); }
 .treasury-overview small { font-size: .65rem; }
+.treasury-overview>div { display: grid; place-items: center; text-align: center; }
 .treasury-note, .treasury-members p { margin: 0; color: #68758e; line-height: 1.6; font-size: .85rem; }
 .treasury-open { justify-self: start; min-height: 44px; padding: 12px 18px; border: 0; border-radius: 10px; background: #1746b0; color: #fff; cursor: pointer; }
 .treasury-members h2 { margin-bottom: 8px; font: 750 1.1rem var(--font-inter); text-transform: none; }
@@ -278,7 +281,7 @@ body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal :is(input, text
 .home-upcoming article span { overflow: hidden; font-size: .75rem; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .home-upcoming button { padding: 9px 12px; border: 0; border-radius: 9px; background: #1746b0; color: #fff; font: inherit; font-size: .7rem; font-weight: 800; cursor: pointer; }
 .rotaract-page[data-club-theme="night"] .home-upcoming { border-color: #344058; background: #172133; color: #fff; }
-.home-rotafriends { display: block; width: min(640px, 100%); height: auto; margin-top: 14px; border-radius: 22px 22px 0 0; object-fit: contain; filter: drop-shadow(0 18px 30px rgba(28,47,90,.13)); }
+.home-rotafriends { display: block; width: min(780px, 100%); height: auto; margin-top: 14px; border-radius: 22px 22px 0 0; object-fit: contain; filter: drop-shadow(0 18px 30px rgba(28,47,90,.13)); }
 
 .treasury-rates { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .treasury-rates article { display: grid; gap: 7px; padding: 18px; border: 1px solid #d2dae7; border-radius: 15px; background: #fff; text-align: center; }
@@ -304,6 +307,7 @@ body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal :is(input, text
 .treasury-unpay { background: #68758e; }
 .treasury-payment-info { display: grid; min-width: 74px; min-height: 100%; padding: 9px 14px; place-items: center; align-content: center; gap: 2px; border: 0; border-radius: 14px; background: linear-gradient(145deg,#1746b0,#3269d3); box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 10px 22px rgba(23,70,176,.19); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
 .treasury-payment-info span { display: grid; width: 25px; height: 25px; place-items: center; border: 1px solid rgba(255,255,255,.56); border-radius: 50%; font-weight: 900; }
+.treasury-payment-info svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
 .treasury-payment-info small { color: inherit; font-size: .66rem; }
 .payment-info-backdrop { position: fixed; z-index: 350; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(8,14,32,.66); backdrop-filter: blur(5px); }
 .payment-info-modal { position: relative; display: grid; gap: 12px; width: min(410px, 100%); padding: 28px; border-radius: 20px; background: #fff; color: #24395b; box-shadow: 0 24px 90px rgba(0,0,0,.3); }
@@ -384,4 +388,14 @@ body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal :is(input, text
   .rotaract-navigation a[aria-current="page"], .rotaract-navigation .rotaract-home-button[aria-current="page"] { background: transparent; }
   .rotaract-page[data-club-theme="night"] .rotaract-navigation { background: rgba(23,33,51,.78); }
   .rotaract-page[data-club-theme="night"] .rotaract-navigation::before { border-color: rgba(255,255,255,.12); background: linear-gradient(145deg,rgba(255,255,255,.16),rgba(212,19,103,.3)); box-shadow: 0 8px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18); }
+}
+
+@media (max-width: 700px) {
+  .rotaract-page .rotaract-section-layout[data-section="inicio"] { overflow: hidden; }
+  .rotaract-page .rotaract-section-layout[data-section="inicio"] .attendance-workspace { display: flex; min-height: 0; flex-direction: column; padding: 14px 14px 0; overflow: hidden; }
+  .rotaract-page .rotaract-section-layout[data-section="inicio"] .attendance-heading { flex: 0 0 auto; }
+  .rotaract-page .rotaract-section-layout[data-section="inicio"] .rotaract-home { display: grid; flex: 1 1 auto; width: 100%; min-height: 0; height: auto; grid-template-rows: minmax(0, 1fr) auto minmax(0, .82fr); align-content: stretch; gap: 12px; padding: 8px 0 0; overflow: hidden; }
+  .rotaract-home .interactive-rotary-wheel { width: min(280px, 72vw); max-height: none; align-self: center; }
+  .rotaract-home .home-upcoming { align-self: center; }
+  .rotaract-home .home-rotafriends { width: 100%; max-width: 680px; align-self: end; justify-self: center; margin: 0; border-radius: 18px 18px 0 0; }
 }
