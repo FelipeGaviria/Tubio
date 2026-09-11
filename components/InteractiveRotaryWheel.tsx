@@ -25,17 +25,21 @@ export function InteractiveRotaryWheel() {
   const returnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const returnSounds = useRef<ReturnType<typeof setTimeout>[]>([]);
   const audioContext = useRef<AudioContext | null>(null);
 
   useEffect(() => () => {
     if (returnTimer.current) clearTimeout(returnTimer.current);
     if (settleTimer.current) clearTimeout(settleTimer.current);
     if (tapTimer.current) clearTimeout(tapTimer.current);
+    returnSounds.current.forEach(clearTimeout);
   }, []);
 
   function clearTimers() {
     if (returnTimer.current) clearTimeout(returnTimer.current);
     if (settleTimer.current) clearTimeout(settleTimer.current);
+    returnSounds.current.forEach(clearTimeout);
+    returnSounds.current = [];
     returnTimer.current = null;
     settleTimer.current = null;
   }
@@ -46,11 +50,12 @@ export function InteractiveRotaryWheel() {
       setReturning(true);
       rawRotation.current = 0;
       setRotation(0);
+      returnSounds.current = [0, 170, 335, 500, 665].map((delay) => setTimeout(() => tick("return"), delay));
       settleTimer.current = setTimeout(() => setReturning(false), 1100);
     }, RETURN_DELAY);
   }
 
-  function tick(kind: "tick" | "tac" = "tick") {
+  function tick(kind: "tick" | "tac" | "return" = "tick") {
     if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(kind === "tac" ? 10 : 5);
     try {
       const Context = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -58,17 +63,34 @@ export function InteractiveRotaryWheel() {
       const context = audioContext.current ?? new Context();
       audioContext.current = context;
       const play = () => {
+        const duration = kind === "tac" ? .011 : .026;
         const oscillator = context.createOscillator();
         const gain = context.createGain();
+        const noise = context.createBufferSource();
+        const noiseGain = context.createGain();
+        const filter = context.createBiquadFilter();
         oscillator.type = "square";
-        const duration = kind === "tac" ? .009 : .018;
-        oscillator.frequency.setValueAtTime(kind === "tac" ? 1050 : 720, context.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(kind === "tac" ? 680 : 440, context.currentTime + duration);
-        gain.gain.setValueAtTime(kind === "tac" ? .035 : .027, context.currentTime);
+        const isTap = kind === "tac";
+        const isReturn = kind === "return";
+        oscillator.frequency.setValueAtTime(isTap ? 1180 : isReturn ? 520 : 610, context.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(isTap ? 760 : isReturn ? 350 : 410, context.currentTime + duration);
+        gain.gain.setValueAtTime(isTap ? .022 : .018, context.currentTime);
         gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
+        const buffer = context.createBuffer(1, Math.max(1, Math.floor(context.sampleRate * duration)), context.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let index = 0; index < data.length; index += 1) data[index] = Math.random() * 2 - 1;
+        noise.buffer = buffer;
+        filter.type = "bandpass";
+        filter.frequency.value = isTap ? 2200 : 1500;
+        filter.Q.value = 1.5;
+        noiseGain.gain.setValueAtTime(isTap ? .018 : .012, context.currentTime);
+        noiseGain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
         oscillator.connect(gain).connect(context.destination);
+        noise.connect(filter).connect(noiseGain).connect(context.destination);
         oscillator.start();
+        noise.start();
         oscillator.stop(context.currentTime + duration + .002);
+        noise.stop(context.currentTime + duration + .002);
       };
       if (context.state === "suspended") void context.resume().then(play).catch(() => undefined); else play();
     } catch { /* El fidget sigue funcionando si el navegador bloquea audio. */ }

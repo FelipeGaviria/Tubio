@@ -334,6 +334,9 @@ body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal :is(input, text
 .rotaract-page[data-club-theme="night"] .treasury-payments>summary { color: #fff; }
 
 @media (min-width: 701px) {
+  .rotaract-page { padding-bottom: 78px; }
+  .rotaract-page .rotaract-navigation { position: fixed; z-index: 180; right: 0; bottom: 0; left: 0; justify-content: center; border-top: 1px solid rgba(208,218,234,.8); border-bottom: 0; background: rgba(255,255,255,.78); box-shadow: 0 -12px 35px rgba(26,57,117,.09), inset 0 1px 0 rgba(255,255,255,.92); backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%); }
+  .rotaract-page[data-club-theme="night"] .rotaract-navigation { background: rgba(23,33,51,.82); border-color: rgba(80,98,130,.68); box-shadow: 0 -12px 35px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.08); }
   .rotaract-page .rotaract-section-layout[data-section="inicio"] { overflow: hidden; }
   .rotaract-page .attendance-heading { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; place-items: center !important; width: 100% !important; }
   .rotaract-page .attendance-heading>div, .rotaract-page .attendance-heading h1, .rotaract-page .attendance-heading>div>span { width: 100% !important; margin-inline: auto !important; text-align: center !important; }
