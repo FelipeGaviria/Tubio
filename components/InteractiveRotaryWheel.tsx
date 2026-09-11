@@ -50,8 +50,8 @@ export function InteractiveRotaryWheel() {
     }, RETURN_DELAY);
   }
 
-  function tick() {
-    if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(7);
+  function tick(kind: "tick" | "tac" = "tick") {
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(kind === "tac" ? 10 : 5);
     try {
       const Context = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!Context) return;
@@ -61,13 +61,14 @@ export function InteractiveRotaryWheel() {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
       oscillator.type = "square";
-      oscillator.frequency.setValueAtTime(1250, context.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(760, context.currentTime + .018);
-      gain.gain.setValueAtTime(.018, context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + .018);
+      const duration = kind === "tac" ? .045 : .012;
+      oscillator.frequency.setValueAtTime(kind === "tac" ? 250 : 1550, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(kind === "tac" ? 120 : 1050, context.currentTime + duration);
+      gain.gain.setValueAtTime(kind === "tac" ? .03 : .012, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
       oscillator.connect(gain).connect(context.destination);
       oscillator.start();
-      oscillator.stop(context.currentTime + .02);
+      oscillator.stop(context.currentTime + duration + .002);
     } catch { /* El fidget sigue funcionando si el navegador bloquea audio. */ }
   }
 
@@ -75,7 +76,7 @@ export function InteractiveRotaryWheel() {
     if (!event.isPrimary || event.button !== 0) return;
     clearTimers();
     setReturning(false);
-    tick();
+    tick("tac");
     setTapped(true);
     if (tapTimer.current) clearTimeout(tapTimer.current);
     tapTimer.current = setTimeout(() => setTapped(false), 260);

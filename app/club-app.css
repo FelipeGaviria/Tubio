@@ -397,5 +397,5 @@ body:has(.rotaract-page[data-club-theme="night"]) .minutes-modal :is(input, text
   .rotaract-page .rotaract-section-layout[data-section="inicio"] .rotaract-home { display: grid; flex: 1 1 auto; width: 100%; min-height: 0; height: auto; grid-template-rows: minmax(0, 1fr) auto minmax(0, .82fr); align-content: stretch; gap: 12px; padding: 8px 0 0; overflow: hidden; }
   .rotaract-home .interactive-rotary-wheel { width: min(280px, 72vw); max-height: none; align-self: center; }
   .rotaract-home .home-upcoming { align-self: center; }
-  .rotaract-home .home-rotafriends { width: 100%; max-width: 680px; align-self: end; justify-self: center; margin: 0; border-radius: 18px 18px 0 0; }
+  .rotaract-home .home-rotafriends { width: 100%; max-width: 680px; align-self: start; justify-self: center; margin: -42px 0 0; border-radius: 18px 18px 0 0; }
 }
