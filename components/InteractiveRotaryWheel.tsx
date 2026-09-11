@@ -23,6 +23,7 @@ export function InteractiveRotaryWheel() {
   const rawRotation = useRef(0);
   const returnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const audioContext = useRef<AudioContext | null>(null);
 
   useEffect(() => () => {
     if (returnTimer.current) clearTimeout(returnTimer.current);
@@ -46,6 +47,26 @@ export function InteractiveRotaryWheel() {
     }, RETURN_DELAY);
   }
 
+  function tick() {
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(7);
+    try {
+      const Context = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!Context) return;
+      const context = audioContext.current ?? new Context();
+      audioContext.current = context;
+      if (context.state === "suspended") void context.resume();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(860, context.currentTime);
+      gain.gain.setValueAtTime(.025, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + .025);
+      oscillator.connect(gain).connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + .028);
+    } catch { /* El fidget sigue funcionando si el navegador bloquea audio. */ }
+  }
+
   function begin(event: PointerEvent<HTMLDivElement>) {
     if (!event.isPrimary || event.button !== 0) return;
     clearTimers();
@@ -61,7 +82,9 @@ export function InteractiveRotaryWheel() {
     const angle = pointerAngle(event.currentTarget, event.clientX, event.clientY);
     rawRotation.current += shortestTurn(lastAngle.current, angle);
     lastAngle.current = angle;
-    setRotation(Math.round(rawRotation.current / STEP) * STEP);
+    const next = Math.round(rawRotation.current / STEP) * STEP;
+    if (next !== rotation) tick();
+    setRotation(next);
   }
 
   function end(event: PointerEvent<HTMLDivElement>) {
@@ -78,6 +101,7 @@ export function InteractiveRotaryWheel() {
     setReturning(false);
     const next = rotation + (event.key === "ArrowRight" ? STEP : -STEP);
     rawRotation.current = next;
+    tick();
     setRotation(next);
     scheduleReturn();
   }
