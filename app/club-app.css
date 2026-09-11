@@ -138,3 +138,48 @@ html:has(.rotaract-page[data-club-theme="night"]), body:has(.rotaract-page[data-
 .rotaract-page[data-club-theme="night"] :is(.treasury-overview span, .treasury-note, .treasury-members p, .treasury-members article small) { color: #afbdd2; }
 .rotaract-page[data-club-theme="night"] .treasury-members article { border-color: #344058; }
 @media (max-width: 400px) { .treasury-overview>div, .treasury-members { padding: 15px; } .treasury-members article { flex-wrap: wrap; } .treasury-members article small { margin-left: 48px; } }
+.rotaract-navigation .rotaract-home-button { display: flex; align-items: center; justify-content: center; gap: 9px; min-width: 130px; min-height: 46px; padding: 10px 18px; border: 0; border-radius: 12px; background: transparent; color: #68758e; font: inherit; font-size: .8rem; font-weight: 750; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; }
+.rotaract-navigation .rotaract-home-button[aria-current="page"] { background: #fceaf2; color: #bb135b; }
+.rotaract-navigation .rotaract-home-button:focus-visible { outline: 3px solid #839ad2; outline-offset: 2px; }
+.rotaract-page[data-club-theme="night"] .rotaract-home-button { color: #bbc7db; }
+.rotaract-page[data-club-theme="night"] .rotaract-home-button[aria-current="page"] { background: #42253b; color: #ffbad8; }
+.home-wheel-wrap { position: relative; display: grid; place-items: center; width: 26px; height: 26px; }
+.rotaract-navigation .home-hold-progress { position: absolute; width: 38px; height: 38px; inset: -6px; fill: none; stroke: currentColor; stroke-width: 2; transform: rotate(-90deg); opacity: 0; pointer-events: none; }
+.home-hold-progress circle { stroke-dasharray: 100; stroke-dashoffset: 100; }
+.is-holding .home-hold-progress { opacity: 1; }
+.is-holding .home-hold-progress circle { animation: rotaract-hold-fill 4s linear forwards; }
+.is-holding .home-wheel-wrap>.rotary-wheel { animation: rotaract-hold-spin 4s cubic-bezier(.35,0,.35,1) forwards; }
+.hold-complete .home-wheel-wrap>.rotary-wheel { animation: rotaract-wheel-finish .7s cubic-bezier(.16,1,.3,1) both; }
+.is-editing .home-wheel-wrap::after { content: ''; position: absolute; width: 6px; height: 6px; right: -3px; top: -2px; border-radius: 50%; background: #1ca879; }
+@keyframes rotaract-hold-fill { to { stroke-dashoffset: 0; } }
+@keyframes rotaract-hold-spin { to { transform: rotate(720deg); } }
+@keyframes rotaract-wheel-finish { from { transform: rotate(0) scale(1.18); } to { transform: rotate(360deg) scale(1); } }
+.rotaract-unlock-dialog { justify-items: center; text-align: center; padding: 32px 28px; gap: 18px; max-height: calc(100dvh - 40px); overflow-y: auto; }
+.rotaract-unlock-dialog h2 { padding: 0; margin: 0; font-weight: 750; }
+.rotaract-unlock-dialog label { width: 100%; text-align: center; }
+.rotaract-unlock-dialog input { text-align: center; }
+.rotaract-unlock-dialog>button[type="submit"] { width: 100%; }
+.rotaract-unlock-dialog .unlock-wheel { display: grid; place-items: center; margin-bottom: 4px; }
+.rotaract-unlock-dialog .unlock-wheel .rotary-wheel { width: 48px; height: 48px; }
+.rotaract-splash { position: fixed; z-index: 500; inset: 0; display: grid; place-items: center; background: #f6f7fc; animation: rotaract-intro-exit .3s ease 1.5s forwards; }
+.rotaract-page[data-club-theme="night"] .rotaract-splash { background: #0d1421; }
+.rotaract-splash .rotary-wheel { width: 64px; height: 64px; animation: rotaract-intro-spin 1.6s cubic-bezier(.45,0,.18,1) both; }
+@keyframes rotaract-intro-spin { from { transform: rotate(0) scale(.85); } to { transform: rotate(1080deg) scale(1); } }
+@keyframes rotaract-intro-exit { to { opacity: 0; visibility: hidden; } }
+body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidden; }
+@media (max-width: 700px) {
+  html:has(.rotaract-page), body:has(.rotaract-page) { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  .rotaract-page[data-club] { display: flex; flex-direction: column; height: 100dvh; min-height: 0; padding-bottom: 0; overflow: hidden; }
+  .rotaract-page .attendance-topbar { flex: 0 0 auto; }
+  .rotaract-page .rotaract-section-layout { display: block; flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: none; -webkit-overflow-scrolling: touch; }
+  .rotaract-page .attendance-workspace { min-height: 0; padding: 24px 14px; overflow: visible; }
+  .rotaract-page .rotaract-navigation { position: relative; inset: auto; order: 3; flex: 0 0 auto; }
+  .rotaract-navigation .rotaract-home-button { min-width: 0; min-height: 56px; flex-direction: column; gap: 5px; padding: 7px 2px; font-size: .63rem; }
+  .rotaract-home { min-height: 0; height: clamp(160px, 44dvh, 360px); }
+  .rotaract-home .rotary-wheel { width: min(240px, 60%); max-height: 90%; }
+  .rotaract-empty-section { min-height: 0; }
+  .rotaract-home-button, .rotaract-home-button * { touch-action: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rotaract-splash .rotary-wheel, .is-holding .home-wheel-wrap>.rotary-wheel, .hold-complete .home-wheel-wrap>.rotary-wheel { animation: none; }
+}
