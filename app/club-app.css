@@ -202,7 +202,7 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .meeting-document-actions .club-report-action small { display: none; }
 .meeting-document-actions .meeting-minutes.is-open { grid-column: 1 / -1; }
 .meeting-document-actions .minutes-toggle, .meeting-document-actions .club-report-action button { min-height: 46px; }
-.rotaract-misc { width: min(760px, 100%); margin: 28px auto 0; }
+.rotaract-misc { display: grid; gap: 14px; width: min(760px, 100%); margin: 28px auto 0; }
 .rotaract-misc details { overflow: hidden; border: 1px solid #d2dae7; border-radius: 18px; background: #fff; box-shadow: 0 14px 38px rgba(23,70,176,.08); }
 .rotaract-misc summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 22px; color: #20345d; font-weight: 800; cursor: pointer; list-style: none; }
 .rotaract-misc summary::-webkit-details-marker { display: none; }
@@ -212,6 +212,9 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .rotaract-page[data-club-theme="night"] .rotaract-misc details { background: #172133; border-color: #344058; box-shadow: none; }
 .rotaract-page[data-club-theme="night"] .rotaract-misc summary { color: #edf1fa; }
 .rotaract-page[data-club-theme="night"] .rotaract-misc details p { color: #c2cde0; }
+.rotaract-slides { display: grid; justify-items: center; gap: 12px; padding: 0 22px 24px; }
+.rotaract-slides p { padding: 0 !important; }
+.rotaract-slides a { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; padding: 10px 18px; border-radius: 10px; background: #1746b0; color: #fff; font-size: .8rem; font-weight: 800; text-decoration: none; }
 
 .rotaract-sync-dot { width: 18px; min-width: 18px; height: 18px; padding: 0; border: 0; background: transparent; }
 .rotaract-sync-dot span { width: 9px; height: 9px; margin: 0; }
@@ -249,6 +252,12 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .treasury-period small { color: #68758e; }
 .treasury-period button { width: 42px; height: 42px; border: 1px solid #cbd5e4; border-radius: 50%; background: #fff; color: #1746b0; font-size: 1.5rem; cursor: pointer; }
 .treasury-person { display: grid; flex: 1; gap: 4px; min-width: 150px; }
+.treasury-payments { overflow: hidden; border: 1px solid #d2dae7; border-radius: 16px; background: #fff; }
+.treasury-payments>summary { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; color: #24395b; font-weight: 800; cursor: pointer; list-style: none; }
+.treasury-payments>summary::-webkit-details-marker { display: none; }
+.treasury-payments>summary span { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: #fceaf2; color: #bb135b; transition: transform .25s ease; }
+.treasury-payments[open]>summary span { transform: rotate(45deg); }
+.treasury-payments .treasury-members { border: 0; border-top: 1px solid #e1e6ef; border-radius: 0; }
 .treasury-actions { display: flex; align-items: center; gap: 8px; }
 .treasury-debt { display: flex; align-items: center; gap: 6px; }
 .treasury-debt button { display: grid; width: 27px; min-height: 27px !important; padding: 0 !important; place-items: center; border: 1px solid #cbd5e4 !important; border-radius: 50% !important; background: transparent !important; color: #1746b0 !important; font-size: .9rem !important; }
@@ -260,6 +269,14 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
 .rotaract-page[data-club-theme="night"] :is(.treasury-rates strong, .treasury-period strong) { color: #fff; }
 .rotaract-page[data-club-theme="night"] :is(.treasury-rates span, .treasury-rates small, .treasury-period small) { color: #afbdd2; }
 .rotaract-page[data-club-theme="night"] :is(.treasury-period button, .treasury-members article select) { background: #22314a; border-color: #465773; color: #fff; }
+.rotaract-page[data-club-theme="night"] .treasury-payments { background: #172133; border-color: #344058; }
+.rotaract-page[data-club-theme="night"] .treasury-payments>summary { color: #fff; }
+
+@media (min-width: 701px) {
+  .rotaract-page .attendance-heading { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; place-items: center !important; width: 100% !important; }
+  .rotaract-page .attendance-heading>div, .rotaract-page .attendance-heading h1, .rotaract-page .attendance-heading>div>span { width: 100% !important; margin-inline: auto !important; text-align: center !important; }
+  .rotaract-page .rotaract-add-person { margin-inline: auto; }
+}
 
 @media (max-width: 700px) {
   .rotaract-save-bar { right: 10px; bottom: calc(82px + env(safe-area-inset-bottom, 0px)); align-items: center; width: min(350px, calc(100vw - 20px)); text-align: left; }
@@ -272,8 +289,10 @@ body:has(.rotaract-splash), body:has(.rotaract-unlock-backdrop) { overflow: hidd
   .rotaract-page .rotaract-add-person { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px; }
   .rotaract-page .rotaract-add-person input { width: 100%; }
   .rotaract-page .rotaract-add-person button { min-width: 44px; }
-  .meeting-document-actions .meeting-minutes.is-open { width: 100%; min-width: 0; }
-  .minutes-editor { min-width: 0; padding: 14px; }
+  .meeting-document-actions .meeting-minutes.is-open { position: fixed; z-index: 180; inset: max(8px, env(safe-area-inset-top, 0px)) 8px calc(78px + env(safe-area-inset-bottom, 0px)); display: flex; width: auto; min-width: 0; flex-direction: column; border-radius: 18px; box-shadow: 0 20px 70px rgba(8,14,32,.35); overflow: hidden; }
+  .meeting-minutes.is-open .minutes-toggle { position: sticky; z-index: 2; top: 0; flex: 0 0 auto; border-bottom: 1px solid #d2dae7; }
+  .meeting-minutes.is-open .minutes-editor { display: grid !important; min-width: 0; padding: 16px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .meeting-minutes.is-open .minutes-editor label, .meeting-minutes.is-open .minutes-editor fieldset, .meeting-minutes.is-open .minutes-entry { display: grid !important; visibility: visible !important; min-width: 0; }
   .rotaract-page .attendance-heading { align-items: center; text-align: center; }
   .rotaract-page .attendance-heading>div { width: 100%; }
   .rotaract-page .rotaract-section-title { justify-items: center; text-align: center; }
