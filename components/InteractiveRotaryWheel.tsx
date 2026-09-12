@@ -63,7 +63,7 @@ export function InteractiveRotaryWheel() {
       const context = audioContext.current ?? new Context();
       audioContext.current = context;
       const play = () => {
-        const duration = kind === "tac" ? .012 : .038;
+        const duration = kind === "tac" ? .018 : .052;
         const oscillator = context.createOscillator();
         const gain = context.createGain();
         oscillator.type = "square";
@@ -71,13 +71,14 @@ export function InteractiveRotaryWheel() {
         const isReturn = kind === "return";
         oscillator.frequency.setValueAtTime(isTap ? 1260 : isReturn ? 720 : 820, context.currentTime);
         oscillator.frequency.exponentialRampToValueAtTime(isTap ? 900 : isReturn ? 520 : 590, context.currentTime + duration);
-        gain.gain.setValueAtTime(isTap ? .025 : .022, context.currentTime);
+        gain.gain.setValueAtTime(isTap ? .09 : .065, context.currentTime);
         gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
         oscillator.connect(gain).connect(context.destination);
         oscillator.start();
         oscillator.stop(context.currentTime + duration + .002);
       };
-      if (context.state === "suspended") void context.resume().then(play).catch(() => undefined); else play();
+      if (context.state === "suspended") void context.resume().catch(() => undefined);
+      play();
     } catch { /* El fidget sigue funcionando si el navegador bloquea audio. */ }
   }
 
