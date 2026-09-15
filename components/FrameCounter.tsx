@@ -4,6 +4,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const FPS_OPTIONS = [4, 6, 8, 12, 24, 30];
 
+function ToolIcon({ name }: { name: "add" | "previous" | "next" | "play" | "pause" | "close" }) {
+  const paths = {
+    add: <><path d="M12 5v14" /><path d="M5 12h14" /></>,
+    previous: <><path d="m14.5 6-6 6 6 6" /><path d="M9 12h9" /></>,
+    next: <><path d="m9.5 6 6 6-6 6" /><path d="M15 12H6" /></>,
+    play: <path d="m9 6 9 6-9 6Z" />,
+    pause: <><path d="M9 7v10" /><path d="M15 7v10" /></>,
+    close: <><path d="m7 7 10 10" /><path d="M17 7 7 17" /></>,
+  };
+  return <svg className="frame-tool-icon" aria-hidden="true" viewBox="0 0 24 24">{paths[name]}</svg>;
+}
+
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(maximum, Math.max(minimum, value));
 }
@@ -32,6 +44,7 @@ export function FrameCounter() {
   const [inFrame, setInFrame] = useState<number | null>(null);
   const [outFrame, setOutFrame] = useState<number | null>(null);
   const [jumpValue, setJumpValue] = useState("0");
+  const [fileError, setFileError] = useState("");
 
   const totalFrames = Math.max(0, Math.floor(duration * sourceFps));
   const currentFrame = clamp(Math.round(currentTime * sourceFps), 0, totalFrames);
@@ -54,7 +67,10 @@ export function FrameCounter() {
   }, [currentFrame, seekFrame]);
 
   const loadFile = useCallback((file?: File) => {
-    if (!file || !file.type.startsWith("video/")) return;
+    if (!file || file.size === 0) {
+      setFileError("No pudimos leer ese archivo. Intenta seleccionarlo de nuevo.");
+      return;
+    }
     const nextUrl = URL.createObjectURL(file);
     setVideoUrl((previous) => {
       if (previous) URL.revokeObjectURL(previous);
@@ -67,6 +83,7 @@ export function FrameCounter() {
     setInFrame(null);
     setOutFrame(null);
     setJumpValue("0");
+    setFileError("");
   }, []);
 
   useEffect(() => () => {
@@ -126,6 +143,20 @@ export function FrameCounter() {
     if (video.paused) await video.play(); else video.pause();
   };
 
+  const removeVideo = () => {
+    videoRef.current?.pause();
+    setVideoUrl("");
+    setFileName("");
+    setDuration(0);
+    setCurrentTime(0);
+    setPlaying(false);
+    setInFrame(null);
+    setOutFrame(null);
+    setJumpValue("0");
+    setFileError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   return <section className="frame-tool-shell">
     <header className="frame-tool-intro">
       <div><span>TuBio Lab / audiovisual</span><h1>Contador<br />de frames.</h1></div>
@@ -134,8 +165,9 @@ export function FrameCounter() {
 
     <div className="frame-tool-workbench">
       <div className={`frame-viewer ${dragging ? "is-dragging" : ""}`} onDragEnter={(event) => { event.preventDefault(); setDragging(true); }} onDragOver={(event) => event.preventDefault()} onDragLeave={(event) => { if (event.currentTarget === event.target) setDragging(false); }} onDrop={(event) => { event.preventDefault(); setDragging(false); loadFile(event.dataTransfer.files[0]); }}>
-        {videoUrl ? <video ref={videoRef} src={videoUrl} playsInline preload="metadata" onLoadedMetadata={(event) => { setDuration(event.currentTarget.duration); event.currentTarget.playbackRate = playbackRate; }} onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} /> : <button className="frame-dropzone" type="button" onClick={() => fileInputRef.current?.click()}><i>＋</i><strong>Inserta un video</strong><span>Arrástralo aquí o selecciónalo desde tu dispositivo</span><small>MP4, WebM, MOV y formatos compatibles con tu navegador</small></button>}
-        <input ref={fileInputRef} type="file" accept="video/*" hidden onChange={(event) => loadFile(event.target.files?.[0])} />
+        {videoUrl ? <video ref={videoRef} src={videoUrl} playsInline preload="metadata" onLoadedMetadata={(event) => { setDuration(event.currentTarget.duration); event.currentTarget.playbackRate = playbackRate; setFileError(""); }} onError={() => setFileError("El navegador no puede decodificar este video. Prueba con un MP4 codificado en H.264.")} onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} /> : <button className="frame-dropzone" type="button" onClick={() => fileInputRef.current?.click()}><i><ToolIcon name="add" /></i><strong>Inserta un video</strong><span>Arrástralo aquí o selecciónalo desde tu dispositivo</span><small>MP4, WebM, MOV y formatos compatibles con tu navegador</small></button>}
+        <input ref={fileInputRef} type="file" accept="video/*,.mp4,.mov,.m4v,.webm" hidden onClick={(event) => { event.currentTarget.value = ""; }} onChange={(event) => loadFile(event.target.files?.[0])} />
+        {fileError && <div className="frame-file-error" role="alert"><strong>No se pudo abrir</strong><span>{fileError}</span><button type="button" onClick={() => fileInputRef.current?.click()}>Elegir otro video</button></div>}
         {videoUrl && <div className="frame-viewer-overlay"><span>{frameTimecode(currentFrame, sourceFps)}</span><strong>FRAME {String(currentFrame).padStart(5, "0")}</strong></div>}
       </div>
 
@@ -149,9 +181,9 @@ export function FrameCounter() {
         <div className="frame-progress-labels"><span>00:00:00:00</span><b>{Math.round(progress)}%</b><span>{frameTimecode(totalFrames, sourceFps)}</span></div>
         <input aria-label="Línea de tiempo por fotogramas" type="range" min="0" max={Math.max(1, totalFrames)} value={currentFrame} disabled={!videoUrl} onChange={(event) => seekFrame(Number(event.target.value))} />
         <div className="frame-transport">
-          <button type="button" disabled={!videoUrl} onClick={() => stepFrame(-1)}><kbd>,</kbd><span>Frame anterior</span></button>
-          <button className="frame-play" type="button" disabled={!videoUrl} onClick={togglePlayback} aria-label={playing ? "Pausar" : "Reproducir"}>{playing ? "Ⅱ" : "▶"}</button>
-          <button type="button" disabled={!videoUrl} onClick={() => stepFrame(1)}><span>Frame siguiente</span><kbd>.</kbd></button>
+          <button type="button" disabled={!videoUrl} onClick={() => stepFrame(-1)}><ToolIcon name="previous" /><span>Frame anterior</span></button>
+          <button className="frame-play" type="button" disabled={!videoUrl} onClick={togglePlayback} aria-label={playing ? "Pausar" : "Reproducir"}><ToolIcon name={playing ? "pause" : "play"} /></button>
+          <button type="button" disabled={!videoUrl} onClick={() => stepFrame(1)}><span>Frame siguiente</span><ToolIcon name="next" /></button>
         </div>
       </div>
     </div>
@@ -171,7 +203,7 @@ export function FrameCounter() {
 
       <section className="frame-jump-panel">
         <span>Ir a un frame</span><form onSubmit={(event) => { event.preventDefault(); seekFrame(Number(jumpValue)); }}><input aria-label="Número de frame" inputMode="numeric" min="0" max={totalFrames} type="number" value={jumpValue} onChange={(event) => setJumpValue(event.target.value)} disabled={!videoUrl} /><button type="submit" disabled={!videoUrl}>Ir</button></form>
-        <button className="frame-replace" type="button" onClick={() => fileInputRef.current?.click()}>{videoUrl ? "Cambiar video" : "Elegir video"}</button>
+        {videoUrl && <button className="frame-remove-video" type="button" onClick={removeVideo} aria-label="Quitar video" title="Quitar video"><ToolIcon name="close" /></button>}
         <p>El archivo vive únicamente en esta pestaña. No se almacena ni se sube.</p>
       </section>
     </div>

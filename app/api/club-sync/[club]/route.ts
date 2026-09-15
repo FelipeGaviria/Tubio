@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { clubCookieName } from "@/lib/club-access";
+import { checkPrivateAccess } from "@/lib/check-private-access";
 
 const endpoints = {
   attendance: "https://qdxapfnjizissxgkhpxi.supabase.co/functions/v1/attendance-sync",
@@ -7,6 +8,7 @@ const endpoints = {
 };
 
 type ClubRouteContext = { params: Promise<{ club: string }> };
+let attendanceViewerToken = "";
 
 async function target(context: ClubRouteContext, editing = false) {
   const { club } = await context.params;
@@ -24,9 +26,17 @@ async function publicTarget(context: ClubRouteContext) {
 export async function GET(_request: Request, context: ClubRouteContext) {
   const destination = await publicTarget(context);
   if (!destination) return Response.json({ error: "Club inválido" }, { status: 404 });
-  const access = await target(context);
-  if (!access && destination.club === "attendance") return Response.json({ error: "Acceso denegado" }, { status: 401 });
+  let access = await target(context);
+  if (!access && destination.club === "attendance") {
+    if (!attendanceViewerToken) {
+      const validation = await checkPrivateAccess(_request, "attendance", process.env.ATTENDANCE_VIEW_CODE ?? "1234");
+      if (validation.response.ok && "token" in validation.result && validation.result.token) attendanceViewerToken = validation.result.token;
+    }
+    if (attendanceViewerToken) access = { url: destination.url, token: attendanceViewerToken };
+  }
+  if (!access && destination.club === "attendance") return Response.json({ error: "No fue posible consultar el club" }, { status: 503 });
   const response = await fetch(destination.url, { headers: access ? { Authorization: `Bearer ${access.token}` } : undefined, cache: "no-store" });
+  if (response.status === 401 && destination.club === "attendance") attendanceViewerToken = "";
   return new Response(await response.text(), { status: response.status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
 }
 
