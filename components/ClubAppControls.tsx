@@ -6,10 +6,9 @@ import { FooterInstallButton } from "@/components/FooterInstallButton";
 export function ClubAppControls({ club, appName }: { club: "toastmasters" | "rotaract"; appName: string }) {
   const [night, setNight] = useState(false);
   useEffect(() => {
-    if (club !== "rotaract") return;
     const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
     const previous = meta?.content;
-    if (meta) meta.content = night ? "#0d1421" : "#f6f7fc";
+    if (meta) meta.content = night ? "#0d1421" : (club === "toastmasters" ? "#ffffff" : "#f6f7fc");
     return () => { if (meta && previous) meta.content = previous; };
   }, [club, night]);
   useEffect(() => {
