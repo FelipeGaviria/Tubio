@@ -3,6 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const FPS_OPTIONS = [4, 6, 8, 12, 24, 30];
+const VIDEO_MIME_BY_EXTENSION: Record<string, string> = {
+  mp4: "video/mp4",
+  m4v: "video/mp4",
+  mov: "video/quicktime",
+  webm: "video/webm",
+};
 
 function ToolIcon({ name }: { name: "add" | "previous" | "next" | "play" | "pause" | "close" }) {
   const paths = {
@@ -35,6 +41,8 @@ export function FrameCounter() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [fileName, setFileName] = useState("");
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [usedDataUrlFallback, setUsedDataUrlFallback] = useState(false);
   const [sourceFps, setSourceFps] = useState(24);
   const [reviewFps, setReviewFps] = useState(24);
   const [duration, setDuration] = useState(0);
@@ -71,12 +79,18 @@ export function FrameCounter() {
       setFileError("No pudimos leer ese archivo. Intenta seleccionarlo de nuevo.");
       return;
     }
-    const nextUrl = URL.createObjectURL(file);
+    const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+    const inferredMime = VIDEO_MIME_BY_EXTENSION[extension];
+    const needsMimeRepair = Boolean(inferredMime) && (!file.type || file.type === "application/octet-stream" || !file.type.startsWith("video/"));
+    const playableFile = needsMimeRepair ? new Blob([file], { type: inferredMime }) : file;
+    const nextUrl = URL.createObjectURL(playableFile);
     setVideoUrl((previous) => {
       if (previous) URL.revokeObjectURL(previous);
       return nextUrl;
     });
     setFileName(file.name);
+    setVideoFile(file);
+    setUsedDataUrlFallback(false);
     setDuration(0);
     setCurrentTime(0);
     setPlaying(false);
@@ -147,6 +161,8 @@ export function FrameCounter() {
     videoRef.current?.pause();
     setVideoUrl("");
     setFileName("");
+    setVideoFile(null);
+    setUsedDataUrlFallback(false);
     setDuration(0);
     setCurrentTime(0);
     setPlaying(false);
@@ -157,6 +173,20 @@ export function FrameCounter() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleVideoError = () => {
+    if (videoFile && !usedDataUrlFallback && videoFile.size <= 150 * 1024 * 1024) {
+      const reader = new FileReader();
+      setUsedDataUrlFallback(true);
+      reader.onload = () => {
+        if (typeof reader.result === "string") setVideoUrl(reader.result);
+      };
+      reader.onerror = () => setFileError("El navegador no pudo leer este archivo desde el dispositivo.");
+      reader.readAsDataURL(videoFile);
+      return;
+    }
+    setFileError(usedDataUrlFallback ? "El archivo llegó correctamente, pero este navegador no admite su códec o contenedor. MP4 con H.264 es la opción más compatible." : "El navegador no pudo leer el video completo. Intenta descargarlo al dispositivo y selecciónalo de nuevo.");
+  };
+
   return <section className="frame-tool-shell">
     <header className="frame-tool-intro">
       <div><span>TuBio Lab / audiovisual</span><h1>Contador<br />de frames.</h1></div>
@@ -165,7 +195,7 @@ export function FrameCounter() {
 
     <div className="frame-tool-workbench">
       <div className={`frame-viewer ${dragging ? "is-dragging" : ""}`} onDragEnter={(event) => { event.preventDefault(); setDragging(true); }} onDragOver={(event) => event.preventDefault()} onDragLeave={(event) => { if (event.currentTarget === event.target) setDragging(false); }} onDrop={(event) => { event.preventDefault(); setDragging(false); loadFile(event.dataTransfer.files[0]); }}>
-        {videoUrl ? <video ref={videoRef} src={videoUrl} playsInline preload="metadata" onLoadedMetadata={(event) => { setDuration(event.currentTarget.duration); event.currentTarget.playbackRate = playbackRate; setFileError(""); }} onError={() => setFileError("El navegador no puede decodificar este video. Prueba con un MP4 codificado en H.264.")} onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} /> : <button className="frame-dropzone" type="button" onClick={() => fileInputRef.current?.click()}><i><ToolIcon name="add" /></i><strong>Inserta un video</strong><span>Arrástralo aquí o selecciónalo desde tu dispositivo</span><small>MP4, WebM, MOV y formatos compatibles con tu navegador</small></button>}
+        {videoUrl ? <video ref={videoRef} src={videoUrl} playsInline preload="metadata" onLoadedMetadata={(event) => { setDuration(event.currentTarget.duration); event.currentTarget.playbackRate = playbackRate; setFileError(""); }} onError={handleVideoError} onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} /> : <button className="frame-dropzone" type="button" onClick={() => fileInputRef.current?.click()}><i><ToolIcon name="add" /></i><strong>Inserta un video</strong><span>Arrástralo aquí o selecciónalo desde tu dispositivo</span><small>MP4, WebM, MOV y formatos compatibles con tu navegador</small></button>}
         <input ref={fileInputRef} type="file" accept="video/*,.mp4,.mov,.m4v,.webm" hidden onClick={(event) => { event.currentTarget.value = ""; }} onChange={(event) => loadFile(event.target.files?.[0])} />
         {fileError && <div className="frame-file-error" role="alert"><strong>No se pudo abrir</strong><span>{fileError}</span><button type="button" onClick={() => fileInputRef.current?.click()}>Elegir otro video</button></div>}
         {videoUrl && <div className="frame-viewer-overlay"><span>{frameTimecode(currentFrame, sourceFps)}</span><strong>FRAME {String(currentFrame).padStart(5, "0")}</strong></div>}
