@@ -12,6 +12,7 @@ function LockIcon() { return <svg className="workspace-lock" aria-label="Acceso 
 const workspaceLinks = [
   { label: "Portafolio", href: "/portafolio", note: "Trabajo seleccionado", locked: false },
   { label: "Tarifario MERO", href: "/tarifario", note: "Tarifas para proveedores", locked: false },
+  { label: "Contador de frames", href: "/contador-frames", note: "Visor audiovisual", locked: false },
   { label: "Toastmasters Asistencias", href: "/asistencias", note: "Registro de sesiones", locked: true },
   { label: "Rotaract Nuevo Medellín", href: "/rotaract", note: "Calendario y asistencias", locked: true },
   { label: "Social Calendars", href: "/social-calendars", note: "Planeación de contenidos", locked: true },
