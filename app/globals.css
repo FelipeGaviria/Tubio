@@ -2793,3 +2793,274 @@ html.tubio-electric-flash::after{content:"";position:fixed;z-index:2147483647;in
     padding: 0;
   }
 }
+
+/* Dirección visual deluxe / tech de Toastmasters. */
+html:has(.toastmasters-hub),
+body:has(.toastmasters-hub) {
+  background: #edf1f7;
+}
+
+.toastmasters-hub {
+  --tm-glass: rgba(255, 255, 255, 0.72);
+  --tm-glass-strong: rgba(255, 255, 255, 0.88);
+  --tm-line: rgba(111, 128, 161, 0.2);
+  --tm-shadow: 0 18px 55px rgba(28, 43, 77, 0.1);
+  background:
+    radial-gradient(circle at 16% 8%, rgba(123, 18, 53, 0.09), transparent 24%),
+    radial-gradient(circle at 84% 18%, rgba(20, 39, 77, 0.12), transparent 28%),
+    #edf1f7;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.toastmasters-hub :is(h1, h2, h3, strong, button, input, select) {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.toastmasters-hub :is(.attendance-heading h1, .toastmasters-welcome h1, .toastmasters-tool-heading h1) {
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.toastmasters-hub :is(.toastmasters-next-events h2, .people-card h2, .rotaract-section-title h2) {
+  font-weight: 740;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-transform: none;
+}
+
+.toastmasters-hub :is(p, small, span) {
+  letter-spacing: -0.005em;
+}
+
+.toastmasters-hub .attendance-topbar {
+  position: relative;
+  z-index: 70;
+  border-bottom-color: rgba(107, 122, 151, 0.18);
+  background: rgba(247, 249, 252, 0.76);
+  box-shadow: 0 8px 32px rgba(21, 37, 72, 0.05);
+  backdrop-filter: blur(22px) saturate(145%);
+}
+
+.toastmasters-hub .attendance-layout {
+  display: block;
+  min-height: calc(100vh - 72px);
+}
+
+.toastmasters-hub .attendance-workspace {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  padding-bottom: 126px;
+}
+
+.toastmasters-hub[data-section="home"] .attendance-workspace {
+  height: calc(100dvh - 72px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 126px;
+}
+
+.toastmasters-app-sidebar {
+  position: fixed !important;
+  z-index: 90;
+  right: 50%;
+  bottom: 18px;
+  left: auto;
+  display: block !important;
+  width: min(720px, calc(100vw - 36px)) !important;
+  min-height: 0 !important;
+  padding: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.58) !important;
+  border-radius: 25px;
+  background: linear-gradient(135deg, rgba(23, 38, 70, 0.87), rgba(11, 23, 49, 0.91)) !important;
+  box-shadow: 0 22px 60px rgba(9, 19, 42, 0.28), inset 0 1px rgba(255, 255, 255, 0.22);
+  transform: translateX(50%);
+  backdrop-filter: blur(26px) saturate(155%);
+}
+
+.toastmasters-app-sidebar > :not(.toastmasters-app-nav) {
+  display: none !important;
+}
+
+.toastmasters-app-nav {
+  position: relative;
+  isolation: isolate;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  min-height: 66px;
+  margin: 0;
+}
+
+.toastmasters-app-nav::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: 20%;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.07));
+  box-shadow: 0 9px 28px rgba(0, 0, 0, 0.18), inset 0 1px rgba(255, 255, 255, 0.24);
+  transition: transform 0.46s cubic-bezier(0.2, 0.86, 0.24, 1);
+  backdrop-filter: blur(16px);
+}
+
+.toastmasters-app-nav:has(button:nth-child(2).active)::before { transform: translateX(100%); }
+.toastmasters-app-nav:has(button:nth-child(3).active)::before { transform: translateX(200%); }
+.toastmasters-app-nav:has(button:nth-child(4).active)::before { transform: translateX(300%); }
+.toastmasters-app-nav:has(button:nth-child(5).active)::before { transform: translateX(400%); }
+
+.toastmasters-app-nav button {
+  position: relative;
+  z-index: 1;
+  justify-content: center;
+  min-width: 0;
+  min-height: 66px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px 4px;
+  border-radius: 18px;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #aebbd3;
+  font-size: 0.56rem;
+  text-align: center;
+  transition: color 0.25s ease, transform 0.38s cubic-bezier(0.2, 0.86, 0.24, 1);
+}
+
+.toastmasters-app-nav button.active {
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.toastmasters-app-nav button > span {
+  width: 31px;
+  height: 31px;
+  flex-basis: 31px;
+  border: 0;
+}
+
+.toastmasters-app-nav button > span svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.05;
+}
+
+.toastmasters-hub :is(.toastmasters-dashboard-grid > button, .toastmasters-next-events, .session-card, .attendance-summary, .people-card, .special-guests, .filler-session-selector, .toastmasters-tool-form, .toastmasters-record-list article, .weekly-word-grid article, .club-month-calendar) {
+  border-color: var(--tm-line);
+  background: var(--tm-glass);
+  box-shadow: var(--tm-shadow), inset 0 1px rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(135%);
+}
+
+.toastmasters-welcome,
+.toastmasters-tool-heading {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(179, 57, 99, 0.34), transparent 32%),
+    linear-gradient(135deg, rgba(20, 39, 77, 0.97), rgba(12, 27, 58, 0.98));
+  box-shadow: 0 22px 60px rgba(17, 31, 62, 0.2), inset 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.toastmasters-welcome::after,
+.toastmasters-tool-heading::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -65px;
+  bottom: -100px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 28px rgba(255, 255, 255, 0.025), 0 0 0 58px rgba(255, 255, 255, 0.018);
+}
+
+.toastmasters-next-events > div:first-child {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 13px;
+}
+
+.toastmasters-next-events > div:first-child p,
+.toastmasters-next-events > div:first-child h2 {
+  margin: 0;
+}
+
+.toastmasters-next-events > div:first-child p {
+  order: 2;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(123, 18, 53, 0.08);
+  color: #7b1235;
+  font-size: 0.55rem;
+}
+
+.toastmasters-share {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  justify-content: center;
+  padding: 0;
+  border-radius: 12px;
+}
+
+.toastmasters-share span {
+  display: none !important;
+}
+
+.toastmasters-share svg {
+  width: 18px !important;
+  height: 18px;
+}
+
+.toastmasters-edit-lock {
+  bottom: 108px;
+}
+
+.toastmasters-hub[data-club-theme="night"] {
+  --tm-glass: rgba(24, 35, 55, 0.74);
+  --tm-glass-strong: rgba(25, 37, 58, 0.9);
+  --tm-line: rgba(151, 168, 200, 0.16);
+  --tm-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
+  background:
+    radial-gradient(circle at 16% 8%, rgba(141, 34, 72, 0.2), transparent 25%),
+    radial-gradient(circle at 84% 18%, rgba(60, 91, 145, 0.2), transparent 28%),
+    #0d1421;
+}
+
+html:has(.toastmasters-hub[data-club-theme="night"]),
+body:has(.toastmasters-hub[data-club-theme="night"]) {
+  background: #0d1421;
+  color-scheme: dark;
+}
+
+.toastmasters-hub[data-club-theme="night"] :is(.toastmasters-dashboard-grid > button, .toastmasters-next-events, .session-card, .attendance-summary, .people-card, .special-guests, .filler-session-selector, .toastmasters-tool-form, .toastmasters-record-list article, .weekly-word-grid article, .club-month-calendar, .people-card-toggle) {
+  background: var(--tm-glass);
+  border-color: var(--tm-line);
+  color: #edf2fa;
+  box-shadow: var(--tm-shadow), inset 0 1px rgba(255, 255, 255, 0.07);
+}
+
+@media (max-width: 760px) {
+  .toastmasters-app-sidebar {
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+    width: auto !important;
+    transform: none;
+  }
+
+  .toastmasters-hub .attendance-workspace {
+    padding-bottom: 103px;
+  }
+
+  .toastmasters-edit-lock {
+    bottom: 91px;
+  }
+}

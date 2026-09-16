@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "Toastmasters", statusBarStyle: "default" },
   title: "Asistencia a Sesiones",
   description: "Registro sencillo de asistencia para las sesiones de Toastmasters.",
+  openGraph: {
+    title: "Sesiones Toast Medellín",
+    description: "Asistencia, agenda, muletillas y palabras de las sesiones de Toastmasters Medellín.",
+    type: "website",
+    images: [{ url: "/images/clubs/toastmasters-logo.png", alt: "Toastmasters Medellín" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Sesiones Toast Medellín",
+    description: "Asistencia, agenda, muletillas y palabras de las sesiones.",
+    images: ["/images/clubs/toastmasters-logo.png"],
+  },
 };
 
 export const viewport: Viewport = {
